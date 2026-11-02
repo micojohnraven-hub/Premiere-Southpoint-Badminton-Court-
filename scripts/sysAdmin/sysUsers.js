@@ -13,6 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
         selectAll: get('selectAll'),
         bulkBar: get('bulkBar'),
         selectedCount: get('selectedCount'),
+
+        bulkClearBtn: get('bulkClearBtn'),
+        bulkExportBtn: get('bulkExportBtn'),
+        bulkSuspendBtn: get('bulkSuspendBtn'),
+        bulkActivateBtn: get('bulkActivateBtn'),
+
         exportBtn: get('exportBtn'),
 
         statTotal: get('statTotal'),
@@ -69,26 +75,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return new Promise((resolve) => {
             const inputField = get('modalInput');
+            const iconBadge = get('modalIconBadge');
+            const icon = get('modalIcon');
+            const closeX = get('modalCloseX');
 
-            elements.modalOverlay.querySelector('h3').innerText = title;
+            // Set Title & Message
+            get('modalTitle').innerText = title;
             elements.modalMessage.innerText = message;
 
-            elements.modalCancel.style.display = hideCancel ? 'none' : 'block';
-            elements.modalConfirm.style.display = hideConfirm ? 'none' : 'block';
+            // Danger vs Success styling & icons
+            if (isDanger) {
+                elements.modalOverlay.classList.add('danger-mode');
+                if (iconBadge) iconBadge.className = 'modal-icon-badge danger';
+                if (icon) icon.className = 'bx bx-error-circle';
+            } else {
+                elements.modalOverlay.classList.remove('danger-mode');
+                if (iconBadge) iconBadge.className = 'modal-icon-badge success';
+                if (icon) icon.className = 'bx bx-check-circle';
+            }
 
+            // Input handling
             inputField.value = '';
             inputField.placeholder = placeholder;
             inputField.style.display = isInput ? 'block' : 'none';
 
+            // Buttons
+            elements.modalCancel.style.display = hideCancel ? 'none' : 'block';
+            elements.modalConfirm.style.display = hideConfirm ? 'none' : 'block';
             elements.modalConfirm.innerText = confirmText;
-            elements.modalConfirm.style.background =
-                isDanger ? '#ef4444' : '#00c800';
+
+            // Remove inline style background so CSS danger classes take over cleanly
+            elements.modalConfirm.style.background = '';
 
             elements.modalOverlay.classList.add('active');
+            if (isInput) setTimeout(() => inputField.focus(), 50);
 
             const cleanup = () => {
                 elements.modalConfirm.removeEventListener('click', handleConfirm);
                 elements.modalCancel.removeEventListener('click', handleCancel);
+                if (closeX) closeX.removeEventListener('click', handleCancel);
             };
 
             const close = (result) => {
@@ -108,13 +133,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             elements.modalConfirm.addEventListener('click', handleConfirm);
             elements.modalCancel.addEventListener('click', handleCancel);
+            if (closeX) closeX.addEventListener('click', handleCancel);
 
             if (hideCancel && hideConfirm) {
                 setTimeout(() => close(true), duration);
             }
         });
     };
-
+    
     let currentUserData = null;
 
     /* SIDEBAR */
@@ -373,6 +399,159 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    /* ---> BULK ACTION LISTENERS <--- */
+
+    const getSelectedRows = () => {
+        return Array.from(document.querySelectorAll('.user-checkbox:checked'))
+            .map(cb => cb.closest('.user-row'))
+            .filter(Boolean);
+    };
+
+    // Deselect All / Clear
+    if (elements.bulkClearBtn) {
+        elements.bulkClearBtn.addEventListener('click', () => {
+            document.querySelectorAll('.user-checkbox').forEach(cb => cb.checked = false);
+            elements.selectAll.checked = false;
+            updateBulkCount();
+        });
+    }
+
+    // Bulk Export
+    if (elements.bulkExportBtn) {
+        elements.bulkExportBtn.addEventListener('click', async () => {
+            const selectedRows = getSelectedRows();
+            const selectedIds = selectedRows.map(r => r.dataset.id);
+
+            if (selectedIds.length === 0) return;
+
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('full_name, email, role, status, player_level')
+                .in('id', selectedIds);
+
+            if (error || !data) {
+                await showCustomModal('Unable to export selected users.', {
+                    title: 'Export Error',
+                    isDanger: true,
+                    hideCancel: true
+                });
+                return;
+            }
+
+            const csvContent =
+                'Full Name,Email,Role,Status,Skill\n' +
+                data.map(u =>
+                    `"${u.full_name || ''}","${u.email || ''}","${u.role || ''}","${u.status || ''}","${u.player_level || ''}"`
+                ).join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `Selected_Users_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+            URL.revokeObjectURL(url);
+        });
+    }
+
+    // Bulk Suspend
+    if (elements.bulkSuspendBtn) {
+        elements.bulkSuspendBtn.addEventListener('click', async () => {
+            const selectedRows = getSelectedRows();
+            const selectedIds = selectedRows.map(r => r.dataset.id);
+            const count = selectedIds.length;
+
+            if (count === 0) return; // Guard: prevents running on 0 selection
+
+            const reason = await showCustomModal(
+                `Are you sure you want to suspend ${count} selected account(s)? Please provide a reason:`,
+                {
+                    isInput: true,
+                    isDanger: true,
+                    confirmText: 'Suspend All',
+                    title: `Bulk Suspend (${count} users)`
+                }
+            );
+
+            if (reason === false) return;
+            if (!reason) {
+                await showCustomModal('A suspension reason is required.', {
+                    title: 'Reason Required',
+                    isDanger: true,
+                    hideCancel: true
+                });
+                return;
+            }
+
+            const { error } = await supabase
+                .from('profiles')
+                .update({ status: 'suspended', suspension_reason: reason })
+                .in('id', selectedIds);
+
+            if (error) {
+                await showCustomModal(`Failed to suspend accounts: ${error.message}`, {
+                    title: 'Error',
+                    isDanger: true,
+                    hideCancel: true
+                });
+                return;
+            }
+
+            await showCustomModal(`${count} accounts suspended successfully.`, {
+                title: 'Success',
+                hideCancel: true,
+                hideConfirm: true,
+                duration: 1500
+            });
+
+            fetchUsers();
+        });
+    }
+
+    // Bulk Reactivate
+    if (elements.bulkActivateBtn) {
+        elements.bulkActivateBtn.addEventListener('click', async () => {
+            const selectedRows = getSelectedRows();
+            const selectedIds = selectedRows.map(r => r.dataset.id);
+            const count = selectedIds.length;
+
+            if (count === 0) return; // Guard: prevents running on 0 selection
+
+            const confirmed = await showCustomModal(
+                `Reactivate ${count} selected user account(s)?`,
+                {
+                    title: `Bulk Reactivate (${count} users)`,
+                    confirmText: 'Reactivate All'
+                }
+            );
+
+            if (!confirmed) return;
+
+            const { error } = await supabase
+                .from('profiles')
+                .update({ status: 'active', suspension_reason: null })
+                .in('id', selectedIds);
+
+            if (error) {
+                await showCustomModal(`Failed to reactivate accounts: ${error.message}`, {
+                    title: 'Error',
+                    isDanger: true,
+                    hideCancel: true
+                });
+                return;
+            }
+
+            await showCustomModal(`${count} accounts reactivated successfully.`, {
+                title: 'Success',
+                hideCancel: true,
+                hideConfirm: true,
+                duration: 1500
+            });
+
+            fetchUsers();
+        });
+    }
+    
     /* EXPORT */
 
     elements.exportBtn.onclick = async () => {

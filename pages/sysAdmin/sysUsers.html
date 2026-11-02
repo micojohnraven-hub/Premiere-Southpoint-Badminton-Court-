@@ -135,11 +135,26 @@
     </main>
 
     <!-- FLOATING BULK ACTIONS BAR -->
-    <div class="bulk-actions-bar" id="bulkBar">
-        <div class="bulk-info"><span id="selectedCount">0</span> users selected</div>
-        <div class="bulk-btns">
-        </div>
+<div class="bulk-actions-bar" id="bulkBar">
+    <div class="bulk-info">
+        <span id="selectedCount">0</span> users selected
     </div>
+
+    <div class="bulk-btns">
+        <button class="bulk-btn" id="bulkExportBtn" title="Export Selected">
+            <i class='bx bx-download'></i> Export
+        </button>
+        <button class="bulk-btn" id="bulkActivateBtn" title="Activate Selected">
+            <i class='bx bx-check-circle'></i> Reactivate
+        </button>
+        <button class="bulk-btn danger" id="bulkSuspendBtn" title="Suspend Selected">
+            <i class='bx bx-user-x'></i> Suspend
+        </button>
+        <button class="bulk-btn clear" id="bulkClearBtn" title="Deselect All">
+            <i class='bx bx-x'></i> Deselect
+        </button>
+    </div>
+</div>
 
     <!-- USER PROFILE MODAL -->
     <div class="modal-overlay" id="profileModal">
@@ -319,18 +334,28 @@
     </div>
 
     <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-card">
-            <h3>Notification</h3>
-            <p id="modalMessage"></p>
+    <div class="modal-card custom-alert-card">
+        <button class="close-modal-btn" id="modalCloseX" aria-label="Close">
+            <i class='bx bx-x'></i>
+        </button>
 
-            <input type="text" id="modalInput" placeholder="Enter reason here..." style="display: none;">
+        <!-- Dynamic Icon Badge -->
+        <div class="modal-icon-badge danger" id="modalIconBadge">
+            <i class='bx bx-error-circle' id="modalIcon"></i>
+        </div>
 
-            <div class="modal-footer">
-                <button class="btn-secondary" id="modalCancel">Cancel</button>
-                <button class="btn-primary" id="modalConfirm">Confirm</button>
-            </div>
+        <h3 id="modalTitle">Notification</h3>
+        <p id="modalMessage"></p>
+
+        <!-- Changed from <input> to <textarea> for clean multi-line typing -->
+        <textarea id="modalInput" rows="3" placeholder="Enter reason here..."></textarea>
+
+        <div class="modal-footer">
+            <button class="btn-secondary" id="modalCancel">Cancel</button>
+            <button class="btn-primary" id="modalConfirm">Confirm</button>
         </div>
     </div>
+</div>
 
     <!-- SCRIPTS -->
     <script type="module">
