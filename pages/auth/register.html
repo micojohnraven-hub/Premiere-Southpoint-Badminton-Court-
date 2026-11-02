@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/auth/register.css">
+    <link rel="stylesheet" href="../../styles/auth/legal.css">
+    <title>Register | Southpoint</title>
+</head>
+
+<body>
+    <div class="login-wrapper">
+        <!-- LEFT PANEL -->
+        <div class="login-left">
+            <div class="left-content">
+                <div class="brand-logo">
+                    <div class="brand-text">
+                        <span class="brand-name">Southpoint</span>
+                        <span class="brand-sub">Premiere Badminton Court</span>
+                    </div>
+                </div>
+
+                <div class="left-divider"></div>
+
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class='bx bx-calendar-check'></i>
+                        <span>Online court reservations</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class='bx bx-time-five'></i>
+                        <span>Real-time court availability</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class='bx bx-user-check'></i>
+                        <span>Coach booking & scheduling</span>
+                    </div>
+                </div>
+
+                <p class="left-footer">© 2026 Premiere Southpoint Badminton Court</p>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL -->
+        <div class="login-right register-mode">
+            <div class="login-card">
+                <h1 class="login-title">Get started</h1>
+                <p class="login-sub">Create a new account</p>
+
+                <form id="registerForm">
+                    <!-- Full Name -->
+                    <div class="input-group">
+                        <input type="text" id="fullName" placeholder="Full Name" required>
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="input-group">
+                        <select id="gender" required>
+                            <option value="" disabled selected>Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="input-group">
+                        <input type="email" id="email" placeholder="Email Address" autocomplete="email" required>
+                    </div>
+
+                    <!-- Username -->
+                    <div class="input-group">
+                        <input type="text" id="username" placeholder="Username" autocomplete="username" required>
+                    </div>
+
+                    <!-- Contact Number -->
+                    <div class="input-group phone-input-group">
+                        <span class="phone-prefix">+63</span>
+                        <input type="tel" id="contactNumber" placeholder="9171234567" maxlength="10" inputmode="numeric"
+                            required>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="input-group password-group">
+                        <input type="password" id="password" placeholder="Password" maxlength="72"
+                            autocomplete="new-password" required>
+                        <i class='bx bx-low-vision' id="togglePassword"></i>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="input-group password-group">
+                        <input type="password" id="confirmPassword" placeholder="Confirm Password" maxlength="72"
+                            autocomplete="new-password" required>
+                        <i class='bx bx-low-vision' id="toggleConfirmPassword"></i>
+                    </div>
+
+                    <!-- Combined Terms & Privacy Checkbox -->
+                    <div id="termsWrapperLogin">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="agreeTerms">
+                            <label for="agreeTerms">
+                                I agree to the <a href="legal.html#terms" target="_blank">Terms &amp; Conditions</a> and
+                                <a href="legal.html#privacy" target="_blank">Privacy Policy</a>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Register Submit Button -->
+                    <div class="register-btn-wrapper">
+                        <button type="submit" class="btn-login" id="registerBtn">Register</button>
+                    </div>
+
+                    <!-- Google Register Button -->
+                    <button type="button" id="googleLoginBtn" class="btn-google"
+                        aria-label="Mag-register gamit ang Google account">
+                        <svg width="16" height="16" viewBox="0 0 48 48" aria-hidden="true">
+                            <path fill="#EA4335"
+                                d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+                            <path fill="#4285F4"
+                                d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+                            <path fill="#FBBC05"
+                                d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+                            <path fill="#34A853"
+                                d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+                        </svg>
+                        <span>Continue with Google</span>
+                    </button>
+
+                    <div aria-live="polite" aria-atomic="true" class="sr-only" id="googleLoginStatus"></div>
+
+                    <!-- Bottom Links -->
+                    <div class="bottom-links">
+                        <p class="text-only">Already have an account?
+                            <a href="login.html" class="register-link">Login</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../../scripts/auth/register.js"></script>
+    <script src="../../scripts/auth/terms.js"></script>
+</body>
+
+</html>

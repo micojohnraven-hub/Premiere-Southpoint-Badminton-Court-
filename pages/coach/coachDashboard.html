@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/coach/coachMain.css">
+    <link rel="stylesheet" href="../../styles/coach/coachDashboard.css">
+    <link rel="stylesheet" href="../../styles/shared/notification.css">
+    <title>Coach Dashboard | Southpoint</title>
+</head>
+
+<body>
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+        <header>
+            <div class="image-text logo-clickable" style="cursor: pointer;">
+                <span class="image"><img src="/components/logo.jpg" alt="logo"></span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Coach</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="coachDashboard.html" class="active">
+                            <i class='bx bx-id-card icon'></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="coachSchedule.html">
+                            <i class='bx bx-calendar icon'></i>
+                            <span class="text">Availability</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="coachRequests.html">
+                            <i class='bx bx-bell icon'></i>
+                            <span class="text">Requests</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="coachStats.html">
+                            <i class='bx bx-run icon'></i>
+                            <span class="text">Player Assessment</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Settings.html">
+                            <i class='bx bx-cog icon'></i>
+                            <span class="text">Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="home">
+        <!-- HEADER SECTION -->
+        <header class="dash-header">
+            <div class="dash-title">
+                <h1>Coach Dashboard</h1>
+                <p>Welcome back! Here is a summary of your training activities.</p>
+            </div>
+
+            <div class="header-actions">
+                <div class="notif-wrapper">
+                    <button class="notif-btn" id="notifToggle" onclick="toggleNotifPanel()">
+                        <i class='bx bx-bell'></i>
+                        <span class="notif-badge" id="notifBadge" style="display:none;">0</span>
+                    </button>
+                    <div class="notif-panel" id="notifPanel">
+                        <div class="notif-panel-header">
+                            <span>Notifications</span>
+                            <button onclick="clearNotifs()">Mark all read</button>
+                        </div>
+                        <ul class="notif-list" id="notifList">
+                            <li class="notif-empty">No new notifications.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="dash-content">
+            <!-- STATS ROW: 4 Compact Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon icon-green"><i class='bx bx-calendar-check'></i></div>
+                    <div class="stat-details">
+                        <span class="stat-value" id="statToday">0</span>
+                        <span class="stat-label">Today's Sessions</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon icon-blue"><i class='bx bx-envelope'></i></div>
+                    <div class="stat-details">
+                        <span class="stat-value" id="statRequests">0</span>
+                        <span class="stat-label">Pending Requests</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon icon-orange"><i class='bx bx-clipboard'></i></div>
+                    <div class="stat-details">
+                        <span class="stat-value" id="statPendingAssessments">0</span>
+                        <span class="stat-label">Pending Assessments</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon icon-purple"><i class='bx bx-time'></i></div>
+                    <div class="stat-details">
+                        <span class="stat-value" id="statUpcoming">0</span>
+                        <span class="stat-label">Upcoming Week</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-main-layout">
+
+                <div class="dashboard-primary">
+
+                    <!-- TOP GRID: Calendar & Action Required -->
+                    <div class="main-dash-grid">
+                        <div class="widget-card">
+                            <div class="card-header">
+                                <h3><i class='bx bx-calendar'></i> Schedule Overview</h3>
+                                <span id="dashMonth" class="month-label">August 2026</span>
+                            </div>
+
+                            <div class="cal-container">
+                                <div class="cal-days-header">
+                                    <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                                </div>
+                                <div class="cal-grid" id="weekDates"></div>
+                            </div>
+                            <div class="cal-day-detail" id="calDayDetail" style="display:none;"></div>
+                        </div>
+
+                        <div class="widget-card">
+                            <div class="card-header">
+                                <h3><i class='bx bx-task'></i> Action Required</h3>
+                            </div>
+
+                            <div class="action-body">
+                                <div id="pendingAssessGrid">
+                                    <p class="empty-msg-small">
+                                        No pending assessments.
+                                    </p>
+                                </div>
+
+                                <a href="coachStats.html" class="assess-cta-btn">
+                                    <i class='bx bx-run'></i>
+                                    Assess Players Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MIDDLE GRID -->
+                    <div class="schedule-split-grid">
+
+                        <div class="schedule-column">
+                            <h2 class="section-title">Today's Schedule</h2>
+
+                            <div class="list-feed" id="sessionGrid">
+                                <!-- Cards Injected -->
+                            </div>
+                        </div>
+
+                        <div class="schedule-column">
+                            <h2 class="section-title">Next Schedule</h2>
+
+                            <div class="list-feed" id="upcomingGrid">
+                                <!-- Cards Injected -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- SIDE ANNOUNCEMENTS -->
+                <aside class="announcement-side">
+
+                    <div class="widget-card announcement-card">
+
+                        <div class="card-header">
+                            <h3>
+                                <i class='bx bx-megaphone'></i>
+                                Announcements
+                            </h3>
+                        </div>
+
+                        <div class="announcement-list" id="coachAnnouncementList">
+                            <div class="announcement-empty">
+                                <i class='bx bx-bell-off'></i>
+                                <p>No announcements available.</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </aside>
+
+            </div>
+    </main>
+
+    <!-- ANNOUNCEMENT MODAL -->
+    <div id="announcementOverlay" class="ann-overlay">
+        <div class="ann-modal">
+            <div class="ann-header">
+                <h2 id="annHeaderTitle">Announcements</h2>
+            </div>
+
+            <div class="ann-body" id="annBody"></div>
+
+            <button class="ann-close-btn" id="annCloseBtn">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- WELCOME MODAL -->
+    <div id="welcomeModal" class="modal-overlay" style="display:none;">
+        <div class="modal-content-clean">
+            <div class="modal-icon"><i class='bx bx-party'></i></div>
+            <h3>Welcome to Southpoint!</h3>
+            <p>Your coach account is active. Please update your profile and password in Settings before your first
+                session.</p>
+            <div class="modal-footer-clean">
+                <button onclick="dismissWelcome()" class="btn-later">Later</button>
+                <button onclick="goToSettings()" class="btn-settings">Go to Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["coach"]);
+    </script>
+    <script src="../../scripts/coach/coachSidebar.js"></script>
+    <script type="module" src="../../scripts/coach/dashboard.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

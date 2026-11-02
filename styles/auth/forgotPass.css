@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+
+body { height:100vh; width:100vw; overflow:hidden; background:#0a1f0a; }
+
+.login-wrapper { display:flex; height:100vh; width:100vw; }
+
+/* ── LEFT PANEL ── */
+.login-left {
+    flex:1;
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    align-items:stretch;
+    background:url('../../components/logobg.jpeg') center center / cover no-repeat;
+}
+
+.login-left::before {
+    content:'';
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.52);
+    z-index:1;
+}
+
+.login-left::after {
+    content:'';
+    position:absolute;
+    width:350px;
+    height:350px;
+    border-radius:50%;
+    background:#16a34a ;
+    opacity:0.07;
+    bottom:10%;
+    left:30%;
+    transform:translateX(-50%);
+    filter:blur(80px);
+    pointer-events:none;
+    z-index:1;
+}
+
+.left-content {
+    position:relative;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:60px 50px;
+    width:100%;
+}
+
+.brand-logo { display:flex; align-items:center; gap:14px; margin-bottom:36px; }
+
+.brand-name { display:block; font-size:24px; font-weight:800; color:#fff; letter-spacing:-0.02em; line-height:1.1; }
+.brand-sub { display:block; font-size:11px; color:rgba(255,255,255,0.6); font-weight:500; text-transform:uppercase; letter-spacing:0.1em; margin-top:2px; }
+
+.left-divider { width:36px; height:3px; background:#16a34a ; border-radius:2px; margin-bottom:28px; }
+
+.feature-list { display:flex; flex-direction:column; gap:14px; }
+
+.feature-item { display:flex; align-items:center; gap:12px; color:rgba(255,255,255,0.65); font-size:13px; }
+.feature-item i { font-size:18px; color:#16a34a ; flex-shrink:0; }
+
+.left-footer { margin-top:auto; padding-top:40px; font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.04em; }
+
+/* ── RIGHT PANEL ── */
+.login-right {
+    width:450px; flex-shrink:0; background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    padding:40px 32px; overflow-y:auto;
+}
+
+.login-card { width:100%; max-width:340px; }
+
+.login-title { font-size:26px; font-weight:800; color:#1a1a2e; letter-spacing:-0.02em; margin-bottom:4px; }
+.login-sub { font-size:12px; color:#9ca3af; margin-bottom:28px; line-height:1.6; }
+
+/* ── INPUT ── */
+.input-group { margin-bottom:12px; position:relative; }
+.input-group input {
+    width:100%; padding:13px 18px;
+    background:#f9fafb; border:1.5px solid #e5e7eb;
+    border-radius:50px; color:#1a1a2e; font-size:13px;
+    font-family:'Poppins',sans-serif; outline:none; transition:0.2s;
+}
+.input-group input::placeholder { color:#c4c9d4; }
+.input-group input:focus { border-color:#16a34a ; background:#fff; box-shadow:0 0 0 4px rgba(5,185,5,0.06); }
+
+.input-group i {
+    position:absolute; right:18px; top:50%;
+    transform:translateY(-50%); color:#c4c9d4; font-size:18px;
+}
+
+/* ── BUTTON ── */
+.btn-login {
+    width:100%; margin-top:6px; padding:13px; border-radius:50px; border:none;
+    background:#16a34a ; color:#fff; font-size:13px; font-weight:700;
+    font-family:'Poppins',sans-serif; letter-spacing:0.8px; cursor:pointer; transition:0.2s;
+}
+.btn-login:hover { background:rgb(4,160,4); transform:translateY(-1px); box-shadow:0 6px 16px rgba(5,185,5,0.25); }
+.btn-login:active { transform:scale(0.98); }
+
+/* ── BACK LINK ── */
+.back-link { margin-top:16px; text-align:center; }
+.back-link a { font-size:11px; color:#9ca3af; text-decoration:none; transition:color 0.2s; }
+.back-link a:hover { color:#6b7280; }
+
+/* ── FOOTER ── */
+.login-footer { margin-top:12px; text-align:center; }
+.login-footer p { font-size:11px; color:#9ca3af; }
+.login-footer a { color:#16a34a ; font-weight:700; text-decoration:none; }
+.login-footer a:hover { text-decoration:underline; }
+
+/* ── MESSAGE BOX ── */
+.message-box {
+    margin-top:14px;
+    padding:12px 16px;
+    border-radius:14px;
+    font-size:12px;
+    line-height:1.5;
+    text-align:center;
+    display:none;
+}
+.message-box.success {
+    display:block;
+    background:rgba(5,185,5,0.08);
+    border:1px solid rgba(5,185,5,0.25);
+    color:rgb(4,130,4);
+}
+.message-box.error {
+    display:block;
+    background:rgba(239,68,68,0.08);
+    border:1px solid rgba(239,68,68,0.25);
+    color:#dc2626;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width:768px) {
+    .login-left { display:none; }
+    .login-right { width:100%; }
+    body { overflow:auto; }
+}
+@media (max-width:480px) {
+    .login-right { padding:32px 20px; }
+    .login-title { font-size:22px; }
+}

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en" class="preload">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management | System Admin</title>
+    <script>
+        (function () {
+            const savedState = localStorage.getItem("sidebarState");
+            const isMobile = window.innerWidth <= 768;
+            if (savedState === "closed" || (!savedState && isMobile)) {
+                document.documentElement.classList.add("sidebar-is-closed");
+            }
+        })();
+    </script>
+
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/sysAdmin/systemAdmin.css">
+    <link rel="stylesheet" href="../../styles/sysAdmin/sidebar.css">
+    <link rel="stylesheet" href="../../styles/sysAdmin/sysUsers.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR NAVIGATION -->
+    <nav class="sidebar">
+        <header>
+            <div class="image-text">
+                <span class="image"><img src="/components/logo.jpg" alt="logo"></span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">System Administrator</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link"><a href="systemAdmin.html"><i class='bx bx-shield-quarter icon'></i><span
+                                class="text">Overwatch</span></a></li>
+                    <li class="nav-link"><a href="sysContent.html"><i class='bx bx-home-alt-2 icon'></i><span
+                                class="text">Homepage</span></a></li>
+                    <li class="nav-link"><a href="sysUsers.html"><i class='bx bx-user-pin icon'></i><span
+                                class="text">User Accounts</span></a></li>
+                    <li class="nav-link"><a href="sysLogs.html"><i class='bx bx-terminal icon'></i><span
+                                class="text">System Logs</span></a></li>
+                    <li class="nav-link"><a href="sysFixes.html"><i class='bx bx-wrench icon'></i><span
+                                class="text">Technical Fixes</span></a></li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li><a href="#" id="logoutBtn"><i class='bx bx-log-out icon'></i><span class="text">Logout</span></a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="home">
+        <div class="dash-header">
+            <div>
+                <h1>User Management</h1>
+                <p>Manage permissions, memberships, and user-specific issues.</p>
+            </div>
+
+            <div class="header-actions">
+                <button class="btn-secondary" id="exportBtn">
+                    <i class='bx bx-download'></i> Export CSV
+                </button>
+                <button class="btn-primary" id="addUserBtn">
+                    <i class='bx bx-user-plus'></i> Add New Account
+                </button>
+            </div>
+        </div>
+        <!-- STATS GRID -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-info">
+                    <span>Total Users</span>
+                    <h2 id="statTotal" style="color: #f59e0b;">0</h2>
+                </div>
+                <i class='bx bx-group'></i>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info"><span>Total Active</span>
+                    <h2 id="statActive">0</h2>
+                </div>
+                <i class='bx bx-group'></i>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info"><span>Suspended</span>
+                    <h2 id="statSuspended" style="color: #ef4444;">0</h2>
+                </div>
+                <i class='bx bx-user-x'></i>
+            </div>
+        </div>
+
+        <!-- SEARCH AND TABLE SECTION -->
+        <section class="content-section">
+            <div class="section-header-row">
+                <h2 class="section-title"><i class='bx bx-list-ul'></i> All User </h2>
+
+                <div class="filter-row">
+                    <button class="filter-chip active">All Users</button>
+                    <button class="filter-chip">Coaches</button>
+                    <button class="filter-chip">Players</button>
+                    <button class="filter-chip">Employee</button>
+                </div>
+
+                <div class="search-box">
+                    <i class="bx bx-search"></i>
+                    <input type="text" id="userSearch" placeholder="Search by name or email...">
+                </div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAll"></th>
+                            <th>USERNAME</th>
+                            <th>ROLE</th>
+                            <th>MEMBERSHIP</th>
+                            <th style="text-align: center">ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTable">
+                        <!-- JS Dynamic Injection -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- FLOATING BULK ACTIONS BAR -->
+    <div class="bulk-actions-bar" id="bulkBar">
+        <div class="bulk-info"><span id="selectedCount">0</span> users selected</div>
+        <div class="bulk-btns">
+        </div>
+    </div>
+
+    <!-- USER PROFILE MODAL -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-card profile-view-card">
+            <button class="close-modal-btn" id="closeProfile">
+                <i class='bx bx-x'></i>
+            </button>
+
+            <div class="profile-header-banner"></div>
+
+            <div class="profile-header-content">
+                <div class="user-avatar-wrapper">
+                    <i class='bx bxs-user'></i>
+                    <span class="status-indicator active" id="profileStatusIndicator"></span>
+                </div>
+
+                <h2 id="profName">User Name</h2>
+                <span class="role-badge" id="profHeaderRole">Player</span>
+            </div>
+
+            <div class="profile-body">
+                <div id="suspensionNotice" class="suspension-notice">
+                    <label>
+                        <i class='bx bx-error-circle'></i>
+                        Account Suspended
+                    </label>
+                    <p id="displaySuspensionReason"></p>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-group">
+                        <label>
+                            <i class='bx bx-at'></i>
+                            Username
+                        </label>
+                        <p id="profUsername">N/A</p>
+                    </div>
+
+                    <div class="info-group">
+                        <label>
+                            <i class='bx bx-envelope'></i>
+                            Email Address
+                        </label>
+                        <p id="profEmail">N/A</p>
+                    </div>
+
+                    <div class="info-group">
+                        <label>
+                            <i class='bx bx-phone'></i>
+                            Contact Number
+                        </label>
+                        <p id="profContact">N/A</p>
+                    </div>
+
+                    <div class="info-group">
+                        <label>
+                            <i class='bx bx-male-female'></i>
+                            Gender
+                        </label>
+                        <p id="profGender">N/A</p>
+                    </div>
+
+                    <div class="info-group">
+                        <label>
+                            <i class='bx bx-shield-alt-2'></i>
+                            System Role
+                        </label>
+                        <p id="profRole">N/A</p>
+                    </div>
+
+                    <div class="info-group">
+                        <label>
+                            <i class='bx bx-star'></i>
+                            Membership
+                        </label>
+                        <p id="profStatus" class="status-pill active">Active</p>
+                    </div>
+
+                    <div class="info-group full-width">
+                        <label>
+                            <i class='bx bx-calendar'></i>
+                            Join Date
+                        </label>
+                        <p id="profJoinDate">N/A</p>
+                    </div>
+
+                    <div class="info-group coach-info">
+                        <label>
+                            <i class='bx bx-money'></i>
+                            Session Fee
+                        </label>
+                        <p id="profSessionFee">N/A</p>
+                    </div>
+
+                    <div class="info-group player-info">
+                        <label>
+                            <i class='bx bx-trending-up'></i>
+                            Player Level
+                        </label>
+                        <p id="profSkill" class="value-highlight">N/A</p>
+                    </div>
+                </div>
+
+                <div class="user-stats-container player-stats">
+                    <div class="stat-mini-card">
+                        <div class="stat-icon success">
+                            <i class='bx bx-trophy'></i>
+                        </div>
+                        <div class="stat-data">
+                            <strong id="modalWinrate">0%</strong>
+                            <span>Winrate</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-mini-card">
+                        <div class="stat-icon">
+                            <i class='bx bx-game'></i>
+                        </div>
+                        <div class="stat-data">
+                            <strong id="modalGamesPlayed">0</strong>
+                            <span>Games Played</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-mini-card danger">
+                        <div class="stat-icon">
+                            <i class='bx bx-error-circle'></i>
+                        </div>
+                        <div class="stat-data">
+                            <strong id="modalViolations">0</strong>
+                            <span>Violations</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer profile-footer">
+                <button class="btn-secondary" id="closeProfileBtn">
+                    Close View
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD USER MODAL -->
+    <div class="modal-overlay" id="addUserModal">
+        <div class="modal-card">
+            <button class="close-modal-btn" id="closeAddUser"><i class='bx bx-x'></i></button>
+            <h3>Add New Account</h3>
+            <p style="font-size: 12px; color: var(--text-gray); margin-bottom: 20px;">This will create a profile record
+                for the user.</p>
+
+            <div class="form-group" style="text-align: left; margin-bottom: 15px;">
+                <label style="font-size: 12px; font-weight: 700;">Full Name</label>
+                <input type="text" id="newUserName" placeholder="e.g. John Doe"
+                    style="width:100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            </div>
+            <div class="form-group" style="text-align: left; margin-bottom: 15px;">
+                <label style="font-size: 12px; font-weight: 700;">Email Address</label>
+                <input type="email" id="newUserEmail" placeholder="user@example.com"
+                    style="width:100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            </div>
+            <div class="form-group" style="text-align: left; margin-bottom: 20px;">
+                <label style="font-size: 12px; font-weight: 700;">Role</label>
+                <select id="newUserRole" style="width:100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                    <option value="player">Player</option>
+                    <option value="coach">Coach</option>
+                    <option value="employee">Employee</option>
+                </select>
+            </div>
+
+            <div class="modal-footer" style="display: flex; gap: 10px;">
+                <button class="btn-secondary" id="cancelAddUser" style="flex:1;">Cancel</button>
+                <button class="btn-primary" id="confirmAddUser" style="flex:2;">Create Account</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-card">
+            <h3>Notification</h3>
+            <p id="modalMessage"></p>
+
+            <input type="text" id="modalInput" placeholder="Enter reason here..." style="display: none;">
+
+            <div class="modal-footer">
+                <button class="btn-secondary" id="modalCancel">Cancel</button>
+                <button class="btn-primary" id="modalConfirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["sys_admin"]);
+    </script>
+    <script src="../../scripts/player/Main2.js"></script>
+    <script type="module" src="../../scripts/sysAdmin/sysUsers.js"></script>
+    <script src="../../scripts/sysAdmin/sidebar.js"></script>
+</body>
+
+</html>

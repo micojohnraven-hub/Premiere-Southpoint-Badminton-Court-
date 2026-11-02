@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/coach/coachMain.css">
+    <link rel="stylesheet" href="../../styles/coach/coachStats.css">
+    <title>Player Assessment | Southpoint</title>
+</head>
+
+<body>
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image"> <img src="/components/logo.jpg" alt="logo"></span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Coach</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link"><a href="coachDashboard.html"><i class='bx bx-id-card icon'></i><span
+                                class="text">Dashboard</span></a></li>
+                    <li class="nav-link"><a href="coachSchedule.html"><i class='bx bx-calendar icon'></i><span
+                                class="text">Availability</span></a></li>
+                    <li class="nav-link"><a href="coachRequests.html"><i class='bx bx-bell icon'></i><span
+                                class="text">Requests</span></a></li>
+                    <li class="nav-link"><a href="coachStats.html" class="active"><i class='bx bx-run icon'></i><span
+                                class="text">Player Assessment</span></a></li>
+                    <li class="nav-link"><a href="Settings.html"><i class='bx bx-cog icon'></i><span
+                                class="text">Settings</span></a></li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <main class="home">
+        <div class="dash-header">
+            <h1>Player Assessment</h1>
+            <p>Assess your players and assign their skill level.</p>
+        </div>
+
+        <div class="stats-wrapper">
+
+            <!-- LEFT: Player List -->
+            <div class="player-panel">
+                <h3>My Players</h3>
+                <div class="player-search">
+                    <i class='bx bx-search'></i>
+                    <input type="text" id="playerSearch" placeholder="Search player...">
+                </div>
+                <div class="player-list" id="playerList">
+                    <div class="empty-players">
+                        <i class='bx bx-loader-alt'></i> Loading players...
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: Assessment Form -->
+            <div class="assessment-panel" id="assessmentPanel">
+                <div class="no-selection" id="noSelection">
+                    <i class='bx bx-user-pin'></i>
+                    <p>Select a player from the list to begin assessment.</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["coach"]);
+    </script>
+
+    <script src="../../scripts/coach/coachSidebar.js"></script>
+    <script type="module" src="../../scripts/coach/coachStats.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/employee/employeeRole.css">
+    <link rel="stylesheet" href="../../styles/employee/EmployeeSidebar.css">
+
+    <script>
+        (function () {
+            const state = localStorage.getItem("employeeSidebarState");
+            if (state === "open") {
+                document.documentElement.classList.add("sidebar-open");
+            }
+        })();
+    </script>
+
+    <title>Reservations | Southpoint</title>
+</head>
+
+<body class="preload">
+
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image"><img src="/components/logo.jpg" alt="logo"></span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Employee</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link"><a href="employeeRole.html"><i class='bx bx-book-content icon'></i><span
+                                class="text">Reservations</span></a></li>
+                    <li class="nav-link"><a href="courtMap.html"><i class='bx bx-map-alt icon'></i><span
+                                class="text">Live Court Map</span></a></li>
+                    <li class="nav-link"><a href="tournament.html"><i class='bx bx-trophy icon'></i><span
+                                class="text">Tournament Day</span></a></li>
+                    <li class="nav-link"><a href="Settings.html"><i class='bx bx-cog icon'></i><span
+                                class="text">Settings</span></a></li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li> <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span> </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <main class="home">
+        <div class="dash-content">
+            <div class="dash-header">
+                <h1>Reservation Monitor</h1>
+                <p>Manage and verify player bookings for today.</p>
+            </div>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="s-info"><span>Pending Check-ins</span>
+                        <h2>—</h2>
+                    </div><i class='bx bx-time-five'></i>
+                </div>
+                <div class="stat-card">
+                    <div class="s-info"><span>Active Courts</span>
+                        <h2>—</h2>
+                    </div><i class='bx bx-check-double'></i>
+                </div>
+                <div class="stat-card">
+                    <div class="s-info"><span>Completed Today</span>
+                        <h2>—</h2>
+                    </div><i class='bx bx-run'></i>
+                </div>
+                <div class="stat-card">
+                    <div class="s-info"><span>Total Bookings Today</span>
+                        <h2>—</h2>
+                    </div><i class='bx bx-calendar-check'></i>
+                </div>
+            </div>
+            <div class="main-grid">
+                <div class="data-area">
+                    <div class="toolbar">
+                        <div class="view-pill">Active Reservations</div>
+                        <div class="search-wrapper"><i class='bx bx-search'></i><input type="text"
+                                placeholder="Search players or courts..."></div>
+                    </div>
+                    <div class="list-container" id="dynamicContent"> </div>
+                </div>
+                <div class="widget-area">
+                    <div class="widget-box">
+                        <div class="w-header">
+                            <i class='bx bx-bell'></i> Live Alerts
+                        </div>
+
+                        <div id="alertFeed" class="alert-feed">
+                            <p style="font-size:12px;color:#888;">No critical alerts.</p>
+                        </div>
+                    </div>
+
+                    <div class="widget-box">
+                        <div class="w-header">
+                            Announcements
+                        </div>
+                        <div id="announcementFeed" class="announcement-feed">
+                            <p style="font-size:12px;color:#888;">
+                                No announcements.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 id="modalTitle">Confirm Action</h3>
+            <p id="modalText">Update status for this court?</p>
+            <div class="modal-footer">
+                <button class="m-btn-cancel" onclick="closeConfirm()">Cancel</button>
+                <button class="m-btn-confirm" onclick="closeConfirm()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="detailsModal">
+        <div class="modal-card">
+            <div id="detailsModalContent"></div>
+            <div class="modal-footer">
+                <button class="m-btn-cancel" onclick="closeDetailsModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="announcementOverlay" class="employee-announcement-overlay">
+        <div class="employee-announcement-modal">
+            <div class="announcement-header">
+                <div>
+                    <i class='bx bx-megaphone'></i>
+                    <span id="annHeaderTitle">Announcement</span>
+                </div>
+            </div>
+
+            <div id="annBody" class="announcement-body"></div>
+
+            <div class="announcement-footer">
+                <button id="annCloseBtn" class="announcement-btn" onclick="closeAnnouncementModal()">
+                    Okay
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["employee"]);
+    </script>
+
+    <script src="../../scripts/employee/EmployeeSidebar.js"></script>
+    <script type="module" src="../../scripts/employee/employeeRole.js" defer></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

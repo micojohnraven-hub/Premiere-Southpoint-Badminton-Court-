@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/coach/coachMain.css">
+    <link rel="stylesheet" href="../../styles/coach/coachSchedule.css">
+    <title>Coach Schedule | Southpoint</title>
+</head>
+
+<body>
+    <nav class="sidebar">
+        <header>
+            <div class="image-text logo-clickable" style="cursor: pointer;">
+                <span class="image"><img src="/components/logo.jpg" alt="logo"></span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Coach</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link"><a href="coachDashboard.html"><i class='bx bx-id-card icon'></i><span
+                                class="text">Dashboard</span></a></li>
+                    <li class="nav-link"><a href="coachSchedule.html" class="active"><i
+                                class='bx bx-calendar icon'></i><span class="text">Availability</span></a></li>
+                    <li class="nav-link"><a href="coachRequests.html"><i class='bx bx-bell icon'></i><span
+                                class="text">Requests</span></a></li>
+                    <li class="nav-link"><a href="coachStats.html"><i class='bx bx-run icon'></i><span
+                                class="text">Player Assessment</span></a></li>
+                    <li class="nav-link"><a href="Settings.html"><i class='bx bx-cog icon'></i><span
+                                class="text">Settings</span></a></li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <main class="home">
+        <div class="dash-header">
+            <div class="dash-header-text">
+                <h1>Coach Schedule</h1>
+                <p>Manage your coaching slots, player posts, and assessment batches.</p>
+            </div>
+            <div class="dash-header-actions">
+                <button class="btn btn-primary btn-auto"
+                    onclick="document.getElementById('schedModal').style.display='flex'">
+                    <i class='bx bx-plus-circle'></i> Create Slot
+                </button>
+                <button class="btn-assess-batch" onclick="document.getElementById('batchModal').style.display='flex'">
+                    <i class='bx bx-group'></i> Create Assessment Batch
+                </button>
+            </div>
+        </div>
+
+        <div class="schedule-container">
+            <div class="schedule-list">
+                <!-- Tabs -->
+                <div class="tab-bar">
+                    <button class="tab-btn active" data-tab="my-slots">
+                        <i class='bx bx-calendar-check'></i> My Slots
+                    </button>
+                    <button class="tab-btn" data-tab="player-requests">
+                        <i class='bx bxs-group'></i> Player Posts
+                        <span class="notif-badge" id="playerPostsBadge">0</span>
+                    </button>
+                    <button class="tab-btn" data-tab="assessment-batches">
+                        <i class='bx bx-clipboard'></i> Assessment Batches
+                        <span class="notif-badge" id="batchApplicantsBadge">0</span>
+                    </button>
+                </div>
+
+                <!-- Tab: My Slots -->
+                <div class="tab-panel active" id="tab-my-slots">
+                    <div class="court-grid" id="courtGrid"></div>
+                </div>
+
+                <!-- Tab: Player Posts -->
+                <div class="tab-panel" id="tab-player-requests">
+                    <p class="tab-hint">Players who posted their preferred schedule. Claim a slot if you're available!
+                    </p>
+                    <div id="playerScheduleList"></div>
+                </div>
+
+                <!-- Tab: Assessment Batches -->
+                <div class="tab-panel" id="tab-assessment-batches">
+                    <p class="tab-hint">Assessment batches you created. Review and confirm applicants here.</p>
+                    <div class="batch-list" id="batchList">
+                        <div class="empty-batch">Loading batches...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calendar-sidebar">
+                <div class="calendar-card">
+                    <div class="calendar-header">
+                        <button id="prevMonth"><i class='bx bx-chevron-left'></i></button>
+                        <h3 id="monthDisplay">March 2024</h3>
+                        <button id="nextMonth"><i class='bx bx-chevron-right'></i></button>
+                    </div>
+                    <div class="calendar-weekdays">
+                        <div>Sun</div>
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
+                    </div>
+                    <div class="calendar-days" id="calendarDays"></div>
+                    <div class="calendar-legend">
+                        <span class="dot occupied"></span> Occupied
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ── Create Slot Modal ── -->
+    <div id="schedModal" class="modal-overlay" style="display: none;">
+        <div class="modal-card">
+            <h3>Create Training Slot</h3>
+            <div class="session-type-toggle">
+                <button type="button" class="sess-type-btn active" data-type="individual" id="btnIndividual">
+                    <i class='bx bx-user'></i> Individual
+                </button>
+                <button type="button" class="sess-type-btn" data-type="package" id="btnPackage">
+                    <i class='bx bx-gift'></i> w/ Package
+                </button>
+            </div>
+            <input type="hidden" id="slotSessionType" value="individual">
+            <input type="hidden" id="slotSelectedPkg" value="">
+            <div id="typeIndividual">
+                <label>Select Date</label>
+                <input type="date" id="slotDate">
+
+                <label style="margin-top:12px;">Select Court</label>
+                <div class="court-tabs" id="courtTabs"></div>
+
+                <label style="margin-top:12px;">Available Slots</label>
+                <div class="slots-grid" id="coachTimeSlots">
+                    <p style="grid-column:1/-1;color:#9ca3af;font-size:13px;padding:12px 0;">Pick a date and court
+                        first.</p>
+                </div>
+                <p id="coachSlotHint" class="field-hint" style="color:#16a34a;font-weight:600;"></p>
+
+                <input type="hidden" id="slotTime">
+                <input type="hidden" id="slotEndTime">
+                <input type="hidden" id="slotCourtId">
+
+                <label class="best-available-toggle">
+                    <input type="checkbox" id="bestAvailableOnly">
+                    Show Best Available Only
+                </label>
+
+                <input type="number" id="slotFee" placeholder="Session fee (optional)" min="0" />
+                <p class="field-hint"><i class='bx bx-info-circle'></i> Rate: <strong>₱200 / hour</strong> — fee
+                    computed from duration.</p>
+            </div>
+            <div id="typePackage" style="display: none;">
+                <label style="margin-top:12px;">Package Rates</label>
+                <div class="session-pkg-rows">
+                    <div class="session-pkg-row">
+                        <label class="pkg-row-label"><i class='bx bx-star'></i> 5 Sessions</label>
+                        <div class="pkg-input-wrap"><input type="number" class="pkg-price-input" id="slotPkg5"
+                                placeholder="e.g. 4500" min="0"></div>
+                    </div>
+                    <div class="session-pkg-row">
+                        <label class="pkg-row-label"><i class='bx bx-medal'></i> 10 Sessions</label>
+                        <div class="pkg-input-wrap"><input type="number" class="pkg-price-input" id="slotPkg10"
+                                placeholder="e.g. 8500" min="0"></div>
+                    </div>
+                    <div class="session-pkg-row">
+                        <label class="pkg-row-label"><i class='bx bx-trophy'></i> 20 Sessions</label>
+                        <div class="pkg-input-wrap"><input type="number" class="pkg-price-input" id="slotPkg20"
+                                placeholder="e.g. 16000" min="0"></div>
+                    </div>
+                </div>
+                <div class="pkg-inclusions-wrap" style="margin-top: 12px;">
+                    <label for="slotPkgNotes"><i class='bx bx-list-check'></i> Inclusions / Notes</label>
+                    <textarea id="slotPkgNotes" rows="3"
+                        placeholder="e.g. Free tshirt, court fee not included"></textarea>
+                    <p class="field-hint">Visible to players when they view this slot.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="saveSlotBtn">Post Slot</button>
+                <button class="btn btn-secondary" onclick="closeSlotModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Create Assessment Batch Modal ── -->
+    <div id="batchModal" class="modal-overlay" style="display: none;">
+        <div class="modal-card">
+            <h3><i class='bx bx-group' style="color:#1d4ed8;"></i> Create Assessment Batch</h3>
+            <p style="font-size:13px;color:#6b7280;margin-bottom:16px;">Set a schedule for player assessments. Max 20
+                players per batch.</p>
+
+            <label>Assessment Date</label>
+            <input type="date" id="batchDate">
+
+            <label style="margin-top:12px;">Start Time</label>
+            <input type="time" id="batchStartTime">
+
+            <label style="margin-top:12px;">End Time</label>
+            <input type="time" id="batchEndTime">
+
+            <label style="margin-top:12px;">Max Players <span class="optional-label">(default: 20)</span></label>
+            <input type="number" id="batchMaxSlots" value="20" min="1" max="20">
+            <p class="field-hint"><i class='bx bx-info-circle'></i> Players can apply until slots are full. You confirm
+                who gets in.</p>
+
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="saveBatchBtn">
+                    <i class='bx bx-check'></i> Create Batch
+                </button>
+                <button class="btn btn-secondary" onclick="closeBatchModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Applicants Modal ── -->
+    <div id="applicantsModal" class="modal-overlay" style="display: none;">
+        <div class="modal-card">
+            <h3 id="applicantsModalTitle">Applicants</h3>
+            <p id="applicantsModalSubtitle"></p>
+            <div id="applicantsList"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary"
+                    onclick="document.getElementById('applicantsModal').style.display='none'">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Confirm Remove Modal ── -->
+    <div id="confirmModal" class="modal-overlay" style="display: none;">
+        <div class="modal-card text-center">
+            <h3>Remove Slot</h3>
+            <p>Are you sure you want to remove this slot?</p>
+            <div class="modal-footer">
+                <button id="confirmRemoveBtn" class="btn btn-danger">Yes, Remove</button>
+                <button class="btn btn-secondary"
+                    onclick="document.getElementById('confirmModal').style.display='none'">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Claim Fee Modal ── -->
+    <div id="claimFeeModal" class="modal-overlay" style="display: none;">
+        <div class="modal-card">
+            <h3>Confirm Claim</h3>
+            <p style="font-size:13px; color:#6b7280; margin-bottom:16px;">Review the session details and set your fee
+                before claiming.</p>
+            <div id="claimFeeDetails"
+                style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:#374151;line-height:1.8;">
+            </div>
+            <label style="font-size:13px;font-weight:600;color:#374151;">Session Fee (₱)</label>
+            <input type="number" id="claimFeeInput" min="0" placeholder="e.g. 1000"
+                style="margin-top:6px;margin-bottom:4px;" />
+            <p style="font-size:11px;color:#9ca3af;margin-bottom:16px;">
+                <i class='bx bx-info-circle'></i> Pre-filled based on the current court rate.
+            </p>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="confirmClaimBtn">Confirm Claim</button>
+                <button class="btn btn-secondary" id="cancelClaimBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["coach"]);
+    </script>
+    <script src="../../scripts/coach/coachSidebar.js"></script>
+    <script type="module" src="../../scripts/coach/calendar.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

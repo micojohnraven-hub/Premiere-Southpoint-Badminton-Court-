@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/admin/AdminSidebar.css">
+    <link rel="stylesheet" href="../../styles/admin/admin.css">
+    <title>Admin Dashboard | Southpoint </title>
+</head>
+
+<body class="preload">
+    <nav class="sidebar close">
+        <script>
+            if (localStorage.getItem("adminSidebarState") === "open") {
+                document.currentScript.parentElement.classList.remove("close");
+            }
+        </script>
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/components/logo.jpg" alt="logo">
+                </span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Business Admin</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="Dashboard.html" class="active"><i class='bx bx-home-alt icon'></i><span
+                                class="text">Dashboard</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Court.html"><i class='bx bx-cabinet icon'></i><span class="text">Court
+                                Manager</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="EventManager.html"><i class='bx bx-calendar-event icon'></i><span class="text">Event
+                                Manager</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Analytics.html"><i class='bx bx-bar-chart-alt-2 icon'></i><span
+                                class="text">Analytics</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Reports.html"><i class='bx bxs-report icon'></i><span class="text">Reports</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Coaches.html"><i class='bx bx-group icon'></i><span class="text">Coaches</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Players.html"><i class='bx bx-run icon'></i><span class="text">Players</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Settings.html"><i class='bx bx-cog icon'></i><span class="text">Settings</span></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <main class="home">
+        <div class="dash-content">
+            <div class="dash-header">
+                <h1>Admin Dashboard</h1>
+                <p>Real-time facility management and system oversight.</p>
+            </div>
+
+            <!-- Statistics Overview -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="s-info">
+                        <span>Occupancy</span>
+                        <h2 id="statOccupancy">—</h2>
+                        <p class="trend">right now</p>
+                    </div>
+                    <i class='bx bx-map-alt'></i>
+                </div>
+                <div class="stat-card">
+                    <div class="s-info">
+                        <span>Total Players</span>
+                        <h2 id="statTotalPlayers">—</h2>
+                        <p class="trend" id="statNewPlayersTrend">—</p>
+                    </div>
+                    <i class='bx bx-user'></i>
+                </div>
+                <div class="stat-card">
+                    <div class="s-info">
+                        <span>Active Courts</span>
+                        <h2 id="statActiveCourts">—</h2>
+                        <p class="trend" id="statAvailableSlots">—</p>
+                    </div>
+                    <i class='bx bx-run'></i>
+                </div>
+            </div>
+
+            <div class="main-grid">
+                <div class="content-area">
+                    <div class="widget-box todays-schedule">
+                        <div class="w-header">
+                            <div><i class='bx bx-calendar-check'></i> Today's Schedule</div>
+                        </div>
+                        <div id="todaysScheduleList" class="schedule-list"></div>
+                    </div>
+                </div>
+
+                <div class="widget-area">
+                    <div class="widget-box">
+                        <div class="w-header">
+                            <div class="title-nav">
+                                <i class='bx bx-calendar'></i> <span>Calendar</span>
+                            </div>
+                            <div class="cal-controls">
+                                <i class='bx bx-chevron-left' onclick="changeMonth(-1)"></i>
+                                <i class='bx bx-chevron-right' onclick="changeMonth(1)"></i>
+                            </div>
+                        </div>
+                        <div class="calendar-widget">
+                            <div class="cal-month" id="calMonth"></div>
+                            <div class="cal-grid" id="calGrid">
+                                <div class="day-name">S</div>
+                                <div class="day-name">M</div>
+                                <div class="day-name">T</div>
+                                <div class="day-name">W</div>
+                                <div class="day-name">T</div>
+                                <div class="day-name">F</div>
+                                <div class="day-name">S</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 id="modalTitle">Confirmation</h3>
+            <p id="modalText">Are you sure you want to perform this action?</p>
+            <div class="modal-footer">
+                <button class="m-btn-cancel" onclick="closeConfirm()">Cancel</button>
+                <button class="m-btn-confirm" id="modalConfirmBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="eventModal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Event Details</h3>
+            <p id="eventDateDisplay" style="font-weight: 500; color: var(--text-muted);"></p>
+            <div class="event-inputs">
+                <input type="text" id="eventTitle" placeholder="Event Name (e.g., Badminton Clinic)">
+                <textarea id="eventDesc" placeholder="Short details..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="m-btn-cancel" id="btnDeleteEvent" onclick="deleteSpecialEvent()"
+                    style="display: none; background: var(--danger); color: var(--white);">Delete</button>
+                <button class="m-btn-cancel" onclick="closeEventModal()">Cancel</button>
+                <button class="m-btn-confirm" onclick="saveSpecialEvent()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["business_admin"]);
+    </script>
+
+    <script src="../../scripts/admin/AdminSidebar.js"></script>
+    <script type="module" src="../../scripts/admin/Dashboard.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

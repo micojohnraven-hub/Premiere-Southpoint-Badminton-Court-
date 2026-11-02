@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" class="preload">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Logs | Southpoint Admin</title>
+
+    <!-- Prevent Sidebar Flash on Page Load -->
+    <script>
+        (function () {
+            const savedState = localStorage.getItem("sidebarState");
+            const isMobile = window.innerWidth <= 768;
+            if (savedState === "closed" || (!savedState && isMobile)) {
+                document.documentElement.classList.add("sidebar-is-closed");
+            }
+        })();
+    </script>
+
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/sysAdmin/systemAdmin.css">
+    <link rel="stylesheet" href="../../styles/sysAdmin/sysLogs.css">
+    <link rel="stylesheet" href="../../styles/sysAdmin/sidebar.css">
+</head>
+
+<body>
+
+    <nav class="sidebar">
+        <header>
+            <div class="image-text">
+                <span class="image"><img src="/components/logo.jpg" alt="logo"></span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">System Administrator</span>
+                </div>
+            </div>
+            <i class="bx bx-chevron-right toggle"></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link"><a href="systemAdmin.html"><i class="bx bx-shield-quarter icon"></i><span
+                                class="text">Overwatch</span></a></li>
+                    <li class="nav-link"><a href="sysContent.html"><i class="bx bx-home-alt-2 icon"></i><span
+                                class="text">Homepage</span></a></li>
+                    <li class="nav-link"><a href="sysUsers.html"><i class="bx bx-user-pin icon"></i><span
+                                class="text">User Accounts</span></a></li>
+                    <li class="nav-link"><a href="sysLogs.html"><i class="bx bx-terminal icon"></i><span
+                                class="text">System Logs</span></a></li>
+                    <li class="nav-link"><a href="sysFixes.html"><i class="bx bx-wrench icon"></i><span
+                                class="text">Technical Fixes</span></a></li>
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class="bx bx-log-out icon"></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <main class="home">
+        <div class="dash-header">
+            <h1>System Activity Logs</h1>
+            <p>Monitor real-time system events, security audits, and automated background tasks.</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-info">
+                    <span>Total Events (24h)</span>
+                    <h2 id="totalEvents">0</h2>
+                </div>
+                <i class="bx bx-list-check"></i>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-info">
+                    <span>Critical Errors</span>
+                    <h2 id="criticalErrors" class="stat-danger">00</h2>
+                </div>
+                <i class="bx bx-bug-alt"></i>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-info">
+                    <span>System Health</span>
+                    <h2 id="systemHealth" class="stat-success">100%</h2>
+                </div>
+                <i class="bx bx-heart-square"></i>
+            </div>
+        </div>
+
+        <section class="content-section">
+            <div class="log-controls">
+                <div class="category-select">
+                    <select id="categoryFilter" class="category-filter-select">
+                        <option value="all">All Categories</option>
+                        <option value="AUTH">Auth</option>
+                        <option value="SETTINGS">Settings</option>
+                        <option value="SYSTEM">System</option>
+                    </select>
+                </div>
+
+                <div class="search-box">
+                    <i class="bx bx-search"></i>
+                    <input type="text" id="logSearch" placeholder="Filter by user or action...">
+                </div>
+
+                <div class="filter-btns">
+                    <button class="btn-filter active" data-filter="all">All</button>
+                    <button class="btn-filter" data-filter="error">Errors</button>
+                    <button class="btn-filter" data-filter="warning">Warnings</button>
+                    <button class="btn-filter" data-filter="success">Success</button>
+
+                    <button class="btn-primary btn-export" id="exportBtn">
+                        <i class="bx bx-download"></i> Export CSV
+                    </button>
+                </div>
+            </div>
+
+            <div class="maximized-container">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>TIMESTAMP</th>
+                                <th>CATEGORY</th>
+                                <th>ACTION / EVENT</th>
+                                <th>USER INVOLVED</th>
+                                <th style="text-align: center">STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="notification-container"></div>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["sys_admin"]);
+    </script>
+    <script type="module" src="../../scripts/sysAdmin/sysLogs.js"></script>
+    <script src="../../scripts/sysAdmin/sidebar.js"></script>
+</body>
+
+</html>

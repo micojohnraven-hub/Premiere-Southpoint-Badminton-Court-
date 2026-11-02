@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/employee/EmployeeSidebar.css">
+    <link rel="stylesheet" href="../../styles/employee/settings.css">
+    <title>Settings | Southpoint</title>
+
+    <script>
+        (function () {
+            const state = localStorage.getItem("employeeSidebarState");
+            if (state === "open") {
+                document.documentElement.classList.add("sidebar-open");
+            }
+        })();
+    </script>
+
+</head>
+
+<body class="preload">
+    <!-- SIDEBAR -->
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image"><img src="/components/logo.jpg" alt="logo"></span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Employee</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link"><a href="employeeRole.html"><i class='bx bx-book-content icon'></i><span
+                                class="text">Reservations</span></a></li>
+                    <li class="nav-link"><a href="courtMap.html"><i class='bx bx-map-alt icon'></i><span
+                                class="text">Live Court Map</span></a></li>
+                    <li class="nav-link"><a href="tournament.html"><i class='bx bx-trophy icon'></i><span
+                                class="text">Tournament Day</span></a></li>
+                    <li class="nav-link"><a href="Settings.html"><i class='bx bx-cog icon'></i><span
+                                class="text">Settings</span></a></li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <section class="home">
+        <div class="dash-content">
+            <div class="dash-header">
+                <h1>Account Settings</h1>
+                <p>Manage your account details, security, and app preferences.</p>
+            </div>
+
+            <div class="settings-grid">
+                <!-- Profile Section -->
+                <div class="settings-card">
+                    <div class="card-title">
+                        <i class='bx bx-user'></i>
+                        <h3>Public Profile</h3>
+                    </div>
+                    <form id="profileForm">
+                        <div class="profile-pic-uploader">
+                            <img src="/components/logobg.jpeg" id="avatarPreview" alt="Profile Picture">
+                            <div class="upload-controls">
+                                <label for="fileUpload" class="btn-outline">Change Photo</label>
+                                <input type="file" id="fileUpload" hidden accept="image/*">
+                                <span>JPG or PNG. Max 2MB.</span>
+                            </div>
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-box">
+                                <label>Full Name</label>
+                                <input type="text" id="fullName" placeholder="Your Name">
+                            </div>
+                            <div class="input-box">
+                                <label>Username</label>
+                                <input type="text" id="username" placeholder="Username">
+                            </div>
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-box">
+                                <label>Email Address</label>
+                                <input type="email" id="email" placeholder="email@example.com" readonly>
+                            </div>
+                            <div class="input-box">
+                                <label>Phone Number</label>
+                                <input type="tel" id="phone" placeholder="+639123456789" inputmode="tel" maxlength="13"
+                                    autocomplete="tel">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-save">Update Profile</button>
+                    </form>
+                </div>
+
+                <!-- Security Section -->
+                <div class="settings-card">
+                    <div class="card-title">
+                        <i class='bx bx-lock-alt'></i>
+                        <h3>Security</h3>
+                    </div>
+                    <form id="securityForm">
+                        <div class="input-box">
+                            <label>Current Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="currentPassword" placeholder="••••••••">
+                                <i class='bx bx-hide toggle-password' data-target="currentPassword"></i>
+                            </div>
+                        </div>
+                        <div class="input-box">
+                            <label>New Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="newPassword" placeholder="Enter new password">
+                                <i class='bx bx-hide toggle-password' data-target="newPassword"></i>
+                            </div>
+                        </div>
+                        <div class="input-box">
+                            <label>Confirm Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="confirmPassword" placeholder="Repeat new password">
+                                <i class='bx bx-hide toggle-password' data-target="confirmPassword"></i>
+                            </div>
+                        </div>
+                        <div class="security-info">
+                            <p><i class='bx bx-info-circle'></i> Must have uppercase, lowercase, number, and special
+                                character (e.g. Pass@123)</p>
+                        </div>
+                        <button type="submit" class="btn-save">Change Password</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["employee"]);
+    </script>
+
+    <script src="../../scripts/employee/EmployeeSidebar.js"></script>
+    <script type="module" src="../../scripts/employee/Settings.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/admin/AdminSidebar.css">
+    <link rel="stylesheet" href="../../styles/admin/Court.css">
+    <link rel="stylesheet" href="../../styles/admin/admin.css">
+    <title>Court | Southpoint</title>
+</head>
+
+<body class="preload">
+    <nav class="sidebar close">
+        <script>
+            if (localStorage.getItem("adminSidebarState") === "open") {
+                document.currentScript.parentElement.classList.remove("close");
+            }
+        </script>
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/components/logo.jpg" alt="logo">
+                </span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Business Admin</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="Dashboard.html"><i class='bx bx-home-alt icon'></i><span
+                                class="text">Dashboard</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Court.html" class="active"><i class='bx bx-cabinet icon'></i><span class="text">Court
+                                Manager</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="EventManager.html"><i class='bx bx-calendar-event icon'></i><span class="text">Event
+                                Manager</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Analytics.html"><i class='bx bx-bar-chart-alt-2 icon'></i><span
+                                class="text">Analytics</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Reports.html"><i class='bx bxs-report icon'></i><span class="text">Reports</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Coaches.html"><i class='bx bx-group icon'></i><span class="text">Coaches</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Players.html"><i class='bx bx-run icon'></i><span class="text">Players</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Settings.html"><i class='bx bx-cog icon'></i><span class="text">Settings</span></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <main class="home">
+        <div class="dash-content">
+            <div class="dash-header">
+                <h1>Court Manager</h1>
+                <p>Manage court names, availability, and current status.</p>
+            </div>
+            <div class="court-area">
+                <div class="toolbar">
+                    <div class="view-pill"><i class='bx bx-list-ul'></i> Live Court View</div>
+                    <div class="search-wrapper">
+                        <i class='bx bx-search'></i>
+                        <input type="text" id="courtSearch" placeholder="Search courts...">
+                        <button class="filter-ico"><i class='bx bx-slider-alt'></i></button>
+                    </div>
+                </div>
+                <div class="court-grid" id="courtGrid"></div>
+            </div>
+        </div>
+    </main>
+
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 id="modalTitle">Confirmation</h3>
+            <p id="modalText">Are you sure you want to perform this action?</p>
+            <div class="modal-footer">
+                <button class="m-btn-cancel" onclick="closeConfirm()">Cancel</button>
+                <button class="m-btn-confirm" id="modalConfirmBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="reasonModal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Set Court Status</h3>
+            <p>Select a reason for making this court unavailable.</p>
+
+            <div class="modal-form">
+                <label>
+                    <input type="radio" name="closeReason" value="Maintenance">
+                    Maintenance
+                </label>
+
+                <label>
+                    <input type="radio" name="closeReason" value="Private Event">
+                    Private Event
+                </label>
+
+                <label>
+                    <input type="radio" name="closeReason" value="Tournament">
+                    Tournament
+                </label>
+
+                <label>
+                    <input type="radio" name="closeReason" value="Others">
+                    Others
+                </label>
+
+                <input type="text" id="otherReasonInput" placeholder="Specify reason..." style="display:none;">
+            </div>
+
+            <div class="modal-footer">
+                <button class="m-btn-cancel" onclick="closeReasonModal()">
+                    Cancel
+                </button>
+
+                <button class="m-btn-confirm danger" onclick="confirmDowntimeReason()">
+                    Set Downtime
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="editCourtModal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Edit Court</h3>
+            <p>Update court name</p>
+
+            <div class="modal-form">
+                <label for="editCourtName">Court Name</label>
+                <input type="text" id="editCourtName">
+            </div>
+
+            <div class="modal-footer">
+                <button class="m-btn-cancel" onclick="closeEditCourtModal()">
+                    Cancel
+                </button>
+
+                <button class="m-btn-confirm" onclick="saveCourtEdit()">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="addCourtModal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Add Court</h3>
+            <p>Add a new court to the system.</p>
+
+            <div class="modal-form">
+                <label for="addCourtName">Court Name</label>
+                <input type="text" id="addCourtName" placeholder="e.g. Court 9">
+            </div>
+
+            <div class="modal-footer">
+                <button class="m-btn-cancel" onclick="closeAddCourtModal()">
+                    Cancel
+                </button>
+
+                <button class="m-btn-confirm" onclick="saveNewCourt()">
+                    Add Court
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["business_admin"]);
+    </script>
+
+    <script src="../../scripts/admin/AdminSidebar.js"></script>
+    <script type="module" src="../../scripts/admin/Court.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

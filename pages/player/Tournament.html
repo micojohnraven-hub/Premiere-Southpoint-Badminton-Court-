@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/player/PlayerSidebar.css">
+    <link rel="stylesheet" href="../../styles/admin/Event.css">
+    <link rel="stylesheet" href="../../styles/admin/EventBrackets.css">
+    <link rel="stylesheet" href="../../styles/player/Tournament.css">
+    <title>Tournament | Southpoint</title>
+</head>
+
+<body>
+    <nav class="sidebar close">
+        <script>
+            if (localStorage.getItem("playerSidebarState") === "open") {
+                document.currentScript.parentElement.classList.remove("close");
+            }
+        </script>
+
+        <header>
+            <div class="image-text">
+                <span class="image"><img src="/components/logo.jpg" alt="logo"></span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Player</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link"><a href="player.html"><i class='bx bx-user icon'></i><span class="text">Profile</span></a></li>
+                    <li class="nav-link"><a href="CourtList.html"><i class='bx bx-detail icon'></i><span class="text">Court List</span></a></li>
+                    <li class="nav-link"><a href="reservation.html"><i class='bx bx-calendar-check icon'></i><span class="text">My Reservations</span></a></li>
+                    <li class="nav-link"><a href="Queue.html"><i class='bx bxs-group icon'></i><span class="text">Queue List</span></a></li>
+                    <li class="nav-link"><a href="Tournament.html"><i class='bx bx-trophy icon'></i><span class="text">Tournaments</span></a></li>
+                    <li class="nav-link"><a href="Coach.html"><i class='bx bx-user-voice icon'></i><span class="text">Coach Booking</span></a></li>
+                    <li class="nav-link"><a href="Settings.html"><i class='bx bx-cog icon'></i><span class="text">Settings</span></a></li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT AREA -->
+    <section class="home">
+        <div class="dash-header">
+            <h1>Tournament Center</h1>
+            <p>Live brackets, match tracking, and event registrations.</p>
+        </div>
+
+        <!-- NO TOURNAMENT STATE -->
+        <div id="noTournamentSection">
+            <div class="empty-tournament-card">
+                <div class="empty-tournament-icon">
+                    <i class='bx bx-trophy'></i>
+                </div>
+                <h2>No Tournament Yet</h2>
+                <p>Stay tuned! The next tournament will appear here once the admin posts an announcement. You'll be able to register and track the live bracket from this page.</p>
+            </div>
+        </div>
+
+        <!-- TOURNAMENT CARD -->
+        <div id="adSection" class="player-ad-card">
+            <div class="ad-content">
+                <div class="ad-info">
+                    <span class="badge" id="regBadge">Registration Open</span>
+                    <h2 id="displayAdTitle">Tournament Loading...</h2>
+                    <p id="displayAdDesc">Join the competition and test your skills.</p>
+                </div>
+
+                <div class="registration-controls" id="regControls">
+
+                    <!-- 1. NOT QUALIFIED -->
+                    <div id="notQualifiedUI">
+                        <div class="status-box status-warning">
+                            <i class='bx bx-shield-x'></i>
+                            <span>You need a player level to join tournaments.</span>
+                        </div>
+                        <a href="Coach.html" class="btn-join btn-join--coach">
+                            <i class='bx bx-user-voice'></i> Book Coach Assessment
+                        </a>
+                    </div>
+
+                    <!-- 2. WRONG LEVEL -->
+                    <div id="wrongLevelUI">
+                        <div class="status-box status-error">
+                            <i class='bx bx-block'></i>
+                            <span id="wrongLevelMsg">This tournament is not for your level.</span>
+                        </div>
+                    </div>
+
+                    <!-- 3. ELIGIBLE -->
+                    <div id="eligibleUI">
+                        <div class="status-box status-success status-box--eligible">
+                            <i class='bx bx-check-shield'></i>
+                            <span id="eligibleMsg">You are eligible to join!</span>
+                        </div>
+                        <button class="btn-join" id="joinBtn" onclick="openJoinModal()">
+                            <i class='bx bx-edit-alt'></i> Join Tournament
+                        </button>
+                    </div>
+
+                    <!-- 4. ALREADY REGISTERED -->
+                    <div id="registeredUI">
+                        <div class="status-box" id="registeredStatusBox">
+                            <i class='bx bxs-check-circle'></i>
+                            <span id="registeredStatusText">Successfully Registered</span>
+                        </div>
+                        <button class="btn-leave-minimal" id="withdrawBtn" onclick="withdrawRegistration()">
+                            Withdraw Registration
+                        </button>
+                    </div>
+
+                    <!-- 5. REGISTRATION CLOSED -->
+                    <div id="closedUI">
+                        <div class="status-box status-error">
+                            <i class='bx bx-lock'></i>
+                            <span>Registration is currently closed.</span>
+                        </div>
+                    </div>
+
+                    <!-- 6. ONGOING -->
+                    <div id="ongoingUI">
+                        <div class="status-box status-success">
+                            <i class='bx bx-broadcast'></i>
+                            <span>Tournament is live! See the bracket below.</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- INLINE BRACKET SECTION -->
+        <div id="bracketSection">
+            <div class="bracket-section-header">
+                <div class="bracket-header-left">
+                    <h2><i class='bx bx-sitemap'></i> Live Bracket</h2>
+                    <div class="tournament-timer" id="bracketTimer">
+                        <i class='bx bx-stopwatch'></i>
+                        <span id="timerDisplay">00:00:00</span>
+                    </div>
+                </div>
+            </div>
+            <div class="bracket-scroll-wrapper">
+                <div id="bracketDisplay" class="bracket-container">
+                    <div class="empty-stream-placeholder">
+                        <div class="placeholder-icon"><i class='bx bx-trophy'></i></div>
+                        <h3>Bracket Not Available Yet</h3>
+                        <p>The bracket will appear here once the tournament starts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOURNAMENT HISTORY SECTION -->
+        <div id="historySection" class="history-section">
+            <div class="history-header">
+                <div>
+                    <h2><i class='bx bx-history'></i> Tournament Archive</h2>
+                    <p class="history-subtext">Relive the glory and check out past champions.</p>
+                </div>
+            </div>
+
+            <div class="history-table-container">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Tournament Event</th>
+                            <th>Champion</th>
+                            <th class="th-bracket">Bracket</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyBody">
+                        <!-- JS Injected -->
+                    </tbody>
+                </table>
+                <div id="historyEmpty" class="empty-state history-empty-state">
+                    <i class='bx bx-folder-open history-empty-icon'></i>
+                    <p class="history-empty-text">No tournament history available.</p>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- JOIN MODAL -->
+    <div id="joinModal" class="modal-overlay">
+        <div class="modal-box modal-box--payment">
+            <div class="modal-header modal-header--center">
+                <button class="modal-close-btn modal-close-btn--abs" onclick="closeJoinModal()"><i class='bx bx-x'></i></button>
+                <h3 class="pay-title-h">Tournament Registration</h3>
+                <p class="pay-title-sub">Fill out your tournament information and fee</p>
+            </div>
+
+            <div class="modal-body modal-body--payment">
+                <!-- Category Select -->
+                <div class="pay-field">
+                    <label>Tournament Category <span class="req-star">*</span></label>
+                    <select id="regCategorySelect" class="pay-select" onchange="handleCategorySelection(this.value)">
+                        <option value="">Select Category</option>
+                    </select>
+                </div>
+
+                <!-- Partner Field (shows only for doubles) -->
+                <div class="pay-field" id="partnerFieldContainer">
+                    <label>Doubles Partner Full Name <span class="req-star">*</span></label>
+                    <input type="text" id="regPartnerInput" placeholder="Enter partner's full name">
+                </div>
+
+                <!-- Experience & Club -->
+                <div class="pay-grid-2col">
+                    <div class="pay-field">
+                        <label>Playing Experience <span class="req-star">*</span></label>
+                        <select id="regExperience" class="pay-select">
+                            <option value="Less than 1 yr">Less than 1 yr</option>
+                            <option value="1 - 2 yrs">1 - 2 yrs</option>
+                            <option value="3 - 5 yrs">3 - 5 yrs</option>
+                            <option value="5+ yrs">5+ yrs</option>
+                        </select>
+                    </div>
+                    <div class="pay-field">
+                        <label>Club / Team</label>
+                        <input type="text" id="regClubTeam" placeholder="e.g. Smash Club (or None)">
+                    </div>
+                </div>
+
+                <!-- Contact Number -->
+                <div class="pay-field">
+                    <label>Active Contact Number <span class="req-star">*</span></label>
+                    <input type="text" id="regContactInput" placeholder="e.g. 09171234567" maxlength="15">
+                </div>
+
+                <!-- Payment Method Selector -->
+                <div class="pay-field">
+                    <label>Payment Method <span class="req-star">*</span></label>
+                    <div class="pay-method-grid">
+                        <label id="optEwalletLabel" class="pay-method-card pay-method-card--active">
+                            <input type="radio" name="tournaPaymentMethod" value="E-wallet" checked onchange="handlePaymentMethodChange(this.value)">
+                            <i class='bx bxs-wallet pay-icon-wallet'></i>
+                            <span class="pay-method-title">E-Wallet</span>
+                        </label>
+                        <label id="optCashLabel" class="pay-method-card">
+                            <input type="radio" name="tournaPaymentMethod" value="Cash" onchange="handlePaymentMethodChange(this.value)">
+                            <i class='bx bx-money pay-icon-cash'></i>
+                            <span class="pay-method-title">Cash</span>
+                        </label>
+                    </div>
+                </div>
+
+                <p class="pay-total">Registration Fee: <strong id="joinFeeLabel">₱0.00</strong></p>
+
+                <!-- E-Wallet Section -->
+                <div id="ewalletSection">
+                    <div class="pay-qr-wrap">
+                        <img id="tournaQRImage" src="" alt="Payment QR Code" class="pay-qr-img">
+                        <div id="qrFallback" class="pay-qr-fallback">
+                            <i class='bx bx-qr-scan'></i>
+                            <span>Loading QR...</span>
+                        </div>
+                    </div>
+                    <p id="tournaQRAccountInfo" class="qr-account-info"></p>
+
+                    <!-- Reference Number -->
+                    <div class="pay-field">
+                        <label>Online Payment Reference Number <span class="req-star">*</span></label>
+                        <input type="text" id="refInput" placeholder="e.g. 1234567890" maxlength="30">
+                    </div>
+
+                    <!-- Screenshot -->
+                    <div class="pay-field">
+                        <label>Payment Screenshot <span class="req-star">*</span></label>
+                        <div class="pay-upload-box" onclick="document.getElementById('ssInput').click()">
+                            <input type="file" id="ssInput" accept="image/*" class="pay-file-input">
+                            <div id="uploadPrompt">
+                                <i class='bx bx-cloud-upload'></i>
+                                <span>Click to upload screenshot</span>
+                            </div>
+                            <img id="ssPreview" class="pay-ss-preview">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cash Section -->
+                <div id="cashSection" class="cash-notice-box">
+                    <div class="cash-notice-content">
+                        <i class='bx bx-info-circle cash-notice-icon'></i>
+                        <div>
+                            <strong class="cash-notice-title">Pay Over the Counter</strong>
+                            <p class="cash-notice-desc">
+                                Please settle your registration fee at the front desk / cashier before game day to get verified by the admin.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="joinStatus" class="join-status"></div>
+            </div>
+
+            <div class="modal-footer modal-footer--payment">
+                <button class="btn-paid" id="submitBtn" onclick="submitJoin()">Confirm & Register</button>
+                <button class="btn-cancel-pay" onclick="closeJoinModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ARCHIVED BRACKET MODAL -->
+    <div id="archivedBracketModal" class="modal-overlay">
+        <div class="modal-box modal-box--archive">
+            <div class="modal-header">
+                <h3 id="archivedBracketTitle">Tournament Bracket</h3>
+                <button class="modal-close-btn" onclick="closeArchivedBracket()"><i class='bx bx-x'></i></button>
+            </div>
+            <div class="modal-body modal-body--archive">
+                <div id="archivedBracketDisplay"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel-pay" onclick="closeArchivedBracket()">Close View</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 Premiere Southpoint Badminton Court. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["player"]);
+    </script>
+
+    <script src="../../scripts/player/PlayerSidebar.js"></script>
+    <script type="module" src="../../scripts/player/Tournament.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

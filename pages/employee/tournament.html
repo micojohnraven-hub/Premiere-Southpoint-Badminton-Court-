@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/employee/employeeRole.css">
+    <link rel="stylesheet" href="../../styles/employee/tournament.css">
+    <link rel="stylesheet" href="../../styles/employee/EmployeeSidebar.css">
+
+    <script>
+        (function () {
+            const state = localStorage.getItem("employeeSidebarState");
+            if (state === "open") {
+                document.documentElement.classList.add("sidebar-open");
+            }
+        })();
+    </script>
+
+    <title>Tournament | Southpoint</title>
+</head>
+
+<body class="preload">
+
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image"><img src="/components/logo.jpg" alt="logo"></span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Employee</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link"><a href="employeeRole.html"><i class='bx bx-book-content icon'></i><span
+                                class="text">Reservations</span></a></li>
+                    <li class="nav-link"><a href="courtMap.html"><i class='bx bx-map-alt icon'></i><span
+                                class="text">Live Court Map</span></a></li>
+                    <li class="nav-link"><a href="tournament.html" class="active"><i class='bx bx-trophy icon'></i><span
+                                class="text">Tournament Day</span></a></li>
+                    <li class="nav-link"><a href="Settings.html"><i class='bx bx-cog icon'></i><span
+                                class="text">Settings</span></a></li>
+                    <!-- <li class="nav-link"><a href="manualOps.html"><i class='bx bx-wrench icon'></i><span class="text">Manual Ops</span></a></li> -->
+            </div>
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT AREA -->
+    <section class="home">
+        <div class="event-wrapper">
+            <div class="dash-content">
+                <div class="dash-header">
+                    <h1>Tournament Center</h1>
+                    <p>Live brackets, match tracking, and event registrations.</p>
+                </div>
+            </div>
+
+            <!-- NO TOURNAMENT STATE (NEW) -->
+            <div id="noTournamentSection" style="display:none;">
+                <div class="empty-tournament-card">
+                    <div class="empty-tournament-icon">
+                        <i class='bx bx-trophy'></i>
+                    </div>
+                    <h2>No Tournament Yet</h2>
+                    <p>Stay tuned! Once the admin posts an announcement and opens registration, it will appear here for
+                        tracking.</p>
+                </div>
+
+                <div class="recent-champs-section">
+                    <h3><i class='bx bx-history'></i> Recent Champions</h3>
+                    <div id="recentChampsList" class="recent-champs-list">
+                        <div class="loading-state"><i class='bx bx-loader-alt bx-spin'></i> Loading...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="adSection" class="player-ad-card" style="display: none;">
+                <div class="ad-content">
+                    <div class="ad-info">
+                        <span class="badge" id="regBadge">Registration Open</span>
+                        <h2 id="displayAdTitle">Tournament Loading...</h2>
+                        <p id="displayAdDesc">Join the competition and test your skills.</p>
+                    </div>
+                </div>
+            </div>
+            <div id="bracketSection" style="display:none;">
+                <div style="display:flex;justify-content:center;margin-top:12px;">
+                    <div class="tournament-timer" id="timerDisplay">
+                        <i class='bx bx-timer'></i> 00:00:00
+                    </div>
+                </div>
+
+                <div class="bracket-stream-box">
+                    <div class="bracket-scroll-wrapper">
+                        <div id="bracketInlineDisplay"
+                            style="width:100%;max-width:100%;display:flex;flex-direction:column;gap:20px;overflow:hidden;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="adSection" class="player-ad-card" style="display: none;">
+            <div class="ad-content">
+                <div class="ad-info">
+                    <span class="badge" id="regBadge">Registration Open</span>
+                    <h2 id="displayAdTitle">Tournament Loading...</h2>
+                    <p id="displayAdDesc">Join the competition and test your skills.</p>
+                </div>
+            </div>
+        </div>
+        <div id="bracketSection" style="display:none;">
+            <div style="display:flex;justify-content:center;margin-top:12px;">
+                <div class="tournament-timer" id="timerDisplay">
+                    <i class='bx bx-timer'></i> 00:00:00
+                </div>
+            </div>
+
+            <div class="bracket-stream-box">
+                <div class="bracket-scroll-wrapper">
+                    <div id="bracketInlineDisplay"
+                        style="width:100%;max-width:100%;display:flex;flex-direction:column;gap:20px;overflow:hidden;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["employee"]);
+    </script>
+
+    <script src="../../scripts/employee/EmployeeSidebar.js"></script>
+    <script type="module" src="../../scripts/employee/tournament.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

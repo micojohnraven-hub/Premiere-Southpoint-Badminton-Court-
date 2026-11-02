@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="icon" href="/components/logo.png">
+    <title>Signing in... | Southpoint</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            font-family: 'Open sans', sans-serif;
+            background: #f4f6f8;
+        }
+
+        .loading-text {
+            color: #444;
+            font-size: 0.95rem;
+            text-align: center;
+            padding: 0 16px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        .modal-card {
+            background: #fff;
+            padding: 24px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            margin: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-card h3 {
+            margin: 0 0 8px;
+            font-size: 1.15rem;
+            color: #2d2d2d;
+        }
+
+        .modal-sub {
+            font-size: 0.85rem;
+            color: #666;
+            margin: 0 0 16px;
+            line-height: 1.5;
+        }
+
+        .field {
+            margin-bottom: 12px;
+        }
+
+        .field.last {
+            margin-bottom: 16px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .phone-group {
+            display: flex;
+            align-items: stretch;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .phone-group:focus-within {
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+        }
+
+        .phone-prefix {
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            background: #f3f4f6;
+            font-weight: 600;
+            border-right: 1px solid #ccc;
+        }
+
+        .phone-group input {
+            flex: 1;
+            min-width: 0;
+            padding: 12px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            font-family: inherit;
+            background: transparent;
+        }
+
+        .field select {
+            width: 100%;
+            min-height: 46px;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            background: #fff;
+        }
+
+        .field select:focus {
+            outline: none;
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+        }
+
+        .submit-btn {
+            width: 100%;
+            min-height: 48px;
+            padding: 12px;
+            background: #16a34a;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            font-family: inherit;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .submit-btn:active {
+            background: #15803d;
+        }
+
+        @media (max-width: 400px) {
+            .modal-card {
+                padding: 20px 16px;
+            }
+
+            .modal-card h3 {
+                font-size: 1.05rem;
+            }
+        }
+
+        @media (max-height: 480px) and (orientation: landscape) {
+            .modal-overlay {
+                align-items: flex-start;
+            }
+
+            .modal-card {
+                padding: 16px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <p class="loading-text" id="statusText">Signing you in...</p>
+
+    <div id="completeProfileModal" class="modal-overlay" style="display:none;">
+        <div class="modal-card">
+            <h3>Complete Your Profile</h3>
+            <p class="modal-sub">We need a few more details to finish setting up your account.</p>
+
+            <form id="completeProfileForm">
+                <div class="field">
+                    <label for="modalPhone">Phone Number</label>
+                    <div class="phone-group">
+                        <span class="phone-prefix">+63</span>
+                        <input type="tel" id="modalPhone" placeholder="9171234567" required maxlength="10"
+                            inputmode="numeric" autocomplete="tel-national">
+                    </div>
+                </div>
+
+                <div class="field last">
+                    <label for="modalGender">Gender</label>
+                    <select id="modalGender" required>
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn">Save and Continue</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="../../scripts/auth/authCallback.js"></script>
+</body>
+
+</html>

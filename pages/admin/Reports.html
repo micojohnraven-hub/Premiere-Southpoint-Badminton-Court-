@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/admin/AdminSidebar.css">
+    <link rel="stylesheet" href="../../styles/admin/Reports.css">
+    <link rel="stylesheet" href="../../styles/admin/admin.css">
+    <title>System Reports | Southpoint</title>
+</head>
+
+<body class="preload">
+    <nav class="sidebar close">
+        <script>
+            if (localStorage.getItem("adminSidebarState") === "open") {
+                document.currentScript.parentElement.classList.remove("close");
+            }
+        </script>
+
+        <header>
+            <div class="image-text">
+                <span class="image"><img src="/components/logo.jpg" alt="logo"></span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Business Admin</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="Dashboard.html"><i class='bx bx-home-alt icon'></i><span
+                                class="text">Dashboard</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Court.html"><i class='bx bx-cabinet icon'></i><span class="text">Court
+                                Manager</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="EventManager.html"><i class='bx bx-calendar-event icon'></i><span class="text">Event
+                                Manager</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Analytics.html"><i class='bx bx-bar-chart-alt-2 icon'></i><span
+                                class="text">Analytics</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Reports.html" class="active"><i class='bx bxs-report icon'></i><span
+                                class="text">Reports</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Coaches.html"><i class='bx bx-group icon'></i><span class="text">Coaches</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Players.html"><i class='bx bx-run icon'></i><span class="text">Players</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Settings.html"><i class='bx bx-cog icon'></i><span class="text">Settings</span></a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <main class="home">
+        <div class="reports-wrapper">
+            <div class="reports-header">
+                <div class="header-title">
+                    <h1>System Reports</h1>
+                    <p>Monitor court usage and reported court issues</p>
+                </div>
+
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="printFullReport()">
+                        Print Report
+                    </button>
+                    <button class="btn btn-primary" onclick="exportToPDF()">
+                        Export PDF
+                    </button>
+                    <button class="btn btn-primary" onclick="exportToCSV()">
+                        Export CSV
+                    </button>
+                </div>
+            </div>
+
+            <div class="reports-container">
+                <div class="report-filters">
+                    <button class="filter-btn active" onclick="filterReports('all')">All</button>
+                    <button class="filter-btn" onclick="filterReports('usage')">Court Usage</button>
+                    <button class="filter-btn" onclick="filterReports('issue')">Issues</button>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Court</th>
+                                <th>Person</th>
+                                <th>Details</th>
+                                <th>Date / Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reports-body"></tbody>
+                    </table>
+                </div>
+
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        Showing <span id="start-idx">0</span> to <span id="end-idx">0</span> of <span
+                            id="total-idx">0</span> entries
+                    </div>
+                    <div class="pagination-buttons" id="pagination-controls"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["business_admin"]);
+    </script>
+
+    <script src="../../scripts/admin/AdminSidebar.js"></script>
+    <script type="module" src="../../scripts/admin/Reports.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.6.0/jspdf.plugin.autotable.min.js"></script>
+
+</body>
+
+</html>

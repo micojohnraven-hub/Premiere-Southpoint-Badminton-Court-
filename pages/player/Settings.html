@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/player/PlayerSidebar.css">
+    <link rel="stylesheet" href="../../styles/player/Settings.css">
+    <title>Settings | Southpoint</title>
+</head>
+
+<body>
+    <!-- SIDEBAR -->
+    <nav class="sidebar close">
+
+        <script>
+            if (localStorage.getItem("playerSidebarState") === "open") {
+                document.currentScript.parentElement.classList.remove("close");
+            }
+        </script>
+
+
+        <header>
+            <div class="image-text">
+                <span class="image"><img src="/components/logo.jpg" alt="logo"></span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Player</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link"><a href="player.html"><i class='bx bx-user icon'></i><span
+                                class="text">Profile</span></a></li>
+                    <li class="nav-link"><a href="CourtList.html"><i class='bx bx-detail icon'></i><span
+                                class="text">Court List</span></a></li>
+                    <li class="nav-link"><a href="reservation.html"><i class='bx bx-calendar-check icon'></i><span
+                                class="text">My Reservations</span></a></li>
+                    <li class="nav-link"><a href="Queue.html"><i class='bx bxs-group icon'></i><span class="text">Queue
+                                List</span></a></li>
+                    <li class="nav-link"><a href="Tournament.html"><i class='bx bx-trophy icon'></i><span
+                                class="text">Tournaments</span></a></li>
+                    <li class="nav-link"><a href="Coach.html"><i class='bx bx-user-voice icon'></i><span
+                                class="text">Coach Booking</span></a></li>
+                    <li class="nav-link"><a href="Settings.html"><i class='bx bx-cog icon'></i><span
+                                class="text">Settings</span></a></li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <section class="home">
+        <div class="header-content">
+            <div class="dash-header">
+                <h1>Player Profile</h1>
+                <p>Manage your personal stats and training progress</p>
+            </div>
+        </div>
+
+        <div class="settings-grid">
+            <!-- Profile Section -->
+            <div class="settings-card">
+                <div class="card-title">
+                    <i class='bx bx-user'></i>
+                    <h3>Public Profile</h3>
+                </div>
+                <form id="profileForm">
+                    <div class="profile-pic-uploader">
+                        <img src="/components/logobg.jpeg" id="avatarPreview" alt="Profile Picture">
+                        <div class="upload-controls">
+                            <label for="fileUpload" class="btn-outline">Change Photo</label>
+                            <input type="file" id="fileUpload" hidden accept="image/*">
+                            <span>JPG or PNG. Max 2MB.</span>
+                        </div>
+                    </div>
+
+                    <div class="input-box">
+                        <label>Full Name</label>
+                        <input type="text" id="fullName" placeholder="Your Name">
+                    </div>
+
+                    <div class="input-row">
+                        <div class="input-box">
+                            <label>Username</label>
+                            <input type="text" id="username" placeholder="Username">
+                        </div>
+                        <div class="input-box">
+                            <label>Gender</label>
+                            <select id="gender">
+                                <option value="">Select gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="input-box">
+                            <label>Email Address</label>
+                            <input type="email" id="email" placeholder="email@example.com" readonly>
+                        </div>
+                        <div class="input-box">
+                            <label>Phone Number</label>
+                            <input type="tel" id="phone" placeholder="09XXXXXXXXX">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-save">Update Profile</button>
+                </form>
+            </div>
+
+            <!-- Security Section -->
+            <div class="settings-card">
+                <div class="card-title">
+                    <i class='bx bx-lock-alt'></i>
+                    <h3>Security</h3>
+                </div>
+                <form id="securityForm">
+                    <div class="input-box">
+                        <label>Current Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="currentPassword" placeholder="••••••••">
+                            <i class='bx bx-hide toggle-password' data-target="currentPassword"></i>
+                        </div>
+                    </div>
+                    <div class="input-box">
+                        <label>New Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="newPassword" placeholder="Enter new password">
+                            <i class='bx bx-hide toggle-password' data-target="newPassword"></i>
+                        </div>
+                    </div>
+                    <div class="input-box">
+                        <label>Confirm Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="confirmPassword" placeholder="Repeat new password">
+                            <i class='bx bx-hide toggle-password' data-target="confirmPassword"></i>
+                        </div>
+                    </div>
+                    <div class="security-info">
+                        <p><i class='bx bx-info-circle'></i> Must have uppercase, lowercase, number, and special
+                            character (e.g. Pass@123)</p>
+                    </div>
+                    <button type="submit" class="btn-save">Change Password</button>
+                </form>
+            </div>
+
+            <!-- Resident Verification Section -->
+            <div class="settings-card full-width">
+                <div class="card-title">
+                    <i class='bx bx-home-heart'></i>
+                    <h3>Resident Verification
+                        <span class="resident-status-badge pending" id="residentBadge" style="display:none;">
+                            <i class='bx bx-time-five'></i> Pending Review
+                        </span>
+                    </h3>
+                </div>
+
+                <div class="discount-note" style="margin-bottom: 18px;">
+                    <i class='bx bx-info-circle'></i>
+                    <span>Southpoint homeowners enjoy a discounted court rate of <strong>₱200/hour</strong> (vs. the
+                        regular ₱250/hour). Upload valid proof of residency to unlock this benefit.</span>
+                </div>
+
+                <form id="residentForm">
+                    <!-- Toggle -->
+                    <div class="resident-toggle-row">
+                        <div class="pref-info">
+                            <strong>I am a Southpoint Homeowner</strong>
+                            <p>Enable this to upload your proof of residency.</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="residentToggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- Proof Upload (shown when toggle is ON) -->
+                    <div class="resident-proof-upload" id="proofUploadSection">
+
+                        <!-- Preview (hidden until file chosen) -->
+                        <div class="proof-preview-wrap" id="proofPreviewWrap">
+                            <img id="proofPreviewImg" src="" alt="Proof Preview">
+                            <span class="proof-filename" id="proofFilename"></span>
+                            <button type="button" class="remove-proof" id="removeProofBtn" title="Remove">
+                                <i class='bx bx-x-circle'></i>
+                            </button>
+                        </div>
+
+                        <!-- Dropzone -->
+                        <div class="proof-dropzone" id="proofDropzone">
+                            <input type="file" id="proofFile" accept="image/*,.pdf">
+                            <i class='bx bx-cloud-upload'></i>
+                            <p>Click to upload or drag &amp; drop your proof here</p>
+                            <span>HOA ID, Certificate of Residency, or any valid homeowner document. JPG, PNG, or PDF.
+                                Max 5MB.</span>
+                        </div>
+
+                        <button type="submit" class="btn-save" id="residentSubmitBtn" disabled>Submit for
+                            Verification</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        © 2026 Premiere Southpoint Badminton Court All rights reserved.
+    </footer>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["player"]);
+    </script>
+
+
+    <script src="../../scripts/player/PlayerSidebar.js"></script>
+    <script type="module" src="../../scripts/player/Settings.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

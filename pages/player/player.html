@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/player/PlayerSidebar.css">
+    <link rel="stylesheet" href="../../styles/player/Player.css">
+    <title>Player Profile | Southpoint</title>
+</head>
+
+<body>
+
+    <nav class="sidebar close">
+
+        <script>
+            if (localStorage.getItem("playerSidebarState") === "open") {
+                document.currentScript.parentElement.classList.remove("close");
+            }
+        </script>
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/components/logo.jpg" alt="Southpoint">
+                </span>
+                <div class="text header-text">
+                    <span class="name" id="sidebarName">Southpoint</span>
+                    <span class="role" id="sidebarRole">Player</span>
+                </div>
+            </div>
+            <i class="bx bx-chevron-right toggle"></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link"><a href="player.html"><i class="bx bx-user icon"></i><span
+                                class="text">Profile</span></a></li>
+                    <li class="nav-link"><a href="CourtList.html"><i class="bx bx-detail icon"></i><span
+                                class="text">Court List</span></a></li>
+                    <li class="nav-link"><a href="reservation.html"><i class="bx bx-calendar-check icon"></i><span
+                                class="text">My Reservations</span></a></li>
+                    <li class="nav-link"><a href="Queue.html"><i class="bx bxs-group icon"></i><span class="text">Queue
+                                List</span></a></li>
+                    <li class="nav-link"><a href="Tournament.html"><i class="bx bx-trophy icon"></i><span
+                                class="text">Tournaments</span></a></li>
+                    <li class="nav-link"><a href="Coach.html"><i class="bx bx-user-voice icon"></i><span
+                                class="text">Coach Booking</span></a></li>
+                    <li class="nav-link"><a href="Settings.html"><i class="bx bx-cog icon"></i><span
+                                class="text">Settings</span></a></li>
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class="bx bx-log-out icon"></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <div id="announcementOverlay" class="ann-overlay">
+        <div class="ann-modal">
+            <div class="ann-header">
+                <h2 id="annHeaderTitle">Announcement</h2>
+            </div>
+            <div id="annBody" class="ann-body"></div>
+            <button id="annCloseBtn" class="ann-close-btn">Okay</button>
+        </div>
+    </div>
+
+    <section class="home">
+        <div class="header-content">
+            <div class="dash-header">
+                <h1>Player Profile</h1>
+                <p>Manage your personal stats and training progress</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="card profile-hero" id="heroSection">
+                <div class="avatar-wrapper" id="avatarTrigger">
+                    <img src="" id="avatarPreview" alt="Player avatar">
+                    <div class="avatar-placeholder">
+                        <i class="bx bx-user"></i>
+                    </div>
+                </div>
+
+                <div class="profile-info">
+                    <!-- LEFT: name -->
+                    <div class="profile-main">
+                        <div class="name-section">
+                            <h2 id="userHeadline"></h2>
+                            <h1 id="userName">Loading...</h1>
+                            <p id="userSubHeadline"></p>
+                            <span class="badge-sub" id="userMeta">Player</span>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT: email + level -->
+                    <div class="profile-side">
+                        <p class="location" id="userEmail">
+                            <i class="bx bx-envelope"></i> Loading...
+                        </p>
+
+                        <div class="level-tag">
+                            <span class="lvl-num" id="playerLevelBadge">Loading...</span>
+                            <span class="winrate-badge" id="playerWinrateBadge">
+                                <p>Win Rate:</p>
+                                <span id="winrateValue"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="dashboard-grid">
+                <section class="card">
+                    <h3 class="card-title">
+                        <i class="bx bx-trending-up"></i>
+                        <span>Skill Requirements</span>
+                    </h3>
+                    <div class="req-list" id="progressionList"></div>
+                    <div class="progress-section">
+                        <div class="progress-label">
+                            <span>Level Mastery</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="bar-bg">
+                            <div class="bar-fill" id="mainProgressBar"></div>
+                        </div>
+                        <small id="nextLevelStatus">Analyzing goals...</small>
+                    </div>
+                </section>
+
+                <section class="card full-width">
+                    <h3 class="card-title">
+                        <i class="bx bx-history"></i>
+                        <span>Assessment History</span>
+                    </h3>
+                    <div id="assessmentHistory" class="ann-history-container"></div>
+                </section>
+
+                <section class="card">
+                    <h3 class="card-title">
+                        <i class="bx bx-user-voice"></i>
+                        <span>Recommended Coaches</span>
+                    </h3>
+                    <div id="coachList" class="coach-container"></div>
+                </section>
+
+                <section class="card">
+                    <h3 class="card-title">
+                        <i class="bx bxs-analyse"></i>
+                        <span>Training Recommendations</span>
+                    </h3>
+                    <div id="aiContent"></div>
+                </section>
+
+                <section class="card">
+                    <h3 class="card-title">
+                        <i class="bx bx-news"></i>
+                        <span>Announcements</span>
+                    </h3>
+                    <div id="announcementsGrid" class="news-grid"></div>
+                </section>
+            </div>
+        </div>
+    </section>
+
+    <div id="assessmentDetailModal" class="modal-overlay" style="display:none;">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2 id="detailModalTitle">Assessment Details</h2>
+                <button class="modal-close-btn" onclick="closeAssessmentModal()">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="detailModalBody"></div>
+            <div class="modal-footer">
+                <button class="btn-cancel-pay" onclick="closeAssessmentModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="promotedPaymentModal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Complete Your Booking</h3>
+            <p class="text-sm text-gray-600 mb-4">You have been promoted to this slot! Please select your payment method
+                within your 10-minute window.</p>
+
+            <form id="promotedPaymentForm">
+                <input type="hidden" id="modalReservationId" name="reservation_id">
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
+                    <select id="modalPaymentMethod" class="w-full border rounded-lg p-2 text-sm" required
+                        onchange="togglePromotedProofField(this.value)">
+                        <option value="">Select payment method</option>
+                        <option value="Cash">Cash</option>
+                        <option value="E-wallet">E-wallet (GCash / Maya)</option>
+                    </select>
+                </div>
+
+                <div id="promotedProofContainer" class="mb-4 hidden">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Upload Payment Screenshot</label>
+                    <input type="file" id="promotedPaymentScreenshot" accept="image/*"
+                        class="w-full border rounded-lg p-1 text-sm">
+
+                    <label class="block text-sm font-medium text-gray-700 mt-3 mb-1">Reference Number</label>
+                    <input type="text" id="promotedReferenceNumber" placeholder="Enter reference number"
+                        class="w-full border rounded-lg p-2 text-sm">
+                </div>
+
+                <div class="flex justify-end space-x-2">
+                    <button type="button" onclick="closePromotedModal()"
+                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium">Cancel</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">Submit
+                        Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Premiere Southpoint Badminton Court. All rights reserved.</p>
+    </footer>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["player"]);
+    </script>
+
+
+    <script src="../../scripts/player/PlayerSidebar.js"></script>
+    <script type="module" src="../../scripts/player/Player.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

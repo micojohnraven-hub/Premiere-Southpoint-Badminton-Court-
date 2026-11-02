@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/admin/AdminSidebar.css">
+    <link rel="stylesheet" href="../../styles/admin/Settings.css">
+    <link rel="stylesheet" href="../../styles/admin/admin.css">
+    <title>Business Settings | Southpoint</title>
+</head>
+
+<body class="preload">
+
+    <nav class="sidebar close">
+        <script>
+            if (localStorage.getItem("adminSidebarState") === "open") {
+                document.currentScript.parentElement.classList.remove("close");
+            }
+        </script>
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/components/logo.jpg" alt="logo">
+                </span>
+
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Business Admin</span>
+                </div>
+            </div>
+
+            <i class="bx bx-chevron-right toggle"></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+
+                    <li class="nav-link">
+                        <a href="Dashboard.html">
+                            <i class="bx bx-home-alt icon"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="Court.html">
+                            <i class="bx bx-cabinet icon"></i>
+                            <span class="text">Court Manager</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="EventManager.html">
+                            <i class="bx bx-calendar-event icon"></i>
+                            <span class="text">Event Manager</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="Analytics.html">
+                            <i class="bx bx-bar-chart-alt-2 icon"></i>
+                            <span class="text">Analytics</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="Reports.html">
+                            <i class="bx bxs-report icon"></i>
+                            <span class="text">Reports</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="Coaches.html">
+                            <i class="bx bx-group icon"></i>
+                            <span class="text">Coaches</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="Players.html">
+                            <i class="bx bx-run icon"></i>
+                            <span class="text">Players</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="Settings.html" class="active">
+                            <i class="bx bx-cog icon"></i>
+                            <span class="text">Settings</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class="bx bx-log-out icon"></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <main class="home">
+        <div class="settings-page">
+            <div class="settings-container">
+
+                <div class="settings-nav-wrapper">
+                    <nav class="settings-nav">
+
+                        <a href="#business" class="settings-link" data-section="business">
+                            <i class="bx bx-store-alt"></i>
+                            <span>Business</span>
+                        </a>
+
+                        <a href="#users" class="settings-link" data-section="users">
+                            <i class="bx bx-group"></i>
+                            <span>User & Access</span>
+                        </a>
+
+                        <a href="#account" class="settings-link" data-section="account">
+                            <i class="bx bx-user-circle"></i>
+                            <span>Account</span>
+                        </a>
+
+                    </nav>
+                </div>
+
+                <section class="settings-main">
+
+                    <div id="business" class="tab-content">
+
+                        <div class="section-header">
+                            <h2>Business Settings</h2>
+                        </div>
+
+                        <div class="settings-card pricing-card">
+
+                            <h3>Court Pricing</h3>
+
+                            <div class="settings-form-row">
+                                <div class="row-info">
+                                    <h4>Standard Court Rate</h4>
+                                    <p>Hourly rate charged for regular court reservations.</p>
+                                </div>
+
+                                <div class="price-input">
+                                    <span>₱</span>
+                                    <input type="number" id="court-rate" class="settings-input" value="250" min="0">
+                                    <span>/hr</span>
+                                </div>
+                            </div>
+
+                            <div class="settings-form-row">
+                                <div class="row-info">
+                                    <h4>Homeowner Discount Rate</h4>
+                                    <p>Hourly rate charged to verified homeowners.</p>
+                                </div>
+
+                                <div class="price-input">
+                                    <span>₱</span>
+                                    <input type="number" id="homeowner-rate" class="settings-input" value="200" min="0">
+                                    <span>/hr</span>
+                                </div>
+                            </div>
+
+                            <p class="settings-note">
+                                These rates apply to court reservations system-wide.
+                            </p>
+
+                        </div>
+
+                        <button class="settings-btn-primary" id="savePricingBtn">
+                            Save Pricing
+                        </button>
+
+                        <div class="settings-card hours-card">
+                            <h3>Business Hours</h3>
+
+                            <div id="businessHoursList">
+                                <p class="settings-note">Loading business hours...</p>
+                            </div>
+
+                            <p class="settings-note">
+                                These hours are shown to players and used for booking slots.
+                            </p>
+                        </div>
+
+                        <button type="button" class="settings-btn-primary" id="saveHoursBtn">
+                            Save Business Hours
+                        </button>
+
+                        <div class="settings-card contact-card">
+                            <h3>Contact Information</h3>
+
+                            <div class="settings-form-row">
+                                <div class="row-info">
+                                    <h4>Phone Number</h4>
+                                    <p>Shown on the public landing page.</p>
+                                </div>
+                                <input type="tel" id="contact-phone" class="settings-input" placeholder="09XXXXXXXXX"
+                                    maxlength="11" inputmode="numeric" autocomplete="tel">
+                            </div>
+
+                            <div class="settings-form-row">
+                                <div class="row-info">
+                                    <h4>Email Address</h4>
+                                    <p>Shown on the public landing page.</p>
+                                </div>
+                                <input type="email" id="contact-email" class="settings-input"
+                                    placeholder="example@southpoint.com">
+                            </div>
+
+                            <div class="settings-form-row">
+                                <div class="row-info">
+                                    <h4>Facebook Page</h4>
+                                    <p>Full link, starting with https://</p>
+                                </div>
+                                <input type="url" id="contact-facebook" class="settings-input"
+                                    placeholder="https://facebook.com/yourpage">
+                            </div>
+
+                            <p class="settings-note">Leave a field empty to hide it from the landing page.</p>
+                        </div>
+
+                        <button type="button" class="settings-btn-primary" id="saveContactBtn">
+                            Save Contact Info
+                        </button>
+
+                        <div class="settings-card qr-card" id="paymentQrCard">
+                            <h3>Payment QR Code</h3>
+
+                            <div class="settings-form-row">
+                                <div class="row-info">
+                                    <h4>Current QR Code</h4>
+                                    <p>Players scan this QR code on the E-Wallet payment step when reserving a court.
+                                    </p>
+                                </div>
+
+                                <div class="qr-preview-box">
+                                    <img id="qrCurrentImage" class="qr-preview-img" alt="Current payment QR code"
+                                        hidden>
+                                    <span id="qrEmptyState" class="qr-empty">No QR code uploaded</span>
+                                </div>
+                            </div>
+
+                            <div class="settings-form-row">
+                                <div class="row-info">
+                                    <h4>E-Wallet Provider</h4>
+                                    <p>The e-wallet this QR code belongs to.</p>
+                                </div>
+
+                                <select id="qr-provider" class="settings-input">
+                                    <option value="GCash">GCash</option>
+                                    <option value="Maya">Maya</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="settings-form-row">
+                                <div class="row-info">
+                                    <h4>Account Name</h4>
+                                    <p>Shown to players beside the QR code so they can confirm who they are paying.</p>
+                                </div>
+
+                                <input type="text" id="qr-account-name" class="settings-input"
+                                    placeholder="Enter account name" maxlength="60">
+                            </div>
+
+                            <div class="settings-form-row">
+                                <div class="row-info">
+                                    <h4>QR Image</h4>
+                                    <p>PNG, JPG, or WEBP, up to 2 MB. Leave empty to keep the current image.</p>
+                                </div>
+
+                                <div class="qr-file-field">
+                                    <input type="file" id="qr-file" accept="image/png,image/jpeg,image/webp" hidden>
+                                    <button type="button" class="settings-btn-secondary" id="qrChooseFileBtn">
+                                        Choose Image
+                                    </button>
+                                    <span id="qrFileName" class="qr-file-name">No file chosen</span>
+                                </div>
+                            </div>
+
+                            <p class="settings-note">
+                                Changes apply immediately to all new payments. Previous QR codes are kept for record
+                                purposes.
+                            </p>
+                        </div>
+
+                        <div class="qr-actions">
+                            <button type="button" class="settings-btn-primary" id="saveQrBtn">
+                                Save QR Code
+                            </button>
+
+                            <button type="button" class="cancel-btn" id="deactivateQrBtn" hidden>
+                                Deactivate QR
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="users" class="tab-content">
+                        <div class="section-header">
+                            <h2>User & Access Management</h2>
+                        </div>
+                        <div class="settings-card">
+                            <div class="table-container">
+                                <table class="user-table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>User Info</th>
+                                            <th>Role</th>
+                                            <th>Status</th>
+                                            <th class="action-header">Action</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody id="userTableBody">
+                                        <tr>
+                                            <td colspan="4" class="table-loading">
+                                                Loading accounts...
+                                            </td>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                            <button class="btn-add" id="openUserModal">
+                                <i class="bx bx-plus"></i>
+                                Create New Account
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="account" class="tab-content">
+
+                        <div class="section-header">
+                            <h2>Account Settings</h2>
+                        </div>
+
+                        <div class="settings-card account-card">
+
+                            <h3>Profile Information</h3>
+
+                            <div class="settings-form-row">
+                                <div class="row-info">
+                                    <h4>Full Name</h4>
+                                    <p>Your name associated with this account.</p>
+                                </div>
+
+                                <input type="text" id="account-full-name" class="settings-input"
+                                    placeholder="Enter full name" autocomplete="name">
+                            </div>
+
+                            <div class="settings-form-row">
+                                <div class="row-info">
+                                    <h4>Username</h4>
+                                    <p>Your username used to access the system.</p>
+                                </div>
+
+                                <input type="text" id="account-username" class="settings-input"
+                                    placeholder="Enter username" autocomplete="username">
+                            </div>
+
+                            <div class="settings-form-row">
+                                <div class="row-info">
+                                    <h4>Email Address</h4>
+                                    <p>Your registered email address.</p>
+                                </div>
+
+                                <input type="email" id="account-email" class="settings-input"
+                                    placeholder="example@southpoint.com" autocomplete="email">
+                            </div>
+
+                            <div class="settings-form-row">
+                                <div class="row-info">
+                                    <h4>Contact Number</h4>
+                                    <p>Your registered contact number.</p>
+                                </div>
+
+                                <input type="tel" id="account-contact" class="settings-input" placeholder="09XXXXXXXXX"
+                                    maxlength="11" inputmode="numeric" autocomplete="tel">
+                            </div>
+
+                        </div>
+
+                        <button type="button" class="settings-btn-primary" id="saveAccountBtn">
+                            Save Changes
+                        </button>
+
+                        <div class="settings-card account-card security-card">
+
+                            <h3>Account Security</h3>
+
+                            <div class="settings-form-row">
+                                <div class="row-info">
+                                    <h4>Current Password</h4>
+                                    <p>Enter your current password.</p>
+                                </div>
+
+                                <div class="password-input">
+                                    <input type="password" id="current-password" class="settings-input"
+                                        placeholder="Enter current password" autocomplete="current-password">
+
+                                    <button type="button" class="password-toggle" data-target="current-password"
+                                        aria-label="Show password">
+                                        <i class="bx bx-hide"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="settings-form-row">
+                                <div class="row-info">
+                                    <h4>New Password</h4>
+                                    <p>
+                                        At least 8 characters with uppercase,
+                                        lowercase, number, and special character.
+                                    </p>
+                                </div>
+
+                                <div class="password-input">
+                                    <input type="password" id="new-password" class="settings-input"
+                                        placeholder="Enter new password" autocomplete="new-password">
+
+                                    <button type="button" class="password-toggle" data-target="new-password"
+                                        aria-label="Show password">
+                                        <i class="bx bx-hide"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="settings-form-row">
+                                <div class="row-info">
+                                    <h4>Confirm New Password</h4>
+                                    <p>Re-enter your new password.</p>
+                                </div>
+
+                                <div class="password-input">
+                                    <input type="password" id="confirm-password" class="settings-input"
+                                        placeholder="Confirm new password" autocomplete="new-password">
+
+                                    <button type="button" class="password-toggle" data-target="confirm-password"
+                                        aria-label="Show password">
+                                        <i class="bx bx-hide"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <button type="button" class="settings-btn-primary" id="updatePasswordBtn">
+                            Update Password
+                        </button>
+
+                    </div>
+
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h2 id="userModalTitle">Create New Account</h2>
+                    <p id="userModalSubtitle">Add an employee account.</p>
+                </div>
+                <button class="modal-close" id="closeUserModal">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="newUserName" class="settings-input" placeholder="Enter full name">
+                </div>
+
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="newUserUsername" class="settings-input" placeholder="Enter username">
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="newUserEmail" class="settings-input" placeholder="example@southpoint.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Contact Number</label>
+                    <input type="tel" id="newUserContact" class="settings-input" placeholder="09XXXXXXXXX"
+                        maxlength="11" inputmode="numeric">
+                </div>
+
+                <div class="form-group">
+                    <label>Role</label>
+                    <select id="newUserRole" class="settings-input">
+                        <option value="employee">Employee</option>
+                        <option value="business_admin">Business Admin</option>
+                        <option value="system_admin">System Admin</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="settings-btn-primary" id="saveUserBtn">
+                    Create Account
+                </button>
+                <button class="cancel-btn" id="cancelUserModal">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirmModal" class="modal">
+        <div class="confirm-box">
+            <div class="confirm-icon">
+                <i id="confirmIcon" class="bx bx-question-mark"></i>
+            </div>
+            <h2 id="confirmTitle">Confirm Action</h2>
+            <p id="confirmMessage">
+                Are you sure you want to continue?
+            </p>
+            <div class="confirm-actions">
+                <button id="confirmCancelBtn" class="cancel-btn">
+                    Cancel
+                </button>
+                <button id="confirmOkBtn" class="confirm-btn">
+                    Confirm
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["business_admin"]);
+    </script>
+
+    <script src="../../scripts/admin/AdminSidebar.js"></script>
+    <script type="module" src="../../scripts/admin/PaymentQR.js"></script>
+    <script type="module" src="../../scripts/admin/Settings.js"></script>
+    <script type="module" src="../../scripts/admin/ContactInfo.js"></script>
+    <script type="module" src="../../scripts/admin/BusinessHours.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

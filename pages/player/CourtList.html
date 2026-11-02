@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/player/PlayerSidebar.css">
+    <link rel="stylesheet" href="../../styles/player/Court.css">
+    <title>Court List - Southpoint</title>
+</head>
+
+<body>
+    <nav class="sidebar close">
+        <script>
+            if (localStorage.getItem("playerSidebarState") === "open") {
+                document.currentScript.parentElement.classList.remove("close");
+            }
+        </script>
+
+        <header>
+            <div class="image-text">
+                <span class="image"><img src="/components/logo.jpg" alt="logo"></span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Player</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link"><a href="player.html"><i class='bx bx-user icon'></i><span
+                                class="text">Profile</span></a></li>
+                    <li class="nav-link"><a href="CourtList.html"><i class='bx bx-detail icon'></i><span
+                                class="text">Court List</span></a></li>
+                    <li class="nav-link"><a href="reservation.html"><i class='bx bx-calendar-check icon'></i><span
+                                class="text">My Reservations</span></a></li>
+                    <li class="nav-link"><a href="Queue.html"><i class='bx bxs-group icon'></i><span class="text">Queue
+                                List</span></a></li>
+                    <li class="nav-link"><a href="Tournament.html"><i class='bx bx-trophy icon'></i><span
+                                class="text">Tournaments</span></a></li>
+                    <li class="nav-link"><a href="Coach.html"><i class='bx bx-user-voice icon'></i><span
+                                class="text">Coach Booking</span></a></li>
+                    <li class="nav-link"><a href="Settings.html"><i class='bx bx-cog icon'></i><span
+                                class="text">Settings</span></a></li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home">
+        <div class="container-center">
+            <h1 class="main-title">Court Reservation</h1>
+            <p class="subtitle">Select a court to view availability and book your session.</p>
+            <div class="court-grid" id="courtContainer"></div>
+        </div>
+    </section>
+
+    <!-- STEP 1: BOOKING MODAL (KASAMA ANG DSS 1 INSIGHTS & SLOT SELECTION) -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeBooking">&times;</span>
+            <h2 id="modalCourtName">Book Court</h2>
+            <div class="ai-badge">
+                <i class='bx bxs-zap'></i>
+                <p id="suggestionText">Checking best times for you...</p>
+            </div>
+            <div class="input-group">
+                <label>Select Date</label>
+                <input type="date" id="reserveDate" class="modern-date">
+            </div>
+            <div class="input-group">
+                <label>Available Slots</label>
+                <div class="slots-grid" id="timeSlots"></div>
+            </div>
+            <div class="input-group">
+                <label>Payment Method</label>
+                <div class="payment-options">
+                    <label class="pay-card">
+                        <input type="radio" name="payment" value="E-wallet" checked>
+                        <div class="pay-box">
+                            <i class='bx bxs-wallet'></i>
+                            <span>E-Wallet</span>
+                        </div>
+                    </label>
+                    <label class="pay-card">
+                        <input type="radio" name="payment" value="Cash">
+                        <div class="pay-box">
+                            <i class='bx bx-money'></i>
+                            <span>Cash</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <button class="primary-btn" id="btnConfirm">Proceed to Payment Details</button>
+        </div>
+    </div>
+
+    <!-- STEP 2: QR CODE MODAL (E-WALLET PAYMENT DETAILS) -->
+    <div id="qrModal" class="modal">
+        <div class="modal-content text-center">
+            <h2>Scan to Pay</h2>
+            <p>Please scan the GCash/Maya QR code below</p>
+            <div class="qr-placeholder">
+                <img id="paymentQRImage" src="" alt="Payment QR Code" style="max-width:100%;height:auto;">
+            </div>
+            <p id="qrAccountInfo"></p>
+            <p class="amount-text">Total: <span id="qrAmount">₱0</span></p>
+
+            <!-- Reference Number -->
+            <div class="qr-field-group">
+                <label class="qr-label">
+                    <i class='bx bx-receipt'></i>
+                    Online Payment Reference Number <span class="required">*</span>
+                </label>
+                <input type="text" id="referenceNumberInput" class="qr-input" placeholder="e.g. 1234567890"
+                    maxlength="30">
+                <p id="refError" class="qr-error">
+                    Please enter your reference number before proceeding.
+                </p>
+            </div>
+
+            <!-- Payment Screenshot -->
+            <div class="qr-field-group">
+                <label class="qr-label">
+                    <i class='bx bx-image-upload'></i>
+                    Payment Screenshot <span class="required">*</span>
+                </label>
+
+                <input type="file" id="paymentScreenshot" accept="image/*" style="display:none;">
+
+                <div id="uploadDropZone" class="upload-dropzone">
+                    <i class='bx bx-cloud-upload upload-icon'></i>
+                    <span id="uploadLabel" class="upload-label">Click to upload screenshot</span>
+                </div>
+
+                <div id="uploadPreviewWrapper" class="upload-preview-wrapper">
+                    <img id="uploadPreview" src="" alt="Payment screenshot preview" class="upload-preview-img">
+                    <p id="removeUpload" class="upload-remove">Remove photo</p>
+                </div>
+
+                <p id="uploadError" class="qr-error">
+                    Please upload your payment screenshot before proceeding.
+                </p>
+            </div>
+
+            <button class="primary-btn" id="btnPaid">Continue to Final Policy Check</button>
+            <button class="secondary-btn" id="btnCancelQR">Cancel / Change Payment</button>
+        </div>
+    </div>
+
+    <!-- STEP 2 (ALTERNATIVE): CASH PAYMENT MODAL -->
+    <div id="cashModal" class="modal">
+        <div class="modal-content text-center">
+            <h2>Cash Payment</h2>
+            <p>You have selected to pay via Cash at the counter.</p>
+            <div class="receipt-box">
+                <p>Total Amount to Pay: <strong id="cashAmountDisplay">₱0.00</strong></p>
+            </div>
+            <button class="primary-btn" id="btnConfirmCash">Continue to Final Policy Check</button>
+            <button class="secondary-btn" id="btnCancelCash">Cancel / Change Payment</button>
+        </div>
+    </div>
+
+    <!-- SUCCESS MODAL -->
+    <div id="successModal" class="modal">
+        <div class="modal-content text-center">
+            <div class="success-check">
+                <i class='bx bxs-check-circle'></i>
+            </div>
+            <h2>Reservation Confirmed!</h2>
+            <div id="successDetails" class="receipt-box"></div>
+            <button class="primary-btn" id="btnDone">Back to Home</button>
+        </div>
+    </div>
+
+    <!-- PLAYER REPORT ISSUE MODAL -->
+    <div id="playerIssueModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closePlayerIssueModal()">&times;</span>
+            <h2> <i class='bx bx-error-circle'></i> Report an Issue </h2>
+            <p id="playerIssueCourt" style="font-weight:500;margin-bottom:15px;"> </p>
+
+            <div class="input-group">
+                <label>Issue Type</label>
+                <select id="playerIssueType">
+                    <option value="accident"> Player Accident</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Description</label>
+                <textarea id="playerIssueDescription" rows="4" placeholder="Describe the issue..."></textarea>
+            </div>
+
+            <button class="primary-btn" onclick="submitPlayerIssue()">
+                Submit Report
+            </button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        © 2026 Premiere Southpoint Badminton Court All rights reserved.
+    </footer>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["player"]);
+    </script>
+
+    <script src="../../scripts/player/PlayerSidebar.js"></script>
+    <script type="module" src="../../scripts/player/Court.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

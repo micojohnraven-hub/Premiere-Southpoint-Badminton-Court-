@@ -1,0 +1,264 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --primary: #05b905;
+    --primary-dark: #049e04;
+    --primary-light: #dcfce7;
+    --navy: #14213d;
+    --gray: #64748b;
+    --muted: #94a3b8;
+    --background: #f4f7fe;
+    --border: #e5e7eb;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    overflow: hidden;
+    background: #fff;
+    color: var(--navy);
+}
+
+.maintenance-page {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+}
+
+.maintenance-card {
+    width: 100%;
+    max-width: 540px;
+    padding: 42px 45px;
+    background: #fff;
+    border: 1px solid #eef2f7;
+    border-radius: 22px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 11px;
+    margin-bottom: 28px;
+}
+
+.brand img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.brand-name {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.brand-name strong {
+    color: var(--navy);
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.brand-name span {
+    margin-top: 2px;
+    color: var(--gray);
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.maintenance-illustration {
+    position: relative;
+    width: 120px;
+    height: 100px;
+    margin: 0 auto 18px;
+}
+
+.tool-circle {
+    width: 78px;
+    height: 78px;
+    position: absolute;
+    top: 10px;
+    left: 21px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.tool-circle i {
+    font-size: 40px;
+}
+
+.gear {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+}
+
+.gear i {
+    font-size: 27px;
+}
+
+.gear-one {
+    top: 0;
+    right: 2px;
+}
+
+.gear-two {
+    bottom: 3px;
+    left: 0;
+}
+
+.maintenance-label {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 6px 11px;
+    border-radius: 20px;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+}
+
+.maintenance-card h1 {
+    margin-bottom: 14px;
+    color: var(--navy);
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.maintenance-card p {
+    max-width: 440px;
+    margin: 0 auto;
+    color: var(--gray);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.maintenance-card p + p {
+    margin-top: 10px;
+}
+
+.sub-message {
+    color: var(--muted) !important;
+    font-size: 12px !important;
+}
+
+.status {
+    width: fit-content;
+    margin: 25px auto 0;
+    padding: 9px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.status span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #f59e0b;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.12);
+}
+
+.bg-circle {
+    position: fixed;
+    z-index: 1;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.circle-one {
+    width: 360px;
+    height: 360px;
+    top: -190px;
+    right: -130px;
+    background: rgba(5, 185, 5, 0.06);
+}
+
+.circle-two {
+    width: 280px;
+    height: 280px;
+    bottom: -160px;
+    left: -120px;
+    background: rgba(5, 185, 5, 0.05);
+}
+
+@media (max-width: 600px) {
+
+    body {
+        overflow-y: auto;
+    }
+
+    .maintenance-page {
+        padding: 18px;
+    }
+
+    .maintenance-card {
+        padding: 35px 24px;
+        border-radius: 18px;
+    }
+
+    .brand {
+        margin-bottom: 25px;
+    }
+
+    .maintenance-card h1 {
+        font-size: 25px;
+    }
+
+    .maintenance-card p {
+        font-size: 12px;
+    }
+
+    .sub-message {
+        font-size: 11px !important;
+    }
+
+    .status {
+        margin-top: 22px;
+    }
+}
+
+@media (max-width: 380px) {
+
+    .maintenance-card {
+        padding: 30px 18px;
+    }
+
+    .maintenance-card h1 {
+        font-size: 23px;
+    }
+
+    .maintenance-illustration {
+        transform: scale(0.9);
+        margin-bottom: 12px;
+    }
+}

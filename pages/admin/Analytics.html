@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/admin/AdminSidebar.css">
+    <link rel="stylesheet" href="../../styles/admin/Analytics.css">
+    <link rel="stylesheet" href="../../styles/admin/admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <title>Admin Analytics | Southpoint</title>
+</head>
+
+<body class="preload">
+
+    <nav class="sidebar close">
+        <script>
+            if (localStorage.getItem("adminSidebarState") === "open") {
+                document.currentScript.parentElement.classList.remove("close");
+            }
+        </script>
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/components/logo.jpg" alt="logo">
+                </span>
+
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Business Admin</span>
+                </div>
+            </div>
+
+            <i class="bx bx-chevron-right toggle"></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+
+                    <li class="nav-link">
+                        <a href="Dashboard.html">
+                            <i class="bx bx-home-alt icon"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="Court.html">
+                            <i class="bx bx-cabinet icon"></i>
+                            <span class="text">Court Manager</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="EventManager.html">
+                            <i class="bx bx-calendar-event icon"></i>
+                            <span class="text">Event Manager</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="Analytics.html" class="active">
+                            <i class="bx bx-bar-chart-alt-2 icon"></i>
+                            <span class="text">Analytics</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="Reports.html">
+                            <i class="bx bxs-report icon"></i>
+                            <span class="text">Reports</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="Coaches.html">
+                            <i class="bx bx-group icon"></i>
+                            <span class="text">Coaches</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="Players.html">
+                            <i class="bx bx-run icon"></i>
+                            <span class="text">Players</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="Settings.html">
+                            <i class="bx bx-cog icon"></i>
+                            <span class="text">Settings</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class="bx bx-log-out icon"></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <main class="home">
+
+        <div class="dash-content">
+
+            <div class="dash-header analytics-header">
+                <div>
+                    <h1>Analytics</h1>
+                    <p>Annual trends and performance insights across the facility.</p>
+                </div>
+
+                <button class="refresh-btn" id="refreshAnalyticsBtn">
+                    <i class="bx bx-refresh"></i>
+                    Refresh
+                </button>
+            </div>
+
+            <div class="analytics-carousel">
+
+                <button class="carousel-arrow carousel-prev" aria-label="Previous section">
+                    <i class="bx bx-chevron-left"></i>
+                </button>
+
+                <div class="carousel-track">
+
+                    <div class="carousel-slide">
+
+                        <h2 class="section-title">
+                            <i class="bx bx-cabinet"></i>
+                            Court Utilization
+                        </h2>
+
+                        <div class="stats-container">
+
+                            <div class="stat-card">
+                                <div class="s-info">
+                                    <span>Active Courts</span>
+                                    <h2 id="statActiveCourts">—</h2>
+                                    <p class="trend">of total courts</p>
+                                </div>
+                                <i class="bx bx-cabinet"></i>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="s-info">
+                                    <span>Most Utilized Court</span>
+                                    <h2 id="statTopCourt">—</h2>
+                                    <p class="trend">this year</p>
+                                </div>
+                                <i class="bx bx-trophy"></i>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="s-info">
+                                    <span>Total Booked Days</span>
+                                    <h2 id="statTotalBookedDays">—</h2>
+                                    <p class="trend">this year</p>
+                                </div>
+                                <i class="bx bx-calendar-check"></i>
+                            </div>
+
+                        </div>
+
+                        <div class="widget-box">
+                            <div class="w-header">
+                                <div>
+                                    <i class="bx bx-bar-chart"></i>
+                                    Hours Booked per Court
+                                </div>
+                            </div>
+
+                            <div class="chart-wrap">
+                                <canvas id="courtUtilizationChart"></canvas>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="carousel-slide">
+
+                        <h2 class="section-title">
+                            <i class="bx bx-trending-up"></i>
+                            Booking Trends
+                        </h2>
+
+                        <div class="stats-container">
+
+                            <div class="stat-card">
+                                <div class="s-info">
+                                    <span>Total Bookings</span>
+                                    <h2 id="statTotalBookings">—</h2>
+                                    <p class="trend">this year</p>
+                                </div>
+                                <i class="bx bx-calendar-check"></i>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="s-info">
+                                    <span>Completion Rate</span>
+                                    <h2 id="statCompletionRate">—</h2>
+                                    <p class="trend">of total bookings</p>
+                                </div>
+                                <i class="bx bx-check-circle"></i>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="s-info">
+                                    <span>Cancellation Rate</span>
+                                    <h2 id="statCancelRate">—</h2>
+                                    <p class="trend">cancelled + no-show</p>
+                                </div>
+                                <i class="bx bx-x-circle"></i>
+                            </div>
+
+                        </div>
+
+                        <div class="analytics-grid-2">
+
+                            <div class="widget-box">
+                                <div class="w-header">
+                                    <div>
+                                        <i class="bx bx-line-chart"></i>
+                                        Bookings Over Time
+                                    </div>
+                                </div>
+
+                                <div class="chart-wrap">
+                                    <canvas id="bookingTrendsChart"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="widget-box">
+                                <div class="w-header">
+                                    <div>
+                                        <i class="bx bx-pie-chart-alt"></i>
+                                        Booking Status Breakdown
+                                    </div>
+                                </div>
+
+                                <div class="chart-wrap">
+                                    <canvas id="bookingStatusChart"></canvas>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="carousel-slide">
+
+                        <h2 class="section-title">
+                            <i class="bx bx-time"></i>
+                            Peak Hours
+                        </h2>
+
+                        <div class="stats-container">
+
+                            <div class="stat-card">
+                                <div class="s-info">
+                                    <span>Peak Hour</span>
+                                    <h2 id="statPeakHour">—</h2>
+                                    <p class="trend">busiest time slot this year</p>
+                                </div>
+                                <i class="bx bx-alarm"></i>
+                            </div>
+
+                        </div>
+
+                        <div class="widget-box">
+                            <div class="w-header">
+                                <div>
+                                    <i class="bx bx-bar-chart-alt-2"></i>
+                                    Reservations by Hour of Day
+                                </div>
+                            </div>
+
+                            <div class="chart-wrap">
+                                <canvas id="peakHoursChart"></canvas>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="carousel-slide">
+
+                        <h2 class="section-title">
+                            <i class="bx bx-user"></i>
+                            Player Engagement
+                        </h2>
+
+                        <div class="stats-container">
+
+                            <div class="stat-card">
+                                <div class="s-info">
+                                    <span>Total Players</span>
+                                    <h2 id="statTotalPlayers">—</h2>
+                                    <p class="trend">registered accounts</p>
+                                </div>
+                                <i class="bx bx-user"></i>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="s-info">
+                                    <span>Active Players</span>
+                                    <h2 id="statActivePlayers">—</h2>
+                                    <p class="trend">status: active</p>
+                                </div>
+                                <i class="bx bx-user-check"></i>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="s-info">
+                                    <span>New This Year</span>
+                                    <h2 id="statNewPlayers">—</h2>
+                                    <p class="trend">registered this year</p>
+                                </div>
+                                <i class="bx bx-user-plus"></i>
+                            </div>
+
+                        </div>
+
+                        <div class="analytics-grid-2">
+
+                            <div class="widget-box">
+                                <div class="w-header">
+                                    <div>
+                                        <i class="bx bx-medal"></i>
+                                        Player Level Distribution
+                                    </div>
+                                </div>
+
+                                <div class="chart-wrap">
+                                    <canvas id="playerLevelChart"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="widget-box">
+                                <div class="w-header">
+                                    <div>
+                                        <i class="bx bx-list-ol"></i>
+                                        Top Players by Games Played
+                                    </div>
+                                </div>
+
+                                <table class="analytics-table" id="topPlayersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Player</th>
+                                            <th>Level</th>
+                                            <th>Games Played</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="carousel-slide">
+
+                        <h2 class="section-title">
+                            <i class="bx bx-trophy"></i>
+                            Tournament Analytics
+                        </h2>
+
+                        <div class="stats-container">
+
+                            <div class="stat-card">
+                                <div class="s-info">
+                                    <span>Total Tournaments</span>
+                                    <h2 id="statTotalTournaments">—</h2>
+                                    <p class="trend">this year</p>
+                                </div>
+                                <i class="bx bx-trophy"></i>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="s-info">
+                                    <span>Total Participants</span>
+                                    <h2 id="statVerificationRate">—</h2>
+                                    <p class="trend">tournament registrations</p>
+                                </div>
+                                <i class="bx bx-check-shield"></i>
+                            </div>
+
+                        </div>
+
+                        <div class="analytics-grid-2">
+                            <div class="widget-box">
+                                <div class="w-header">
+                                    <div>
+                                        <i class='bx bx-trophy'></i>
+                                        Tournament Overview
+                                    </div>
+                                </div>
+
+                                <table class="analytics-table" id="tournamentOverviewTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Tournament</th>
+                                            <th>Registrations</th>
+                                            <th>Matches</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+
+                            <div class="widget-box">
+                                <div class="w-header">
+                                    <div>
+                                        <i class='bx bx-list-ol'></i>
+                                        Top Winners
+                                    </div>
+                                </div>
+
+                                <table class="analytics-table" id="topWinnersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Player</th>
+                                            <th>Wins</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <button class="carousel-arrow carousel-next" aria-label="Next section">
+                    <i class="bx bx-chevron-right"></i>
+                </button>
+
+                <div class="carousel-dots"></div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["business_admin"]);
+    </script>
+
+    <script src="../../scripts/admin/AdminSidebar.js"></script>
+    <script type="module" src="../../scripts/admin/Analytics.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

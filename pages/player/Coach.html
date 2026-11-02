@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Coach Booking - Southpoint</title>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/player/PlayerSidebar.css">
+    <link rel="stylesheet" href="../../styles/player/Coach.css">
+</head>
+
+<body>
+    <nav class="sidebar close">
+
+        <script>
+            if (localStorage.getItem("playerSidebarState") === "open") {
+                document.currentScript.parentElement.classList.remove("close");
+            }
+        </script>
+
+        <header>
+            <div class="image-text">
+                <span class="image"><img src="/components/logo.jpg" alt="logo"></span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Player</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link"><a href="player.html"><i class='bx bx-user icon'></i><span
+                                class="text">Profile</span></a></li>
+                    <li class="nav-link"><a href="CourtList.html"><i class='bx bx-detail icon'></i><span
+                                class="text">Court List</span></a></li>
+                    <li class="nav-link"><a href="reservation.html"><i class='bx bx-calendar-check icon'></i><span
+                                class="text">My Reservations</span></a></li>
+                    <li class="nav-link"><a href="Queue.html"><i class='bx bxs-group icon'></i><span class="text">Queue
+                                List</span></a></li>
+                    <li class="nav-link"><a href="Tournament.html"><i class='bx bx-trophy icon'></i><span
+                                class="text">Tournaments</span></a></li>
+                    <li class="nav-link"><a href="Coach.html"><i class='bx bx-user-voice icon'></i><span
+                                class="text">Coach Booking</span></a></li>
+                    <li class="nav-link"><a href="Settings.html"><i class='bx bx-cog icon'></i><span
+                                class="text">Settings</span></a></li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home">
+        <div class="container">
+            <div class="dash-header">
+                <h1>Coach Reservation</h1>
+                <p>Select an expert coach for your next session.</p>
+            </div>
+
+            <!-- Coach Grid -->
+            <div class="coach-grid" id="coachGrid"></div>
+
+            <!-- My Stats -->
+            <div class="my-stats-section" id="myStatsSection" style="display:none;">
+                <div class="stats-section-header">
+                    <h2><i class='bx bx-bar-chart-alt-2'></i> My Performance Stats</h2>
+                    <p>Latest stats recorded by your coach</p>
+                </div>
+                <div class="stats-layout">
+                    <div class="stats-card">
+                        <div class="stats-card-header">
+                            <span class="rank-badge" id="myRankBadge">Beginner</span>
+                            <span class="stats-date" id="myStatsDate">—</span>
+                        </div>
+                        <div class="stats-pills-grid" id="myStatsPills"></div>
+                    </div>
+                    <div id="myNotesCard" class="notes-card" style="display:none;">
+                        <h3><i class='bx bx-notepad'></i> Coach Feedback</h3>
+                        <p id="myNotesText"></p>
+                    </div>
+                </div>
+                <div class="improve-card" id="myImproveCard" style="display:none;">
+                    <div class="improve-header"><i class='bx bx-trending-up'></i><strong>Areas to Improve</strong></div>
+                    <div class="improve-list" id="myImproveList"></div>
+                </div>
+            </div>
+
+            <!-- Assessment Batches Section -->
+            <div class="assessment-section">
+                <div class="assessment-header">
+                    <div>
+                        <h2><i class='bx bx-clipboard'></i> Open Assessments</h2>
+                        <p>Apply for a coach assessment slot.</p>
+                    </div>
+                </div>
+                <div class="assessment-list" id="assessmentBatchList">
+                    <p class="no-posts-text">No open assessments yet.</p>
+                </div>
+            </div>
+
+            <!-- Assessment Apply Confirmation Modal -->
+            <div id="applyAssessmentModal" class="modal" style="display:none;">
+                <div class="modal-content text-center">
+                    <span class="close-btn"
+                        onclick="document.getElementById('applyAssessmentModal').style.display='none'">&times;</span>
+                    <div class="modal-header-box">
+                        <h2><i class='bx bx-clipboard-check'></i> Confirm Application</h2>
+                        <p>You're applying for this assessment slot.</p>
+                    </div>
+                    <div id="applyAssessmentDetails" style="margin:16px 0;"></div>
+                    <button class="primary-btn full-width-btn" id="confirmApplyBtn">Confirm Apply</button>
+                    <button class="secondary-btn"
+                        onclick="document.getElementById('applyAssessmentModal').style.display='none'">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Post Schedule Section -->
+            <div class="post-schedule-section">
+                <div class="post-schedule-header">
+                    <div class="post-schedule-title-wrap">
+                        <h2><i class='bx bx-calendar-plus'></i> My Schedules</h2>
+                        <p>Coaches can see and claim your preferred times.</p>
+                    </div>
+                    <button type="button" class="add-new-btn"
+                        onclick="document.getElementById('postScheduleModal').style.display='flex'">
+                        <i class='bx bx-plus'></i> Add New
+                    </button>
+                </div>
+                <div class="my-posts-grid" id="myPostedSchedules">
+                    <p class="no-posts-text">No posted schedules yet.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Booking Modal ── -->
+        <div id="bookingModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <div class="modal-header-box">
+                    <h2><i class='bx bx-calendar-check'></i> Book a Session</h2>
+                    <p>Choose a date, time, and payment method.</p>
+                </div>
+
+                <!-- Selected Coach Info Banner -->
+                <div id="selectedCoachInfo"></div>
+
+                <form id="bookingForm">
+                    <!-- Available Dates -->
+                    <div class="input-group">
+                        <label>Available Dates</label>
+                        <input type="hidden" id="sessionDate">
+                        <div class="slots-scroll" id="availableDates"></div>
+                    </div>
+
+                    <!-- Available Times -->
+                    <div class="input-group">
+                        <label>Available Times</label>
+                        <input type="hidden" id="sessionTime">
+                        <div class="slots-scroll" id="availableTimes"></div>
+                    </div>
+
+                    <!-- Package Options -->
+                    <div class="input-group">
+                        <label>Session Package</label>
+                        <div id="packageOptions"></div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="input-group">
+                        <label>Payment Method</label>
+                        <div class="payment-options">
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="E-wallet">
+                                <span><i class='bx bx-qr-scan'></i> E-Wallet (QR)</span>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="Cash">
+                                <span><i class='bx bx-money'></i> Cash at Counter</span>
+                            </label>
+                        </div>
+                        <p class="muted-hint">
+                            Online (E-Wallet) payments are non-refundable. Please double-check your schedule before
+                            paying.
+                        </p>
+                    </div>
+                    <button type="submit" class="primary-btn full-width-btn">Proceed to Payment</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- My Package Sessions -->
+        <div class="package-sessions-section" id="myPackageSessionsSection">
+            <div class="post-schedule-header">
+                <div class="post-schedule-title-wrap">
+                    <h2><i class='bx bx-package'></i> My Package Sessions</h2>
+                    <p>Track your session schedules set by your coach.</p>
+                </div>
+            </div>
+            <div id="myPackageSessionsList">
+                <p class="no-posts-text">No active package sessions yet.</p>
+            </div>
+        </div>
+
+        <!-- ── Post Schedule Modal ── -->
+        <div id="postScheduleModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn"
+                    onclick="document.getElementById('postScheduleModal').style.display='none'">&times;</span>
+                <div class="modal-header-box">
+                    <h2>Post My Schedule</h2>
+                    <p>Tell coaches when you're available. They'll claim your slot!</p>
+                </div>
+
+                <div class="input-group">
+                    <label>Start Date</label>
+                    <input type="date" id="postDate" class="full-input">
+                </div>
+
+                <div class="input-group">
+                    <label>End Date <span class="label-hint">(Optional — if multi-day)</span></label>
+                    <input type="date" id="postEndDate" class="full-input">
+                </div>
+
+                <div class="input-group time-row">
+                    <div class="time-col">
+                        <label>Start Time</label>
+                        <input type="time" id="postStartTime" class="full-input">
+                    </div>
+                    <div class="time-col">
+                        <label>End Time</label>
+                        <input type="time" id="postEndTime" class="full-input">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Notes (Optional)</label>
+                    <textarea id="postNotes" placeholder="e.g. Beginner level, focusing on footwork..." rows="3"
+                        class="full-textarea"></textarea>
+                </div>
+
+                <button class="primary-btn full-width-btn" id="savePostBtn">Post Schedule</button>
+            </div>
+        </div>
+
+        <!-- ASSESS MODAL -->
+        <div id="assessmentResultModal" class="modal" style="display:none;">
+            <div
+                style="background:#fff;border-radius:16px;padding:24px;max-width:480px;width:90%;max-height:80vh;overflow-y:auto;position:relative;">
+                <button onclick="document.getElementById('assessmentResultModal').style.display='none'"
+                    style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280;">✕</button>
+                <h3 style="margin:0 0 16px;font-size:18px;font-weight:800;">Assessment Result</h3>
+                <div id="assessmentResultContent"></div>
+            </div>
+        </div>
+
+        <!-- QR CODE MODAL -->
+        <div id="qrModal" class="modal">
+            <div class="modal-content text-center">
+                <h2>Scan to Pay</h2>
+                <p>Please scan the GCash/Maya QR code below</p>
+                <div class="qr-placeholder">
+                    <img id="paymentQRImage" src="" alt="Payment QR Code" style="max-width:100%;height:auto;">
+                </div>
+                <p id="qrAccountInfo"></p>
+                <p id="qrPayeeNote" class="muted-hint"></p>
+                <p class="amount-text">Total: <span id="qrAmount">₱0</span></p>
+                <!-- Reference Number -->
+                <div class="qr-field-group">
+                    <label class="qr-label">
+                        <i class='bx bx-receipt'></i>
+                        Online Payment Reference Number <span class="required">*</span>
+                    </label>
+                    <input type="text" id="referenceNumberInput" class="qr-input" placeholder="e.g. 1234567890"
+                        maxlength="30">
+                    <p id="refError" class="qr-error">
+                        Please enter your reference number before proceeding.
+                    </p>
+                </div>
+
+                <!-- Payment Screenshot -->
+                <div class="qr-field-group">
+                    <label class="qr-label">
+                        <i class='bx bx-image-upload'></i>
+                        Payment Screenshot <span class="required">*</span>
+                    </label>
+
+                    <input type="file" id="paymentScreenshot" accept="image/*" style="display:none;">
+
+                    <div id="uploadDropZone" class="upload-dropzone">
+                        <i class='bx bx-cloud-upload upload-icon'></i>
+                        <span id="uploadLabel" class="upload-label">Click to upload screenshot</span>
+                    </div>
+
+                    <div id="uploadPreviewWrapper" class="upload-preview-wrapper">
+                        <img id="uploadPreview" src="" alt="Payment screenshot preview" class="upload-preview-img">
+                        <p id="removeUpload" class="upload-remove">Remove photo</p>
+                    </div>
+
+                    <p id="uploadError" class="qr-error">
+                        Please upload your payment screenshot before proceeding.
+                    </p>
+                </div>
+
+                <div class="qr-field-group">
+                    <label class="qr-label" style="cursor:pointer;">
+                        <input type="checkbox" id="policyAck">
+                        I understand that online payments are non-refundable and I have checked that my schedule is
+                        correct.
+                    </label>
+                    <p id="policyError" class="qr-error">
+                        Please confirm that you understand the policy before proceeding.
+                    </p>
+                </div>
+
+                <button class="primary-btn" id="btnPaid">I have paid</button>
+                <button class="secondary-btn" id="btnCancelQR">Cancel / Change Payment</button>
+            </div>
+        </div>
+
+        <!-- ── Cash Modal ── -->
+        <div id="cashModal" class="modal">
+            <div class="modal-content text-center">
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <div class="modal-header-box">
+                    <h2>Cash at Counter</h2>
+                    <p>Confirm your booking and pay at the venue.</p>
+                </div>
+                <div class="receipt-box">
+                    <p class="muted-hint">Amount due upon arrival:</p>
+                    <p id="cashAmountLabel" class="cash-amount-big">₱1,000.00</p>
+                </div>
+                <button class="primary-btn" onclick="processFinalPayment('Cash')">Confirm Reservation</button>
+                <button class="secondary-btn" onclick="backToBooking('cashModal')">Change Payment Method</button>
+            </div>
+        </div>
+
+        <!-- ── Success Modal ── -->
+        <div id="successModal" class="modal">
+            <div class="modal-content text-center">
+                <div class="success-check"><i class='bx bxs-check-circle'></i></div>
+                <h2>Success!</h2>
+                <p class="success-sub">Your reservation has been processed.</p>
+                <div id="successDetails" class="receipt-box"></div>
+                <button class="primary-btn" onclick="location.reload()">Back to Dashboard</button>
+            </div>
+        </div>
+
+    </section>
+
+    <footer class="footer">
+        <p>© 2026 Premiere Southpoint Badminton Court. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function renderDatesFromFilter() {
+            if (window._renderDates) window._renderDates();
+        }
+    </script>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["player"]);
+    </script>
+
+    <script src="../../scripts/player/PlayerSidebar.js"></script>
+    <script type="module" src="../../scripts/player/Coach.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

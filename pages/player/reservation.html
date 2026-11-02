@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Reservations | Southpoint</title>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/player/PlayerSidebar.css">
+    <link rel="stylesheet" href="../../styles/player/reservation.css">
+    <link rel="stylesheet" href="../../styles/shared/notification.css">
+</head>
+
+<body>
+    <!-- ── SIDEBAR ── -->
+    <nav class="sidebar close">
+
+        <script>
+            if (localStorage.getItem("playerSidebarState") === "open") {
+                document.currentScript.parentElement.classList.remove("close");
+            }
+        </script>
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/components/logo.jpg" alt="logo">
+                </span>
+                <div class="text header-text">
+                    <span class="name" id="sidebarName">Southpoint</span>
+                    <span class="role" id="sidebarRole">Player</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link"><a href="player.html"><i class='bx bx-user icon'></i><span
+                                class="text">Profile</span></a></li>
+                    <li class="nav-link"><a href="CourtList.html"><i class='bx bx-detail icon'></i><span
+                                class="text">Court List</span></a></li>
+                    <li class="nav-link"><a href="reservation.html"><i class='bx bx-calendar-check icon'></i><span
+                                class="text">My Reservations</span></a></li>
+                    <li class="nav-link"><a href="Queue.html"><i class='bx bxs-group icon'></i><span class="text">Queue
+                                List</span></a></li>
+                    <li class="nav-link"><a href="Tournament.html"><i class='bx bx-trophy icon'></i><span
+                                class="text">Tournaments</span></a></li>
+                    <li class="nav-link"><a href="Coach.html"><i class='bx bx-user-voice icon'></i><span
+                                class="text">Coach Booking</span></a></li>
+                    <li class="nav-link"><a href="Settings.html"><i class='bx bx-cog icon'></i><span
+                                class="text">Settings</span></a></li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ── MAIN CONTENT ── -->
+    <section class="home">
+        <div class="dash-header">
+            <div>
+                <h1>My Reservations</h1>
+                <p>View your bookings, queue status, and notifications</p>
+            </div>
+            <div class="notif-wrapper">
+                <button class="notif-btn" id="notifToggle" onclick="toggleNotifPanel()">
+                    <i class='bx bx-bell'></i>
+                    <span class="notif-badge" id="notifBadge" style="display:none; font-size: 12px;">0</span>
+                </button>
+                <div class="notif-panel" id="notifPanel">
+                    <div class="notif-panel-header">
+                        <span>Notifications</span>
+                        <button onclick="clearNotifs()">Mark all read</button>
+                    </div>
+                    <ul class="notif-list" id="notifList">
+                        <li class="notif-empty">No new notifications.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- STATS ROW -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class='bx bx-check-circle'></i></div>
+                    <div class="stat-info">
+                        <h3 id="statConfirmed">—</h3>
+                        <p>CONFIRMED</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon amber"><i class='bx bx-time'></i></div>
+                    <div class="stat-info">
+                        <h3 id="statPending">—</h3>
+                        <p>PENDING</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class='bx bx-list-ol'></i></div>
+                    <div class="stat-info">
+                        <h3 id="statQueued">—</h3>
+                        <p>QUEUED</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red"><i class='bx bx-x-circle'></i></div>
+                    <div class="stat-info">
+                        <h3 id="statCancelled">—</h3>
+                        <p>CANCELLED</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESERVATIONS CARD -->
+            <div class="card">
+                <div class="card-title">
+                    <i class='bx bx-calendar'></i>
+                    Booking History
+                </div>
+
+                <div class="filter-tabs">
+                    <button class="tab-btn active" data-filter="all">All</button>
+                    <button class="tab-btn" data-filter="confirmed">Confirmed</button>
+                    <button class="tab-btn" data-filter="pending">Pending</button>
+                    <button class="tab-btn" data-filter="pending_verification">Awaiting Verification</button>
+                    <button class="tab-btn" data-filter="queued">Queued</button>
+                    <button class="tab-btn" data-filter="cancelled">Cancelled</button>
+                </div>
+
+                <div class="reservations-list" id="reservationsList"></div>
+            </div>
+
+        </div>
+
+        <!-- ── CANCEL CONFIRM MODAL ── -->
+        <div class="modal" id="cancelModal">
+            <div class="modal-content">
+                <i class='bx bx-error-circle'
+                    style="font-size:3rem;color:#ef4444;display:block;margin-bottom:12px;"></i>
+                <h3>Cancel Reservation?</h3>
+                <p id="cancelModalText">Are you sure you want to cancel this reservation? This will automatically
+                    promote the next person in the queue.</p>
+                <div class="modal-btns">
+                    <button class="btn-secondary" id="btnCancelNo">Keep It</button>
+                    <button class="btn-danger" id="btnCancelYes">Yes, Cancel</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="promotedPaymentModal" class="promo-modal">
+        <div class="promo-modal-content">
+            <h3>Complete Your Booking</h3>
+            <p>You have been promoted to this slot! Please select your payment method within your 10-minute window.</p>
+
+            <form id="promotedPaymentForm">
+                <input type="hidden" id="modalReservationId" name="reservation_id">
+
+                <div class="promo-field">
+                    <label for="modalPaymentMethod">Payment Method</label>
+                    <select id="modalPaymentMethod" required onchange="togglePromotedProofField(this.value)">
+                        <option value="">Select payment method</option>
+                        <option value="Cash">Cash</option>
+                        <option value="E-wallet">E-wallet (GCash / Maya)</option>
+                    </select>
+                </div>
+
+                <div id="promotedProofContainer" class="promo-proof">
+                    <div class="promo-field">
+                        <label for="promotedPaymentScreenshot">Upload Payment Screenshot</label>
+                        <input type="file" id="promotedPaymentScreenshot" accept="image/*">
+                    </div>
+
+                    <div class="promo-field">
+                        <label for="promotedReferenceNumber">Reference Number</label>
+                        <input type="text" id="promotedReferenceNumber" placeholder="Enter reference number">
+                    </div>
+                </div>
+
+                <div class="promo-actions">
+                    <button type="button" class="promo-btn-secondary" onclick="closePromotedModal()">Cancel</button>
+                    <button type="submit" id="promotedSubmitBtn" class="promo-btn-primary">Submit Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        © 2026 Premiere Southpoint Badminton Court. All rights reserved.
+    </footer>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["player"]);
+    </script>
+
+    <script src="../../scripts/player/PlayerSidebar.js"></script>
+    <script type="module" src="../../scripts/player/reservation.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

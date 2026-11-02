@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/admin/AdminSidebar.css">
+    <link rel="stylesheet" href="../../styles/admin/Coaches.css">
+    <link rel="stylesheet" href="../../styles/coach/coachMain.css">
+    <title>Coach Profile | Southpoint</title>
+</head>
+
+<body class="preload">
+    <nav class="sidebar close">
+        <script>
+            if (localStorage.getItem("adminSidebarState") === "open") {
+                document.currentScript.parentElement.classList.remove("close");
+            }
+        </script>
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/components/logo.jpg" alt="logo">
+                </span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Business Admin</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="Dashboard.html"><i class='bx bx-home-alt icon'></i><span
+                                class="text">Dashboard</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Court.html"><i class='bx bx-cabinet icon'></i><span class="text">Court
+                                Manager</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="EventManager.html"><i class='bx bx-calendar-event icon'></i><span class="text">Event
+                                Manager</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Analytics.html"><i class='bx bx-bar-chart-alt-2 icon'></i><span
+                                class="text">Analytics</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Reports.html"><i class='bx bxs-report icon'></i><span class="text">Reports</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Coaches.html" class="active"><i class='bx bx-group icon'></i><span
+                                class="text">Coaches</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Players.html"><i class='bx bx-run icon'></i><span class="text">Players</span></a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="Settings.html"><i class='bx bx-cog icon'></i><span class="text">Settings</span></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home">
+        <div class="dash-content">
+            <div class="dash-header">
+                <h1>Coaches</h1>
+                <p>View and manage registered coaches, their contact information, and account status.</p>
+            </div>
+
+            <div class="container">
+                <div class="db-header">
+                    <div class="search-box">
+                        <i class='bx bx-search'></i>
+                        <input type="text" id="coachSearchInput" placeholder="Search coach name or email...">
+                    </div>
+                    <button class="add-btn" id="openModalBtn">
+                        <i class='bx bx-plus-circle'></i> Add New Coach
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Coach Name</th>
+                                <th>Contact / Email</th>
+                                <th style="text-align: center;">Status</th>
+                                <th style="text-align: center;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="coachTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        Showing <span id="showingStart">0</span> to
+                        <span id="showingEnd">0</span> of
+                        <span id="totalEntries">0</span> coaches
+                    </div>
+                    <div class="pagination-buttons" id="paginationBtns"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODAL 1: ADD NEW COACH -->
+    <div id="coachModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Add Coach Account</h3>
+            <p>Fill in the details below to create a new coach account.</p>
+
+            <form id="coachForm">
+                <div class="duration-section" style="display: block;">
+                    <label class="duration-label">Full Name</label>
+                    <input type="text" id="coachName" class="time-input" placeholder="Enter full name" required
+                        style="margin-bottom: 15px;">
+
+                    <label class="duration-label">Username</label>
+                    <input type="text" id="coachUsername" class="time-input" placeholder="Enter username" required
+                        style="margin-bottom: 15px;">
+
+                    <label class="duration-label">Email Address</label>
+                    <input type="email" id="coachEmail" class="time-input" placeholder="coach@example.com" required
+                        style="margin-bottom: 15px;">
+
+                    <label class="duration-label">Mobile Number</label>
+                    <input type="tel" id="coachPhone" class="time-input" placeholder="09123456789" inputmode="numeric"
+                        pattern="09[0-9]{9}" maxlength="11" required style="margin-bottom: 15px;">
+
+                    <label class="duration-label">Club Affiliation</label>
+                    <input type="text" id="coachClub" class="time-input"
+                        placeholder="Enter club name (e.g., Southpoint Club)" style="margin-bottom: 15px;">
+
+                    <small style="color: #94a3b8; font-size: 0.75rem; display: block; margin-bottom: 10px;">
+                        <i class='bx bx-info-circle'></i> An invite email will be sent to the coach to set their own
+                        password.
+                    </small>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="modal-btn btn-cancel" id="closeModal">Cancel</button>
+                    <button type="submit" class="modal-btn btn-confirm">Create Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: SUSPEND COACH -->
+    <div class="modal-overlay" id="actionModal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Suspend Account</h3>
+            <p id="modalDescription">Choose the suspension reason and duration for this coach.</p>
+
+            <div id="suspendReasonSelectWrapper" class="duration-section" style="margin-bottom: 15px;">
+                <label for="suspendReasonSelect" class="duration-label">Suspension Reason</label>
+                <select id="suspendReasonSelect" class="duration-select">
+                    <option value="" disabled selected>Select a reason...</option>
+                    <option value="Violation of Court Rules">Violation of Court Rules</option>
+                    <option value="Unpaid Court/Club Dues">Unpaid Court/Club Dues</option>
+                    <option value="Inappropriate Behavior">Inappropriate Behavior</option>
+                    <option value="Other">Other (Specify below)</option>
+                </select>
+            </div>
+
+            <div id="suspendReasonWrapper" class="reason-section" style="display: none; margin-bottom: 15px;">
+                <label for="suspendReason" class="duration-label">Specific Reason (Optional)</label>
+                <textarea id="suspendReason" rows="3"
+                    placeholder="Enter additional details for suspension..."></textarea>
+            </div>
+
+            <div id="durationWrapper" class="duration-section" style="display: none;">
+                <label for="suspendDuration" class="duration-label">Suspension Duration</label>
+                <select id="suspendDuration" class="duration-select">
+                    <option value="1">1 Day</option>
+                    <option value="3">3 Days</option>
+                    <option value="7">7 Days</option>
+                    <option value="14">14 Days</option>
+                    <option value="30">30 Days</option>
+                </select>
+            </div>
+
+            <div class="modal-footer">
+                <button class="modal-btn btn-cancel" id="closeActionModal">Cancel</button>
+                <button class="modal-btn btn-confirm" id="confirmModalBtn">Confirm Suspension</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["business_admin"]);
+    </script>
+
+    <script src="../../scripts/admin/AdminSidebar.js"></script>
+    <script type="module" src="../../scripts/admin/Coaches.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

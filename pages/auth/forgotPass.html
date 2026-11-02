@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/auth/forgotPass.css">
+    <title>Forgot Password | Southpoint</title>
+</head>
+
+<body>
+    <div class="login-wrapper">
+
+        <!-- LEFT PANEL -->
+        <div class="login-left">
+            <div class="left-content">
+                <div class="brand-logo">
+                    <div class="brand-text">
+                        <span class="brand-name">Southpoint</span>
+                        <span class="brand-sub">Premiere Badminton Court</span>
+                    </div>
+                </div>
+
+                <div class="left-divider"></div>
+
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class='bx bx-calendar-check'></i>
+                        <span>Online court reservations</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class='bx bx-time-five'></i>
+                        <span>Real-time court availability</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class='bx bx-user-check'></i>
+                        <span>Coach booking & scheduling</span>
+                    </div>
+                </div>
+
+                <p class="left-footer">© 2026 Premiere Southpoint Badminton Court</p>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL -->
+        <div class="login-right">
+            <div class="login-card">
+                <h1 class="login-title">Forgot Password</h1>
+                <p class="login-sub">Enter your email address and we'll send you instructions to reset your password.
+                </p>
+
+                <form id="forgotPasswordForm">
+                    <div class="input-group">
+                        <input type="email" id="email" placeholder="Email Address" required>
+                        <i class='bx bx-envelope'></i>
+                    </div>
+
+                    <button type="submit" class="btn-login" id="resetBtn">SEND RESET LINK</button>
+                </form>
+
+                <div class="message-box" id="messageBox"></div>
+
+                <div class="back-link">
+                    <a href="login.html">← Back to Login</a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module" src="../../scripts/auth/forgotPass.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Premiere Southpoint Badminton Court</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="/components/logo.png">
+<link rel="stylesheet" href="landing.css">
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="landing.html"><img src="/components/logo.png" alt="Premiere Southpoint Badminton Court"></a>
+  <nav class="nav-links">
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#courts">Courts</a>
+    <a href="#faq">FAQ</a>
+    <a href="#visit">Visit</a>
+  </nav>
+  <div class="nav-actions">
+    <a class="btn btn-ghost" href="/pages/auth/login.html">Log in</a>
+    <a class="btn btn-solid" href="/pages/auth/register.html">Sign up</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <svg class="hero-lines" viewBox="0 0 220 440" aria-hidden="true">
+      <rect x="10" y="10" width="200" height="420" />
+      <line x1="30" y1="10" x2="30" y2="430" />
+      <line x1="190" y1="10" x2="190" y2="430" />
+      <line x1="10" y1="220" x2="210" y2="220" class="net" />
+      <line x1="10" y1="164" x2="210" y2="164" />
+      <line x1="10" y1="276" x2="210" y2="276" />
+      <line x1="110" y1="10" x2="110" y2="164" />
+      <line x1="110" y1="276" x2="110" y2="430" />
+      <line x1="10" y1="52" x2="210" y2="52" />
+      <line x1="10" y1="388" x2="210" y2="388" />
+    </svg>
+    <div class="hero-text">
+      <h1>Reserve your court before you leave the house.</h1>
+      <p>Premiere Southpoint Badminton Court in Brgy. Pulo, Cabuyao City, Laguna. Check which of our eight courts are open, book a slot, and skip the wait at the counter.</p>
+      <div class="hero-actions">
+        <a class="btn btn-solid" href="#courts">See available courts</a>
+        <a class="btn btn-ghost" href="/pages/auth/login.html">Log in to book</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <img class="hero-logo" src="/components/logo.png" alt="Premiere Southpoint Badminton Court">
+    </div>
+  </section>
+
+  <section id="about" class="block">
+    <h2>About Southpoint</h2>
+    <p class="lead">Premiere Southpoint Badminton Court opened on June 9, 2017 in Brgy. Pulo, Cabuyao City, Laguna. It is a family-owned hub for casual and competitive players, run by a team with 21 years of experience managing badminton businesses.</p>
+    <div class="stats">
+      <div class="stat" data-reveal style="--i:0"><strong>2017</strong><span>Year we opened</span></div>
+      <div class="stat" data-reveal style="--i:1"><strong>8</strong><span>Active courts</span></div>
+      <div class="stat" data-reveal style="--i:2"><strong>500+</strong><span>Players who have reserved</span></div>
+    </div>
+    <h3 class="sub">Why we moved online</h3>
+    <div class="points">
+      <article data-reveal style="--i:0">
+        <h4>No more waiting for a reply</h4>
+        <p>Court availability is one shared record, so you no longer wait for a message back to find out if a slot is free.</p>
+      </article>
+      <article data-reveal style="--i:1">
+        <h4>No double bookings</h4>
+        <p>Every booking goes into one system instead of separate spreadsheets, so schedules stop overlapping during peak hours.</p>
+      </article>
+      <article data-reveal style="--i:2">
+        <h4>Know your place in line</h4>
+        <p>Join the queue for busy hours and see your estimated wait, instead of crowding the front desk.</p>
+      </article>
+      <article data-reveal style="--i:3">
+        <h4>Fair, organized tournaments</h4>
+        <p>Players are leveled from recorded assessments, brackets build automatically, and the next match shows as soon as a game ends.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="services" class="block">
+    <p class="eyebrow">Services</p>
+    <h2>What you can do here</h2>
+    <p class="lead services-lead">From booking a court to joining a tournament, everything happens in one place.</p>
+    <div class="services">
+      <article class="service" data-reveal style="--i:0">
+        <span class="service-num">01</span>
+        <div class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+        <h3>Court reservation</h3>
+        <p>Pick a date and hour, pay online, and staff confirm your payment. The system also suggests open slots that fit your schedule.</p>
+      </article>
+      <article class="service" data-reveal style="--i:1">
+        <span class="service-num">02</span>
+        <div class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <h3>Reservation queue</h3>
+        <p>Join the first-come, first-served waitlist for busy hours and track your spot and estimated wait time without waiting on-site.</p>
+      </article>
+      <article class="service" data-reveal style="--i:2">
+        <span class="service-num">03</span>
+        <div class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg></div>
+        <h3>Tournaments</h3>
+        <p>Register online, follow your bracket, and see your next match as soon as the current game ends. Results are recorded automatically.</p>
+      </article>
+      <article class="service" data-reveal style="--i:3">
+        <span class="service-num">04</span>
+        <div class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+        <h3>Skills assessment</h3>
+        <p>Get leveled as beginner, intermediate or advanced from recorded assessments, so you compete against players at your level.</p>
+      </article>
+      <article class="service" data-reveal style="--i:4">
+        <span class="service-num">05</span>
+        <div class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+        <h3>Coaching</h3>
+        <p>Request a coach, book single sessions or packages, and get coaching recommendations based on your assessment records.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="courts" class="block">
+    <div class="block-head">
+      <h2>Courts and schedule</h2>
+    </div>
+    <p class="lead">Choose a court and a date to see which hours are open. Booking needs an account.</p>
+    <div id="courtTabs" class="court-tabs"></div>
+    <div class="picker">
+      <div>
+        <div id="calendar" class="calendar"></div>
+        <div id="schedCard" class="sched"></div>
+      </div>
+      <div>
+        <h3>Time slots</h3>
+        <ul id="slotList" class="slot-list" aria-live="polite"></ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="block block-tint">
+    <p class="eyebrow">FAQ</p>
+    <h2>Questions, answered</h2>
+    <p class="lead">Quick answers about booking, payments, queueing and tournaments.</p>
+    <div class="faq">
+      <details class="faq-item" data-reveal style="--i:0">
+        <summary>Do I need an account to reserve a court?</summary>
+        <p>You can browse the courts, open hours and booked slots without one. To book, you need to sign up and log in.</p>
+      </details>
+      <details class="faq-item" data-reveal style="--i:1">
+        <summary>How do I reserve a court?</summary>
+        <p>Log in, choose a court, pick a date and hour, then pay by scanning the payment QR shown during booking or pay directly to the counter. Staff verify your payment before the booking is confirmed.</p>
+      </details>
+      <details class="faq-item" data-reveal style="--i:2">
+        <summary>Can I cancel or get a refund?</summary>
+        <p>Cash reservations can be cancelled. Once an online payment is made, the booking is not cancellable or refundable as a rule. The owner may consider exceptions case by case, depending on the reason, so please double-check your date and time before paying.</p>
+      </details>
+      <details class="faq-item" data-reveal style="--i:3">
+        <summary>Is there a discount for homeowners?</summary>
+        <p>Yes. Homeowners of Southpoint Subdivision get a discounted court rate once their homeowner status is verified.</p>
+      </details>
+      <details class="faq-item" data-reveal style="--i:4">
+        <summary>What if all the courts are taken?</summary>
+        <p>Join the reservation queue for busy hours. It is first come, first served, and it shows your place in line and your estimated wait time, so you do not have to wait around on-site.</p>
+      </details>
+      <details class="faq-item" data-reveal style="--i:5">
+        <summary>How do tournaments and skill levels work?</summary>
+        <p>Register online when an event is open, then follow your bracket and see your next match as soon as the current game ends. Your level (beginner, intermediate or advanced) comes from recorded assessments, so everyone competes against players at their level.</p>
+      </details>
+      <details class="faq-item" data-reveal style="--i:6">
+        <summary>How does coaching work, and who do I pay?</summary>
+        <p>Request a coach and choose a single session or a package. Coaching fees are paid to the coach directly, separate from the court fee.</p>
+      </details>
+      <details class="faq-item" data-reveal style="--i:7">
+        <summary>What time are you open?</summary>
+        <p>Opening hours can differ by day. The current weekly hours are listed under Visit us.</p>
+      </details>
+    </div>
+  </section>
+
+  <section id="visit" class="block">
+    <h2>Visit us</h2>
+    <p class="lead">Southpoint Subdivision, Pulo-Diezmo Road, Brgy. Pulo, Cabuyao City, Laguna.</p>
+    <div class="visit-grid">
+      <div>
+        <h3>Opening hours</h3>
+        <ul id="hoursList" class="hours-list"></ul>
+      </div>
+      <div id="contactBlock" hidden>
+        <h3>Contact us</h3>
+        <ul id="contactList" class="contact-list"></ul>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <a class="btn btn-solid" href="/pages/auth/register.html">Create an account</a>
+      <a class="btn btn-ghost" href="/pages/auth/login.html">I already have one</a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <p class="footer-brand"><img src="/components/logo.png" alt="Southpoint Logo"></p>
+      <p>Premiere Southpoint Badminton Court. Check open courts, book a slot, and skip the wait at the counter.</p>
+    </div>
+    <div>
+      <h3>Quick links</h3>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#courts">Courts</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="/pages/auth/login.html">Log in</a></li>
+        <li><a href="/pages/auth/register.html">Sign up</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Find us</h3>
+      <p>Southpoint Subdivision, Pulo-Diezmo Road, Brgy. Pulo, Cabuyao City, Laguna</p>
+      <ul id="footerContact" class="footer-contact"></ul>
+    </div>
+  </div>
+</footer>
+
+<script src="reveal.js" defer></script>
+<script type="module" src="landing.js"></script>
+</body>
+</html>

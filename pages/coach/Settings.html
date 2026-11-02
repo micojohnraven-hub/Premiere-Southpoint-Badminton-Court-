@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Boxicons CSS -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <title>Settings | Southpoint</title>
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../../styles/coach/coachMain.css">
+    <link rel="stylesheet" href="../../styles/coach/Settings.css">
+</head>
+
+<body>
+    <nav class="sidebar close">
+        <header>
+            <div class="image-text">
+                <span class="image"><img src="/components/logo.jpg" alt="logo"></span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Coach</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link"><a href="coachDashboard.html"><i class='bx bx-id-card icon'></i><span
+                                class="text">Dashboard</span></a></li>
+                    <li class="nav-link"><a href="coachSchedule.html"><i class='bx bx-calendar icon'></i><span
+                                class="text">Availability</span></a></li>
+                    <li class="nav-link"><a href="coachRequests.html"><i class='bx bx-bell icon'></i><span
+                                class="text">Requests</span></a></li>
+                    <li class="nav-link"><a href="coachStats.html"><i class='bx bx-run icon'></i><span
+                                class="text">Player Assessment</span></a></li>
+                    <li class="nav-link"><a href="Settings.html"><i class='bx bx-cog icon'></i><span
+                                class="text">Settings</span></a></li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <section class="home">
+        <div class="dash-wrapper">
+            <div class="dash-header">
+                <h1>Account Settings</h1>
+                <p>Manage your account details, security, and app preferences.</p>
+            </div>
+
+            <div class="settings-grid">
+                <!-- Profile Section -->
+                <div class="settings-card">
+                    <div class="card-title">
+                        <i class='bx bx-user'></i>
+                        <h3>Public Profile</h3>
+                    </div>
+                    <form id="profileForm">
+                        <div class="profile-pic-uploader">
+                            <img src="/components/logobg.jpeg" id="avatarPreview" alt="Profile Picture">
+                            <div class="upload-controls">
+                                <label for="fileUpload" class="btn-outline">Change Photo</label>
+                                <input type="file" id="fileUpload" hidden accept="image/*">
+                                <span>JPG or PNG. Max 2MB.</span>
+                            </div>
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-box">
+                                <label>Full Name</label>
+                                <input type="text" id="fullName" placeholder="Your Name">
+                            </div>
+                            <div class="input-box">
+                                <label>Username</label>
+                                <input type="text" id="username" placeholder="Username">
+                            </div>
+                        </div>
+
+                        <div class="input-box">
+                            <label>Email Address</label>
+                            <input type="email" id="email" placeholder="email@example.com" readonly>
+                        </div>
+
+                        <div class="input-box">
+                            <label>Phone Number</label>
+                            <input type="tel" id="phone" placeholder="+63 000 000 0000">
+                        </div>
+
+                        <button type="submit" class="btn-save">Update Profile</button>
+                    </form>
+                </div>
+
+                <!-- Security Section -->
+                <div class="settings-card">
+                    <div class="card-title">
+                        <i class='bx bx-lock-alt'></i>
+                        <h3>Security</h3>
+                    </div>
+                    <form id="securityForm">
+                        <div class="input-box">
+                            <label>Current Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="currentPassword" placeholder="••••••••">
+                                <i class='bx bx-hide toggle-password' data-target="currentPassword"></i>
+                            </div>
+                        </div>
+                        <div class="input-box">
+                            <label>New Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="newPassword" placeholder="Enter new password">
+                                <i class='bx bx-hide toggle-password' data-target="newPassword"></i>
+                            </div>
+                        </div>
+                        <div class="input-box">
+                            <label>Confirm Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="confirmPassword" placeholder="Repeat new password">
+                                <i class='bx bx-hide toggle-password' data-target="confirmPassword"></i>
+                            </div>
+                        </div>
+                        <div class="security-info">
+                            <p><i class='bx bx-info-circle'></i> Must have uppercase, lowercase, number, and special
+                                character (e.g. Pass@123)</p>
+                        </div>
+                        <button type="submit" class="btn-save">Change Password</button>
+                    </form>
+                </div>
+
+                <div class="settings-card full-width" id="paymentQrCard">
+                    <div class="card-title">
+                        <i class='bx bx-qr'></i>
+                        <h3>Payment QR Code</h3>
+                    </div>
+
+                    <div class="qr-layout">
+                        <div class="qr-preview-box">
+                            <img id="qrCurrentImage" class="qr-preview-img" alt="Current payment QR code" hidden>
+                            <span id="qrEmptyState" class="qr-empty">No QR code uploaded</span>
+                        </div>
+
+                        <div class="qr-form">
+                            <p class="security-info">
+                                <i class='bx bx-info-circle'></i>
+                                Players scan this QR code when paying for your coaching sessions.
+                            </p>
+
+                            <div class="input-box">
+                                <label>E-Wallet Provider</label>
+                                <select id="qr-provider">
+                                    <option value="GCash">GCash</option>
+                                    <option value="Maya">Maya</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="input-box">
+                                <label>Account Name</label>
+                                <input type="text" id="qr-account-name" placeholder="Enter account name" maxlength="60">
+                            </div>
+
+                            <div class="input-box">
+                                <label>QR Image</label>
+                                <div class="qr-file-field">
+                                    <input type="file" id="qr-file" accept="image/png,image/jpeg,image/webp" hidden>
+                                    <button type="button" class="btn-outline" id="qrChooseFileBtn">Choose Image</button>
+                                    <span id="qrFileName" class="qr-file-name">No file chosen</span>
+                                </div>
+                                <p class="security-info">PNG, JPG, or WEBP, up to 2 MB. Leave empty to keep the current
+                                    image.</p>
+                            </div>
+
+                            <div class="qr-actions">
+                                <button type="button" class="btn-save" id="saveQrBtn">Save QR Code</button>
+                                <button type="button" class="btn-danger-outline" id="deactivateQrBtn" hidden>Deactivate
+                                    QR</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["coach"]);
+    </script>
+
+    <script src="../../scripts/player/Main2.js"></script>
+    <script type="module" src="../../scripts/coach/PaymentQR.js"></script>
+    <script type="module" src="../../scripts/coach/Settings.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

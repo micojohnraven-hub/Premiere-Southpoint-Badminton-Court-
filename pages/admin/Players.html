@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/admin/AdminSidebar.css">
+    <link rel="stylesheet" href="../../styles/coach/coachMain.css">
+    <link rel="stylesheet" href="../../styles/admin/Players.css">
+    <title>Players Profile | Southpoint</title>
+</head>
+
+<body class="preload">
+
+    <nav class="sidebar close">
+        <script>
+            if (localStorage.getItem("adminSidebarState") === "open") {
+                document.currentScript.parentElement.classList.remove("close");
+            }
+        </script>
+
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="/components/logo.jpg" alt="logo">
+                </span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Business Admin</span>
+                </div>
+            </div>
+            <i class="bx bx-chevron-right toggle"></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="Dashboard.html">
+                            <i class="bx bx-home-alt icon"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="Court.html">
+                            <i class="bx bx-cabinet icon"></i>
+                            <span class="text">Court Manager</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="EventManager.html">
+                            <i class="bx bx-calendar-event icon"></i>
+                            <span class="text">Event Manager</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="Analytics.html">
+                            <i class="bx bx-bar-chart-alt-2 icon"></i>
+                            <span class="text">Analytics</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="Reports.html">
+                            <i class="bx bxs-report icon"></i>
+                            <span class="text">Reports</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="Coaches.html">
+                            <i class="bx bx-group icon"></i>
+                            <span class="text">Coaches</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="Players.html" class="active">
+                            <i class="bx bx-run icon"></i>
+                            <span class="text">Players</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="Settings.html">
+                            <i class="bx bx-cog icon"></i>
+                            <span class="text">Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class="bx bx-log-out icon"></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <section class="home">
+        <div class="dash-content">
+            <div class="dash-header">
+                <h1>Players</h1>
+                <p>View and manage player profiles, skill levels, win rates, and account standing.</p>
+            </div>
+
+            <div class="container">
+                <div class="db-header">
+                    <div class="search-box">
+                        <i class="bx bx-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search name, email, contact, or level...">
+                    </div>
+
+                    <div class="filter-group">
+                        <select id="filterSelect">
+                            <option value="all">All Players</option>
+                            <option value="homeowners">Homeowners Only</option>
+                            <option value="advanced">Advanced</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="beginner">Beginner</option>
+                            <option value="not-qualified">Not Qualified</option>
+                        </select>
+
+                        <select id="sortSelect">
+                            <option value="name">Sort: Name A–Z</option>
+                            <option value="winrate-desc">Sort: Win Rate ↓</option>
+                            <option value="winrate-asc">Sort: Win Rate ↑</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Player Name</th>
+                                <th>Contact / Email</th>
+                                <th>Level</th>
+                                <th style="text-align: center;">Win Rate</th>
+                                <th style="text-align: center;">Account Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="playerTable"></tbody>
+                    </table>
+                </div>
+
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        Showing <span id="showingStart">0</span> to
+                        <span id="showingEnd">0</span> of
+                        <span id="totalEntries">0</span> players
+                    </div>
+
+                    <div class="pagination-buttons" id="paginationWrapper"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal-overlay" id="actionModal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Account Action</h3>
+            <p id="modalDescription">Please confirm your selection to proceed.</p>
+
+            <div id="suspendReasonWrapper" class="reason-section">
+                <label for="suspendReasonSelect" class="duration-label">
+                    Suspension Reason
+                </label>
+                <select id="suspendReasonSelect" class="duration-select" style="margin-bottom: 10px;">
+                    <option value="">-- Select a reason --</option>
+                    <option value="Unsportsmanlike conduct">Unsportsmanlike conduct</option>
+                    <option value="Harassment or abusive language">Harassment or abusive language</option>
+                    <option value="Violation of court rules">Violation of court rules</option>
+                    <option value="Repeated no-shows">Repeated no-shows</option>
+                    <option value="Other">Other (Please specify)</option>
+                </select>
+
+                <textarea id="suspendReason" rows="3" placeholder="Enter custom suspension reason..."
+                    style="display: none;"></textarea>
+
+                <div id="durationWrapper" class="duration-section">
+                    <label for="suspendDuration" class="duration-label">
+                        Suspension Duration
+                    </label>
+
+                    <select id="suspendDuration" class="duration-select">
+                        <option value="1">1 Day</option>
+                        <option value="3">3 Days</option>
+                        <option value="7">7 Days</option>
+                        <option value="14">14 Days</option>
+                        <option value="30">30 Days</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="modal-btn btn-cancel" id="closeModal">
+                    Cancel
+                </button>
+                <button class="modal-btn btn-confirm" id="confirmModalBtn">
+                    Confirm Action
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="warningModal">
+        <div class="modal-card">
+            <h3>Issue Warning</h3>
+            <p>Please select or provide the reason for issuing this warning.</p>
+
+            <div class="modal-form">
+                <label for="warningReasonSelect">Warning Reason</label>
+                <select id="warningReasonSelect" class="duration-select" style="margin-bottom: 10px;">
+                    <option value="">-- Select a reason --</option>
+                    <option value="Minor behavioral infraction">Minor behavioral infraction</option>
+                    <option value="Late arrival / No-show">Late arrival / No-show</option>
+                    <option value="Disrespectful to staff or coaches">Disrespectful to staff or coaches</option>
+                    <option value="Improper facility usage">Improper facility usage</option>
+                    <option value="Other">Other (Please specify)</option>
+                </select>
+
+                <!-- Hidden by default, lalabas lang pag "Other" ang pinili -->
+                <textarea id="warningReason" rows="3" placeholder="Enter custom warning reason..."
+                    style="display: none;"></textarea>
+            </div>
+
+            <div class="modal-footer">
+                <button class="modal-btn btn-cancel" onclick="closeWarningModal()">
+                    Cancel
+                </button>
+                <button class="modal-btn btn-warning" onclick="submitWarning()">
+                    Issue Warning
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["business_admin"]);
+    </script>
+
+    <script src="../../scripts/admin/AdminSidebar.js"></script>
+    <script type="module" src="../../scripts/admin/Players.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

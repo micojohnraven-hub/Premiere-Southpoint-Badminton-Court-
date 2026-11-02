@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/coach/coachMain.css">
+    <link rel="stylesheet" href="../../styles/coach/coachRequests.css">
+    <title>Requests & Players | Southpoint</title>
+</head>
+
+<body>
+    <nav class="sidebar">
+        <header>
+            <div class="image-text logo-clickable" style="cursor: pointer;">
+                <span class="image"><img src="/components/logo.jpg" alt="logo"></span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">Coach</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link"><a href="coachDashboard.html"><i class='bx bx-id-card icon'></i><span
+                                class="text">Dashboard</span></a></li>
+                    <li class="nav-link"><a href="coachSchedule.html"><i class='bx bx-calendar icon'></i><span
+                                class="text">Availability</span></a></li>
+                    <li class="nav-link"><a href="coachRequests.html" class="active"><i
+                                class='bx bx-bell icon'></i><span class="text">Requests</span></a></li>
+                    <li class="nav-link"><a href="coachStats.html"><i class='bx bx-run icon'></i><span
+                                class="text">Player Assessment</span></a></li>
+                    <li class="nav-link"><a href="Settings.html"><i class='bx bx-cog icon'></i><span
+                                class="text">Settings</span></a></li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <main class="home">
+        <div class="requests-wrapper">
+            <div class="dash-header">
+                <h1>Bookings Request</h1>
+                <p>Manage and respond to your incoming lesson and package requests.</p>
+            </div>
+
+            <!-- Pending Requests -->
+            <section class="content-section">
+                <div class="section-block">
+                    <div class="section-block-header">
+                        <div>
+                            <h2><i class='bx bx-envelope-open'></i> Pending Requests</h2>
+                            <p>Manage and respond to your incoming lesson and package requests.</p>
+                        </div>
+                    </div>
+                    <div class="request-list" id="requestList"></div>
+                </div>
+            </section>
+
+            <!-- Package Sessions -->
+            <section class="content-section">
+                <div class="section-block">
+                    <div class="section-block-header">
+                        <div>
+                            <h2><i class='bx bx-collection'></i> Package Sessions</h2>
+                            <p>Set schedules for your active package players.</p>
+                        </div>
+                    </div>
+                    <div id="packageSessionsGrid">
+                        <p class="no-posts-text">No active package sessions.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Payment Proof Modal -->
+    <div id="paymentProofModal"
+        style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.7); align-items:center; justify-content:center;">
+        <div style="background:#fff; border-radius:16px; padding:24px; width:70%; max-width:100%;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <h3 style="margin:0; font-size:16px; font-weight:800;">Payment Proof</h3>
+                <button onclick="document.getElementById('paymentProofModal').style.display='none'"
+                    style="background:none;border:none;font-size:24px;cursor:pointer;color:#6b7280;">×</button>
+            </div>
+            <img id="paymentProofImg" src="" alt="Payment Screenshot"
+                style="width:100%; border-radius:10px; object-fit:contain; max-height:400px;">
+            <button onclick="document.getElementById('paymentProofModal').style.display='none'"
+                style="width:100%;margin-top:16px;padding:12px;background:#16a34a;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- Player Modal -->
+    <div id="playerModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="player-profile-summary">
+                    <div class="modal-avatar">
+                        <i class='bx bxs-user-circle'></i>
+                    </div>
+                    <div class="modal-title-info">
+                        <h2 id="modalPlayerName">Player Name</h2>
+                        <p id="modalLevel">BEGINNER</p>
+                    </div>
+                </div>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3><i class='bx bx-run'></i> Physical Attributes</h3>
+                        <div class="attribute-list">
+                            <div class="attribute-item">
+                                <div class="attr-label"><span>Stamina</span><span>85%</span></div>
+                                <div class="attr-bar">
+                                    <div class="fill" style="width:85%;"></div>
+                                </div>
+                            </div>
+                            <div class="attribute-item">
+                                <div class="attr-label"><span>Agility</span><span>70%</span></div>
+                                <div class="attr-bar">
+                                    <div class="fill" style="width:70%;"></div>
+                                </div>
+                            </div>
+                            <div class="attribute-item">
+                                <div class="attr-label"><span>Speed</span><span>92%</span></div>
+                                <div class="attr-bar">
+                                    <div class="fill" style="width:92%;"></div>
+                                </div>
+                            </div>
+                            <div class="attribute-item">
+                                <div class="attr-label"><span>Accuracy</span><span>65%</span></div>
+                                <div class="attr-bar">
+                                    <div class="fill" style="width:65%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <h3><i class='bx bx-trending-up'></i> Level Progress</h3>
+                        <div class="level-status">
+                            <span class="level-badge">ADVANCED</span>
+                            <p style="margin-top:6px; font-size:13px; color:#64748b;">Progress to next level</p>
+                        </div>
+                        <div class="progress-section">
+                            <div class="bar-bg">
+                                <div class="bar-fill" style="width:75%;"></div>
+                            </div>
+                            <small>75% to Next Level</small>
+                        </div>
+                        <ul class="req-check-list">
+                            <li class="check-ok"><i class='bx bx-check-circle'></i> Attendance: 90%</li>
+                            <li class="check-ok"><i class='bx bx-check-circle'></i> Win Rate: 85%</li>
+                            <li class="check-pending"><i class='bx bx-time'></i> Coach Evaluation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="closeModalBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["coach"]);
+    </script>
+
+    <script type="module" src="../../scripts/coach/coachRequests.js"></script>
+    <script type="module" src="../../scripts/coach/coachSidebar.js"></script>
+    <script type="module" src="../../scripts/shared/maintenanceGuard.js"></script>
+
+</body>
+
+</html>

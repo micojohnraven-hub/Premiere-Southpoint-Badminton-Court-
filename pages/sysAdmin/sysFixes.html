@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" class="preload">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Fixes | Southpoint Admin</title>
+
+    <!-- Prevent Sidebar Flash on Page Load -->
+    <script>
+        (function () {
+            const savedState = localStorage.getItem("sidebarState");
+            const isMobile = window.innerWidth <= 768;
+            if (savedState === "closed" || (!savedState && isMobile)) {
+                document.documentElement.classList.add("sidebar-is-closed");
+            }
+        })();
+    </script>
+
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/sysAdmin/sidebar.css">
+    <link rel="stylesheet" href="../../styles/sysAdmin/sysFixes.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR NAVIGATION -->
+    <nav class="sidebar">
+        <header>
+            <div class="image-text">
+                <span class="image"><img src="/components/logo.jpg" alt="logo"></span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">System Administrator</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link"><a href="systemAdmin.html"><i class='bx bx-shield-quarter icon'></i><span
+                                class="text">Overwatch</span></a></li>
+                    <li class="nav-link"><a href="sysContent.html"><i class='bx bx-home-alt-2 icon'></i><span
+                                class="text">Homepage</span></a></li>
+                    <li class="nav-link"><a href="sysUsers.html"><i class='bx bx-user-pin icon'></i><span
+                                class="text">User Accounts</span></a></li>
+                    <li class="nav-link"><a href="sysLogs.html"><i class='bx bx-terminal icon'></i><span
+                                class="text">System Logs</span></a></li>
+                    <li class="nav-link"><a href="sysFixes.html"><i class='bx bx-wrench icon'></i><span
+                                class="text">Technical Fixes</span></a></li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN DASHBOARD AREA -->
+    <main class="home">
+        <header class="dash-header">
+            <h1>Technical Maintenance Desk</h1>
+            <p>Manage infrastructure tickets, hardware overrides, and critical system patches.</p>
+        </header>
+
+        <!-- STATS OVERVIEW -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-info">
+                    <span>Open Tickets</span>
+                    <h2 id="openTicketsCount" class="text-danger">0</h2>
+                </div>
+                <i class='bx bx-bug'></i>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <span>Resolved Today</span>
+                    <h2 id="resolvedTodayCount">0</h2>
+                </div>
+                <i class='bx bx-task-x'></i>
+            </div>
+        </div>
+
+        <!-- ACTIVE REQUESTS SECTION -->
+        <section class="content-section">
+            <div class="fix-header">
+                <div class="header-left">
+                    <h2 class="section-title"><i class='bx bx-list-ul'></i> Active Fix Requests</h2>
+                    <div class="search-box">
+                        <i class='bx bx-search'></i>
+                        <input type="text" id="fixSearch" placeholder="Filter tickets...">
+                    </div>
+                </div>
+
+                <div class="bulk-actions" id="bulkMenu">
+                    <span id="selectedCount">0 Selected</span>
+                    <button class="chip btn-resolve-all" onclick="bulkResolve()">Resolve All</button>
+                    <button class="chip btn-delete-bulk" onclick="bulkDelete()">Delete</button>
+                </div>
+
+                <button class="btn-primary" id="newTicketBtn">
+                    <i class='bx bx-plus-circle'></i> New Ticket
+                </button>
+            </div>
+
+            <div class="filter-controls">
+                <div class="filter-chips" id="priorityFilters">
+                    <button class="chip active" data-filter="all">All Fixes</button>
+                    <button class="chip" data-filter="critical">Critical</button>
+                    <button class="chip" data-filter="medium">Medium</button>
+                    <button class="chip" data-filter="low">Low</button>
+                </div>
+            </div>
+
+            <div class="maximized-container">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="col-check"><input type="checkbox" id="selectAll"></th>
+                                <th>TICKET ID</th>
+                                <th>REPORTED BY</th>
+                                <th>TYPE</th>
+                                <th>ISSUE DESCRIPTION</th>
+                                <th>PRIORITY</th>
+                                <th class="text-center">STATUS</th>
+                                <th class="text-center">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fixTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CREATE NEW TICKET -->
+            <div id="createTicketModal" class="custom-modal">
+                <div class="modal-content">
+                    <header class="modal-header">
+                        <h3>Create New Fix Request</h3>
+                        <span class="close-modal" id="closeCreateModal">&times;</span>
+                    </header>
+                    <div class="modal-body">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label class="label-tech">Affected Court</label>
+                                <select id="newCourt" class="ticket-select"></select>
+                            </div>
+                            <div class="info-item">
+                                <label class="label-tech">Component / Issue Type</label>
+                                <select id="newIssueType" class="ticket-select">
+                                    <option value="maintenance">Maintenance</option>
+                                    <option value="incident">Incident</option>
+                                </select>
+                            </div>
+                            <div class="info-item">
+                                <label class="label-tech">Priority Level</label>
+                                <select id="newPriority" class="ticket-select">
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="critical">Critical</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="resolution-notes">
+                            <label class="label-tech">Issue Description</label>
+                            <textarea id="newDescription" class="ticket-textarea"
+                                placeholder="Explain the problem in detail..."></textarea>
+                        </div>
+                        <footer class="action-footer">
+                            <button class="chip" id="cancelCreate">Cancel</button>
+                            <button class="btn-primary" id="confirmCreateTicket">Create Ticket</button>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-card logout-modal">
+            <div class="logout-modal-header">
+                <i class='bx bx-info-circle logout-icon'></i>
+                <h3 id="modalTitle">Confirm Action</h3>
+            </div>
+
+            <div class="logout-modal-body">
+                <p id="modalMessage"></p>
+            </div>
+
+            <div class="logout-modal-footer">
+                <button class="btn-logout-cancel" id="modalCancel">Cancel</button>
+                <button class="btn-logout-confirm" id="modalConfirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification-container"></div>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["sys_admin"]);
+    </script>
+    <script src="../../scripts/player/Main2.js"></script>
+    <script type="module" src="../../scripts/sysAdmin/sysFixes.js"></script>
+    <script src="../../scripts/sysAdmin/sidebar.js"></script>
+</body>
+
+</html>

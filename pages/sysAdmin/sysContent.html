@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" class="preload">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage Content | System Admin</title>
+
+    <!-- Prevent Sidebar Flash on Page Load -->
+    <script>
+        (function () {
+            const savedState = localStorage.getItem("sidebarState");
+            const isMobile = window.innerWidth <= 768;
+            if (savedState === "closed" || (!savedState && isMobile)) {
+                document.documentElement.classList.add("sidebar-is-closed");
+            }
+        })();
+    </script>
+
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/sysAdmin/systemAdmin.css">
+    <link rel="stylesheet" href="../../styles/sysAdmin/sidebar.css">
+    <link rel="stylesheet" href="../../styles/sysAdmin/sysContent.css">
+</head>
+
+<body>
+    <nav class="sidebar">
+        <header>
+            <div class="image-text">
+                <span class="image"><img src="/components/logo.jpg" alt="logo"></span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">System Administrator</span>
+                </div>
+            </div>
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link"><a href="systemAdmin.html"><i class='bx bx-shield-quarter icon'></i><span
+                                class="text">Overwatch</span></a></li>
+                    <li class="nav-link"><a href="sysContent.html"><i class='bx bx-home-alt-2 icon'></i><span
+                                class="text">Homepage</span></a></li>
+                    <li class="nav-link"><a href="sysUsers.html"><i class='bx bx-user-pin icon'></i><span
+                                class="text">User Accounts</span></a></li>
+                    <li class="nav-link"><a href="sysLogs.html"><i class='bx bx-terminal icon'></i><span
+                                class="text">System Logs</span></a></li>
+                    <li class="nav-link"><a href="sysFixes.html"><i class='bx bx-wrench icon'></i><span
+                                class="text">Technical Fixes</span></a></li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li>
+                    <a href="#" id="logoutBtn">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <main class="home">
+        <div class="dash-header">
+            <h1>Homepage Editor</h1>
+            <p>Manage system announcements and homepage banner content.</p>
+        </div>
+
+        <section class="content-section table-section">
+            <div class="section-header">
+                <h2 class="section-title">Announcements</h2>
+                <button class="btn-primary" id="newPostBtn">
+                    <i class="bx bx-plus"></i>
+                    New Announcement
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>TITLE</th>
+                            <th>CATEGORY</th>
+                            <th>AUDIENCE</th>
+                            <th>PUBLISHED</th>
+                            <th style="text-align:center;">ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="announcementsBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card editor-card">
+            <h2 class="section-title">
+                <i class="bx bx-layout"></i>
+                Homepage Banner
+            </h2>
+
+            <div class="form-group">
+                <label>Main Banner Headline</label>
+                <input type="text" id="headlineInput" placeholder="Experience the Best Badminton in the City">
+                <small>Maximum 60 characters recommended.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Sub-Headline / Description Text</label>
+                <textarea rows="3" id="subtextInput" placeholder="Enter sub-headline text..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Banner Backgrounds</label>
+
+                <div class="responsive-upload-grid">
+                    <div class="upload-item">
+                        <span class="upload-label">
+                            <i class="bx bx-desktop"></i>
+                            Desktop Version
+                        </span>
+
+                        <div class="image-upload-box" id="desktopBox">
+                            <input type="file" id="desktopInput" hidden accept="image/*">
+
+                            <div class="preview-area" id="desktopPreview">
+                                <i class="bx bx-image-add"></i>
+                                <span>1920 x 600 recommended</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="upload-item">
+                        <span class="upload-label">
+                            <i class="bx bx-mobile-alt"></i>
+                            Mobile Version
+                        </span>
+
+                        <div class="image-upload-box" id="mobileBox">
+                            <input type="file" id="mobileInput" hidden accept="image/*">
+
+                            <div class="preview-area" id="mobilePreview">
+                                <i class="bx bx-image-add"></i>
+                                <span>800 x 800 recommended</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-primary" id="updateHeroBtn">
+                Save & Publish Banner
+            </button>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="postModalOverlay">
+        <div class="modal-card post-modal">
+            <h3 id="modalTitle">Create Announcement</h3>
+
+            <div class="form-group">
+                <label>Category</label>
+                <select id="postCategory">
+                    <option value="General">General</option>
+                    <option value="Important">Important</option>
+                    <option value="Maintenance">Maintenance</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Audience</label>
+                <select id="postAudience">
+                    <option value="All">All</option>
+                    <option value="Players">Players</option>
+                    <option value="Coaches">Coaches</option>
+                    <option value="Employees">Employees</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" id="postTitle" placeholder="Announcement title">
+            </div>
+
+            <div class="form-group">
+                <label>Message</label>
+                <textarea id="postMessage" rows="5" placeholder="Write your announcement..."></textarea>
+            </div>
+
+            <div class="form-group" id="postFileGroup">
+                <label>Attachment <small>(Optional)</small></label>
+                <input type="file" id="postFile" accept="image/*">
+                <small>Optional image attachment for the announcement.</small>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-modal-cancel" id="closePostModal">Cancel</button>
+                <button class="btn-modal-confirm" id="savePostBtn">Publish</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <i class="bx bx-info-circle"></i>
+                <h3>Confirm Action</h3>
+            </div>
+
+            <div class="modal-body">
+                <p id="modalMessage">Are you sure you want to continue?</p>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-modal-cancel" id="modalCancel">Cancel</button>
+                <button class="btn-modal-confirm" id="modalConfirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification-container"></div>
+
+    <script type="module">
+        import { checkAccess } from "../../scripts/shared/authGuard.js";
+        checkAccess(["sys_admin"]);
+    </script>
+    <script type="module" src="../../scripts/sysAdmin/sysContent.js"></script>
+    <script src="../../scripts/sysAdmin/sidebar.js"></script>
+</body>
+
+</html>

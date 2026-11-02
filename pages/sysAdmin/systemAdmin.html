@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" class="preload">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Admin | Southpoint Admin</title>
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="icon" href="/components/logo.png">
+    <link rel="stylesheet" href="../../styles/sysAdmin/systemAdmin.css">
+    <link rel="stylesheet" href="../../styles/sysAdmin/sidebar.css">
+</head>
+
+<body>
+
+    <nav class="sidebar" aria-label="System administrator navigation">
+        <header>
+            <div class="image-text">
+                <span class="image"><img src="/components/logo.jpg" alt="Southpoint logo"></span>
+                <div class="text header-text">
+                    <span class="name">Southpoint</span>
+                    <span class="role">System Administrator</span>
+                </div>
+            </div>
+            <i class="bx bx-chevron-right toggle" role="button" tabindex="0" aria-label="Toggle sidebar"></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <ul class="menu-links">
+                    <li class="nav-link"><a href="systemAdmin.html"><i class="bx bx-shield-quarter icon"></i><span
+                                class="text">Overwatch</span></a></li>
+                    <li class="nav-link"><a href="sysContent.html"><i class="bx bx-home-alt-2 icon"></i><span
+                                class="text">Homepage</span></a></li>
+                    <li class="nav-link"><a href="sysUsers.html"><i class="bx bx-user-pin icon"></i><span
+                                class="text">User Accounts</span></a></li>
+                    <li class="nav-link"><a href="sysLogs.html"><i class="bx bx-terminal icon"></i><span
+                                class="text">System Logs</span></a></li>
+                    <li class="nav-link"><a href="sysFixes.html"><i class="bx bx-wrench icon"></i><span
+                                class="text">Technical Fixes</span></a></li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <ul>
+                    <li>
+                        <a href="#" id="logoutBtn">
+                            <i class="bx bx-log-out icon"></i>
+                            <span class="text">Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="home">
+        <div class="dash-header-container">
+            <div class="dash-header">
+                <h1>System Overwatch</h1>
+                <p>Monitor system health, activity, and critical issues.</p>
+            </div>
+
+            <div class="card maintenance-card">
+                <div class="maintenance-info">
+                    <h3>Maintenance Mode</h3>
+                    <p>Lock public access for updates</p>
+                </div>
+
+                <label class="switch">
+                    <input type="checkbox" id="maintenanceToggle" aria-label="Maintenance mode status loading" disabled>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-info">
+                    <span>System Status</span>
+                    <h2 id="systemStatus">Checking...</h2>
+                    <p id="systemStatusText" aria-live="polite">Running health checks</p>
+                </div>
+                <i class="bx bx-server" aria-hidden="true"></i>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-info">
+                    <span>Pending Technical Issues</span>
+                    <h2 id="technicalIssues">—</h2>
+                    <p>Requires attention</p>
+                </div>
+                <i class="bx bx-bug" aria-hidden="true"></i>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-info">
+                    <span>Today's Activity</span>
+                    <h2 id="todayLogs">—</h2>
+                    <p>System events</p>
+                </div>
+                <i class="bx bx-pulse" aria-hidden="true"></i>
+            </div>
+        </div>
+
+        <div class="admin-grid">
+            <section class="card">
+                <h2 class="section-title"><i class="bx bx-server" aria-hidden="true"></i> System Health</h2>
+
+                <div class="health-list">
+                    <div class="health-item">
+                        <div>
+                            <i class="bx bx-data" aria-hidden="true"></i>
+                            <span>Database</span>
+                        </div>
+                        <span class="health-status" id="databaseStatus" aria-live="polite">Checking...</span>
+                    </div>
+
+                    <div class="health-item">
+                        <div>
+                            <i class="bx bx-user" aria-hidden="true"></i>
+                            <span>Authentication</span>
+                        </div>
+                        <span class="health-status" id="authStatus" aria-live="polite">Checking...</span>
+                    </div>
+
+                    <div class="health-item">
+                        <div>
+                            <i class="bx bx-cloud" aria-hidden="true"></i>
+                            <span>Live Updates</span>
+                        </div>
+                        <span class="health-status" id="serviceStatus" aria-live="polite">Checking...</span>
+                    </div>
+
+                    <div class="health-item">
+                        <div>
+                            <i class="bx bx-error-circle" aria-hidden="true"></i>
+                            <span>Technical Issues</span>
+                        </div>
+                        <span class="health-status" id="issueStatus" aria-live="polite">Checking...</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="bx bx-history" aria-hidden="true"></i> Recent System Activity
+                    </h2>
+                    <button type="button" class="btn-secondary" id="viewLogsBtn">View System Logs <i
+                            class="bx bx-right-arrow-alt" aria-hidden="true"></i></button>
+                </div>
+
+                <div class="log-feed" id="logFeed">
+                    <p class="empty-message">Loading system activity...</p>
+                </div>
+            </section>
+
+        </div>
+
+        <div class="admin-grid">
+            <section class="card">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="bx bx-wrench" aria-hidden="true"></i> Technical Issues</h2>
+                    <button type="button" class="btn-secondary" id="viewFixesBtn">Technical Fixes <i
+                            class="bx bx-right-arrow-alt" aria-hidden="true"></i></button>
+                </div>
+
+                <div class="issue-list" id="issueList">
+                    <p class="empty-message">Loading technical issues...</p>
+                </div>
+            </section>
+
+
+            <section class="card database-manager">
+                <h2 class="section-title">
+                    <i class="bx bx-data" aria-hidden="true"></i>
+                    Backup Request Log
+                </h2>
+
+                <div class="backup-list" id="backupList" aria-live="polite">
+                    <p class="empty-message">Loading backup requests...</p>
+                </div>
+
+                <button type="button" class="btn-primary" id="createBackupBtn">
+                    <i class="bx bx-plus" aria-hidden="true"></i>
+                    Log Backup Request
+                </button>
+            </section>
+        </div>
+
+        <div class="card quick-actions">
+            <h2 class="section-title"><i class="bx bx-grid-alt" aria-hidden="true"></i> System Administration</h2>
+
+            <div class="quick-action-grid">
+                <button type="button" class="quick-action-btn" id="usersBtn">
+                    <i class="bx bx-user-pin" aria-hidden="true"></i>
+                    <span>User Accounts</span>
+                    <small>Manage system users</small>
+                </button>
+
+                <button type="button" class="quick-action-btn" id="contentBtn">
+                    <i class="bx bx-home-alt-2" aria-hidden="true"></i>
+                    <span>Homepage</span>
+                    <small>Manage public content</small>
+                </button>
+
+                <button type="button" class="quick-action-btn" id="logsBtn">
+                    <i class="bx bx-terminal" aria-hidden="true"></i>
+                    <span>System Logs</span>
+                    <small>View system activity</small>
+                </button>
+
+                <button type="button" class="quick-action-btn" id="fixesBtn">
+                    <i class="bx bx-wrench" aria-hidden="true"></i>
+                    <span>Technical Fixes</span>
+                    <small>Review reported issues</small>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <div class="system-modal" id="systemModal" role="dialog" aria-modal="true" aria-hidden="true"
+        aria-labelledby="modalTitle" aria-describedby="modalMessage">
+        <div class="system-modal-content">
+            <div class="system-modal-icon" id="modalIcon">
+                <i class="bx bx-question-mark"></i>
+            </div>
+
+            <h3 id="modalTitle">Confirm Action</h3>
+
+            <p id="modalMessage">Are you sure you want to continue?</p>
+
+            <div class="system-modal-actions">
+                <button type="button" class="btn-secondary" id="modalCancelBtn">Cancel</button>
+                <button type="button" class="btn-primary" id="modalConfirmBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../scripts/sysAdmin/sidebarInit.js"></script>
+    <script type="module" src="../../scripts/sysAdmin/systemAdmin.js"></script>
+    <script src="../../scripts/sysAdmin/sidebar.js"></script>
+
+</body>
+
+</html>
