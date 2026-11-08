@@ -67,13 +67,17 @@
             </div>
 
             <div class="header-actions">
-                <button class="btn-secondary" id="exportBtn">
-                    <i class='bx bx-download'></i> Export CSV
-                </button>
-                <button class="btn-primary" id="addUserBtn">
-                    <i class='bx bx-user-plus'></i> Add New Account
-                </button>
-            </div>
+                    <button class="btn-secondary" id="exportBtn">
+                        <i class='bx bx-download'></i> Export CSV
+                    </button>
+                    <!-- ⬇️ ADD THIS BUTTON ⬇️ -->
+                    <button class="btn-secondary" id="exportPdfBtn">
+                        <i class='bx bxs-file-pdf' style="color: #ef4444;"></i> Export PDF
+                    </button>
+                    <button class="btn-primary" id="addUserBtn">
+                        <i class='bx bx-user-plus'></i> Add New Account
+                    </button>
+                </div>
         </div>
         <!-- STATS GRID -->
         <div class="stats-grid">
@@ -101,20 +105,57 @@
         <!-- SEARCH AND TABLE SECTION -->
         <section class="content-section">
             <div class="section-header-row">
-                <h2 class="section-title"><i class='bx bx-list-ul'></i> All User </h2>
+                <h2 class="section-title"><i class='bx bx-list-ul'></i> All User</h2>
 
-                <div class="filter-row">
-                    <button class="filter-chip active">All Users</button>
-                    <button class="filter-chip">Coaches</button>
-                    <button class="filter-chip">Players</button>
-                    <button class="filter-chip">Employee</button>
-                </div>
+                <div class="header-controls">
+                    <!-- Search Input -->
+                    <div class="search-box">
+                        <i class="bx bx-search"></i>
+                        <input type="text" id="userSearch" placeholder="Search by name or email...">
+                    </div>
 
-                <div class="search-box">
-                    <i class="bx bx-search"></i>
-                    <input type="text" id="userSearch" placeholder="Search by name or email...">
+                    <!-- Filter Icon Button & Dropdown Container -->
+                    <div class="filter-dropdown-wrapper" id="filterWrapper">
+                        <button type="button" class="filter-trigger-btn" id="filterBtn" title="Filter users">
+                            <i class='bx bx-slider-alt'></i>
+                            <span>Filter</span>
+                            <span class="filter-badge-dot" id="filterDot"></span>
+                        </button>
+
+                        <!-- Dropdown Menu opens directly under the icon -->
+                        <div class="filter-dropdown-menu" id="filterDropdown">
+                            <div class="dropdown-header">
+                                <span>Filters</span>
+                                <button type="button" id="resetFilterBtn" class="reset-filter-link">Reset</button>
+                            </div>
+
+                            <!-- Roles Group -->
+                            <div class="filter-group">
+                                <label class="filter-label">Filter by Role</label>
+                                <div class="chip-group" id="roleChips">
+                                    <button type="button" class="filter-chip active" data-filter="all users">All Users</button>
+                                    <button type="button" class="filter-chip" data-filter="coach">Coaches</button>
+                                    <button type="button" class="filter-chip" data-filter="player">Players</button>
+                                    <button type="button" class="filter-chip" data-filter="employee">Employee</button>
+                                    <button type="button" class="filter-chip" data-filter="admins">Admins</button>
+                                </div>
+                            </div>
+
+                            <!-- Status Group -->
+                            <div class="filter-group">
+                                <label class="filter-label">Filter by Status</label>
+                                <div class="chip-group" id="statusChips">
+                                    <button type="button" class="filter-chip status-chip active" data-status="all">All</button>
+                                    <button type="button" class="filter-chip status-chip" data-status="active">Active</button>
+                                    <button type="button" class="filter-chip status-chip danger" data-status="suspended">Suspended</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <!-- Table Container -->
             <div class="table-container">
                 <table>
                     <thead>
@@ -222,15 +263,27 @@
                             <i class='bx bx-shield-alt-2'></i>
                             System Role
                         </label>
-                        <p id="profRole">N/A</p>
+                        <select id="editUserRole" class="modal-select">
+                            <option value="player">Player</option>
+                            <option value="coach">Coach</option>
+                            <option value="employee">Employee</option>
+                            <option value="business_admin">Business Administrator</option>
+                            <option value="sys_admin">System Administrator</option>
+                        </select>
                     </div>
 
+                    <!-- EDITABLE MEMBERSHIP STATUS -->
                     <div class="info-group">
                         <label>
                             <i class='bx bx-star'></i>
-                            Membership
+                            Membership Status
                         </label>
-                        <p id="profStatus" class="status-pill active">Active</p>
+                        <select id="editUserStatus" class="modal-select">
+                            <option value="active">Active</option>
+                            <option value="pending">Pending</option>
+                            <option value="suspended">Suspended</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
                     </div>
 
                     <div class="info-group full-width">
@@ -292,8 +345,11 @@
             </div>
 
             <div class="modal-footer profile-footer">
-                <button class="btn-secondary" id="closeProfileBtn">
+                <button type="button" class="btn-secondary" id="closeProfileBtn">
                     Close View
+                </button>
+                <button type="button" class="btn-primary" id="saveUserBtn">
+                    <i class='bx bx-save'></i> Save Role & Status
                 </button>
             </div>
         </div>
@@ -365,6 +421,8 @@
     <script src="../../scripts/player/Main2.js"></script>
     <script type="module" src="../../scripts/sysAdmin/sysUsers.js"></script>
     <script src="../../scripts/sysAdmin/sidebar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 </body>
 
 </html>

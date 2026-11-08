@@ -671,47 +671,82 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     const filterTable = () => {
-        const query =
-            elements.searchInput.value.toLowerCase();
+        const query = elements.searchInput.value.trim().toLowerCase();
 
-        const activeChipEl =
-            document.querySelector(
-                '.chip[data-filter].active'
-            );
+        const activeChipEl = document.querySelector(
+            '.chip[data-filter].active'
+        );
 
-        const activeChip =
-            activeChipEl
-                ? activeChipEl.getAttribute('data-filter')
-                : 'all';
+        const activeChip = activeChipEl
+            ? activeChipEl.getAttribute('data-filter')
+            : 'all';
 
-        document
-            .querySelectorAll('.fix-row')
-            .forEach(row => {
-                const textMatch =
-                    row.innerText
-                        .toLowerCase()
-                        .includes(query);
+        const rows = document.querySelectorAll('.fix-row');
+        let visibleCount = 0;
 
-                const priority =
-                    row.getAttribute(
-                        'data-priority'
-                    ) || 'low';
+        rows.forEach(row => {
+            const priority =
+                row.getAttribute('data-priority') || 'low';
 
-                const priorityMatch =
-                    activeChip === 'all' ||
-                    priority === activeChip;
+            const priorityMatch =
+                activeChip === 'all' || priority === activeChip;
 
-                row.style.display =
-                    textMatch && priorityMatch
-                        ? ''
-                        : 'none';
-            });
+            let textMatch = true;
+
+            if (query) {
+                // Extract only meaningful fields (exclude Status and Action button text)
+                const ticketId = (row.cells[1]?.innerText || '').toLowerCase();
+                const roleLabel = (row.querySelector('.role-label')?.innerText || '').toLowerCase();
+                const techAvatar = (row.querySelector('.tech-avatar')?.innerText || '').trim().toLowerCase();
+                const catLabel = (row.querySelector('.cat-label')?.innerText || '').toLowerCase();
+                const desc = (row.querySelector('.p-name')?.childNodes[0]?.textContent || '').trim().toLowerCase();
+
+                if (query.length === 1) {
+                    // 🎯 1ST LETTER SEARCH: Check if avatar, ID, or any word STARTS WITH this letter
+                    const roleWords = roleLabel.split(/\s+/);
+                    const catWords = catLabel.split(/\s+/);
+                    const descWords = desc.split(/\s+/);
+                    const cleanTicketId = ticketId.replace('#fix-', '').replace('#', '');
+
+                    textMatch =
+                        techAvatar === query ||
+                        roleWords.some(word => word.startsWith(query)) ||
+                        catWords.some(word => word.startsWith(query)) ||
+                        descWords.some(word => word.startsWith(query)) ||
+                        cleanTicketId.startsWith(query);
+                } else {
+                    // Multi-character search
+                    const searchable = `${ticketId} ${roleLabel} ${catLabel} ${desc}`;
+                    textMatch = searchable.includes(query);
+                }
+            }
+
+            const isVisible = textMatch && priorityMatch;
+            row.style.display = isVisible ? '' : 'none';
+
+            if (isVisible) visibleCount++;
+        });
+
+        // Show friendly "No fix requests found" if nothing matches
+        let noMatchRow = elements.tableBody.querySelector('.no-filter-row');
+        if (visibleCount === 0 && rows.length > 0) {
+            if (!noMatchRow) {
+                noMatchRow = document.createElement('tr');
+                noMatchRow.className = 'no-filter-row';
+                noMatchRow.innerHTML = `
+                    <td colspan="8" class="text-center empty-row" style="padding: 3rem 1rem; color: #94a3b8; text-align: center;">
+                        No fix requests found matching "${escapeHTML(query)}".
+                    </td>
+                `;
+                elements.tableBody.appendChild(noMatchRow);
+            }
+        } else if (noMatchRow) {
+            noMatchRow.remove();
+        }
     };
 
-    elements.searchInput.addEventListener(
-        'keyup',
-        filterTable
-    );
+    // Use 'input' instead of 'keyup' so it handles backspaces, pastes, and clear events instantly
+    elements.searchInput.addEventListener('input', filterTable);
 
     chipBtns.forEach(btn => {
         btn.addEventListener(

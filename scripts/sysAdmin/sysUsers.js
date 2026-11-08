@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         bulkActivateBtn: get('bulkActivateBtn'),
 
         exportBtn: get('exportBtn'),
+        exportPdfBtn: get('exportPdfBtn'),
 
         statTotal: get('statTotal'),
         statActive: get('statActive'),
@@ -31,6 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
         newUserName: get('newUserName'),
         newUserEmail: get('newUserEmail'),
         newUserRole: get('newUserRole'),
+        editUserRole: get('editUserRole'),
+        editUserStatus: get('editUserStatus'),
+        saveUserBtn: get('saveUserBtn'),
 
         profileModal: get('profileModal'),
         profHeaderRole: get('profHeaderRole'),
@@ -65,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const {
             isInput = false,
             confirmText = 'Confirm',
+            cancelText = 'Cancel', // 👈 1. ADD THIS
             isDanger = false,
             placeholder = 'Enter reason here...',
             hideCancel = false,
@@ -103,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.modalCancel.style.display = hideCancel ? 'none' : 'block';
             elements.modalConfirm.style.display = hideConfirm ? 'none' : 'block';
             elements.modalConfirm.innerText = confirmText;
+            elements.modalCancel.innerText = cancelText; //
 
             // Remove inline style background so CSS danger classes take over cleanly
             elements.modalConfirm.style.background = '';
@@ -131,9 +137,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 close(false);
             };
 
+            const handleCloseX = () => {
+                close(null); // 👈 Cancels without triggering PDF
+            };
+
             elements.modalConfirm.addEventListener('click', handleConfirm);
             elements.modalCancel.addEventListener('click', handleCancel);
-            if (closeX) closeX.addEventListener('click', handleCancel);
+            if (closeX) closeX.addEventListener('click', handleCloseX);
 
             if (hideCancel && hideConfirm) {
                 setTimeout(() => close(true), duration);
@@ -309,55 +319,136 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* SEARCH & FILTER */
 
-    const applyFilters = () => {
-        const searchTerm =
-            elements.userSearch.value.trim().toLowerCase();
+    const filterBtn = get('filterBtn');
+    const filterDropdown = get('filterDropdown');
+    const filterWrapper = get('filterWrapper');
+    const resetFilterBtn = get('resetFilterBtn');
+    const filterDot = get('filterDot');
 
-        const activeChip =
-            document.querySelector('.filter-chip.active');
-
-        const selectedFilter =
-            activeChip?.innerText.trim().toLowerCase() || 'all users';
-
-        const rows = document.querySelectorAll('.user-row');
-
-        rows.forEach(row => {
-            const rowText = row.innerText.toLowerCase();
-            const rowRole = row.dataset.role.toLowerCase();
-
-            const matchesSearch =
-                rowText.includes(searchTerm);
-
-            let matchesFilter = false;
-
-            if (selectedFilter === 'all users') {
-                matchesFilter = true;
-            } else if (selectedFilter === 'employee') {
-                matchesFilter =
-                    rowRole === 'staff' ||
-                    rowRole === 'employee';
-            } else {
-                matchesFilter =
-                    selectedFilter.includes(rowRole);
-            }
-
-            row.style.display =
-                matchesSearch && matchesFilter ? '' : 'none';
+    // 1. Toggle dropdown when clicking the filter icon
+    if (filterBtn) {
+        filterBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            filterDropdown.classList.toggle('active');
+            filterBtn.classList.toggle('active');
         });
+    }
 
-        updateBulkCount();
-    };
+    // 2. Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (filterWrapper && !filterWrapper.contains(e.target)) {
+            filterDropdown.classList.remove('active');
+            filterBtn.classList.remove('active');
+        }
+    });
 
-    elements.filterChips.forEach(chip => {
+    // 3. Handle Role & Status Chip selection
+    document.querySelectorAll('#roleChips .filter-chip').forEach(chip => {
         chip.addEventListener('click', () => {
-            elements.filterChips.forEach(item =>
-                item.classList.remove('active')
-            );
-
+            document.querySelectorAll('#roleChips .filter-chip').forEach(c => c.classList.remove('active'));
             chip.classList.add('active');
             applyFilters();
         });
     });
+
+    document.querySelectorAll('#statusChips .filter-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            document.querySelectorAll('#statusChips .filter-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            applyFilters();
+        });
+    });
+
+    // 4. Reset Filters button
+    if (resetFilterBtn) {
+        resetFilterBtn.addEventListener('click', () => {
+            document.querySelectorAll('#roleChips .filter-chip').forEach(c => c.classList.remove('active'));
+            document.querySelector('#roleChips [data-filter="all users"]').classList.add('active');
+
+            document.querySelectorAll('#statusChips .filter-chip').forEach(c => c.classList.remove('active'));
+            document.querySelector('#statusChips [data-status="all"]').classList.add('active');
+
+            elements.userSearch.value = '';
+            applyFilters();
+        });
+    }
+
+    // 5. Apply filters across Search, Role, and Status
+    const applyFilters = () => {
+        const searchTerm = elements.userSearch.value.trim().toLowerCase();
+
+        const activeRoleChip = document.querySelector('#roleChips .filter-chip.active');
+        const selectedRole = activeRoleChip ? activeRoleChip.dataset.filter : 'all users';
+
+        const activeStatusChip = document.querySelector('#statusChips .filter-chip.active');
+        const selectedStatus = activeStatusChip ? activeStatusChip.dataset.status : 'all';
+
+        // Check if any non-default filter is applied (shows green dot on filter button)
+        const isCustomFilter = selectedRole !== 'all users' || selectedStatus !== 'all';
+        if (filterDot) {
+            filterDot.classList.toggle('active', isCustomFilter);
+        }
+
+        const rows = document.querySelectorAll('.user-row');
+        let visibleCount = 0; // 👈 Count matching rows
+
+        rows.forEach(row => {
+            const rowText = row.innerText.toLowerCase();
+            const rowRole = (row.dataset.role || '').toLowerCase();
+            const rowStatus = (row.querySelector('.status-pill')?.innerText || '').trim().toLowerCase();
+
+            // Match Search
+            const matchesSearch = rowText.includes(searchTerm);
+
+            // Match Role
+            let matchesRole = false;
+            if (selectedRole === 'all users') {
+                matchesRole = true;
+            } else if (selectedRole === 'employee') {
+                matchesRole = (rowRole === 'staff' || rowRole === 'employee');
+            } else if (selectedRole === 'admins') {
+                matchesRole = (rowRole === 'sys_admin' || rowRole === 'business_admin');
+            } else {
+                matchesRole = (rowRole === selectedRole);
+            }
+
+            // Match Status
+            let matchesStatus = false;
+            if (selectedStatus === 'all') {
+                matchesStatus = true;
+            } else {
+                matchesStatus = (rowStatus === selectedStatus);
+            }
+
+            const isVisible = matchesSearch && matchesRole && matchesStatus;
+            row.style.display = isVisible ? '' : 'none';
+
+            if (isVisible) visibleCount++;
+        });
+
+        // 👇 SHOW / HIDE "NO DATA FOUND" EMPTY STATE
+        let noDataRow = elements.userTable.querySelector('.no-data-row');
+        if (visibleCount === 0) {
+            if (!noDataRow) {
+                noDataRow = document.createElement('tr');
+                noDataRow.className = 'no-data-row';
+                noDataRow.innerHTML = `
+                    <td colspan="5" class="no-data-cell">
+                        <div class="empty-state">
+                            <i class='bx bx-search-alt'></i>
+                            <h3>No Users Found</h3>
+                            <p>There's nothing to see here. Try adjusting your search or filters.</p>
+                        </div>
+                    </td>
+                `;
+                elements.userTable.appendChild(noDataRow);
+            }
+        } else if (noDataRow) {
+            noDataRow.remove();
+        }
+
+        updateBulkCount();
+    };
 
     elements.userSearch.addEventListener('input', applyFilters);
 
@@ -421,16 +512,19 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.bulkExportBtn.addEventListener('click', async () => {
             const selectedRows = getSelectedRows();
             const selectedIds = selectedRows.map(r => r.dataset.id);
+            const count = selectedIds.length;
 
-            if (selectedIds.length === 0) return;
+            if (count === 0) return;
 
+            // Fetch selected user data
             const { data, error } = await supabase
                 .from('profiles')
                 .select('full_name, email, role, status, player_level')
-                .in('id', selectedIds);
+                .in('id', selectedIds)
+                .order('full_name', { ascending: true });
 
             if (error || !data) {
-                await showCustomModal('Unable to export selected users.', {
+                await showCustomModal('Unable to fetch selected users.', {
                     title: 'Export Error',
                     isDanger: true,
                     hideCancel: true
@@ -438,19 +532,65 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const csvContent =
-                'Full Name,Email,Role,Status,Skill\n' +
-                data.map(u =>
-                    `"${u.full_name || ''}","${u.email || ''}","${u.role || ''}","${u.status || ''}","${u.player_level || ''}"`
-                ).join('\n');
+            // Ask user for choice
+            const choice = await showCustomModal(
+                `Choose format to export ${count} selected account(s):`,
+                {
+                    title: 'Export Format',
+                    confirmText: '📊 Download CSV',
+                    cancelText: '📄 Download PDF',
+                    duration: 0
+                }
+            );
 
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `Selected_Users_${new Date().toISOString().split('T')[0]}.csv`;
-            link.click();
-            URL.revokeObjectURL(url);
+            // If user closed with "X", do nothing
+            if (choice === null) return;
+
+            if (choice === true) {
+                // 1. DOWNLOAD CSV
+                const csvContent =
+                    'Full Name,Email,Role,Status,Skill\n' +
+                    data.map(u => `"${u.full_name || ''}","${u.email || ''}","${u.role || ''}","${u.status || ''}","${u.player_level || ''}"`).join('\n');
+
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `Selected_Users_${new Date().toISOString().split('T')[0]}.csv`;
+                link.click();
+                URL.revokeObjectURL(url);
+            } else if (choice === false) {
+                // 2. DOWNLOAD PDF
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                doc.setFontSize(16);
+                doc.setTextColor(18, 38, 29);
+                doc.text('Southpoint - Selected Users Report', 14, 18);
+
+                doc.setFontSize(9);
+                doc.setTextColor(100, 116, 139);
+                doc.text(`Generated on: ${new Date().toLocaleDateString()} | Selected: ${data.length}`, 14, 25);
+
+                const tableRows = data.map(u => [
+                    u.full_name || 'N/A',
+                    u.email || 'N/A',
+                    formatRole(u.role || 'player').toUpperCase(),
+                    formatStatus(u.status || 'active').toUpperCase(),
+                    u.player_level || 'N/A'
+                ]);
+
+                doc.autoTable({
+                    head: [['FULL NAME', 'EMAIL', 'ROLE', 'STATUS', 'SKILL LEVEL']],
+                    body: tableRows,
+                    startY: 30,
+                    theme: 'striped',
+                    headStyles: { fillColor: [5, 185, 5], textColor: 255, fontStyle: 'bold' },
+                    styles: { fontSize: 8, cellPadding: 3.5 }
+                });
+
+                doc.save(`Selected_Users_${new Date().toISOString().split('T')[0]}.pdf`);
+            }
         });
     }
 
@@ -595,6 +735,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
         URL.revokeObjectURL(url);
     };
+
+    /* EXPORT PDF */
+    if (elements.exportPdfBtn) {
+        elements.exportPdfBtn.onclick = async () => {
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('full_name, email, role, status, player_level')
+                .order('full_name', { ascending: true });
+
+            if (error || !data) {
+                await showCustomModal('Unable to load users for PDF export.', {
+                    title: 'Export Error',
+                    isDanger: true,
+                    hideCancel: true
+                });
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Header Title & Date
+            doc.setFontSize(16);
+            doc.setTextColor(18, 38, 29);
+            doc.text('Southpoint - User Accounts Report', 14, 18);
+
+            doc.setFontSize(9);
+            doc.setTextColor(100, 116, 139);
+            const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            doc.text(`Generated on: ${dateStr} | Total Records: ${data.length}`, 14, 25);
+
+            // Table Data
+            const tableRows = data.map(u => [
+                u.full_name || 'N/A',
+                u.email || 'N/A',
+                formatRole(u.role || 'player').toUpperCase(),
+                formatStatus(u.status || 'active').toUpperCase(),
+                u.player_level || 'N/A'
+            ]);
+
+            doc.autoTable({
+                head: [['FULL NAME', 'EMAIL', 'ROLE', 'STATUS', 'SKILL LEVEL']],
+                body: tableRows,
+                startY: 30,
+                theme: 'striped',
+                headStyles: { fillColor: [5, 185, 5], textColor: 255, fontStyle: 'bold' },
+                styles: { fontSize: 8, cellPadding: 3.5 }
+            });
+
+            doc.save(`Users_Report_${new Date().toISOString().split('T')[0]}.pdf`);
+
+            await showCustomModal('PDF report downloaded successfully!', {
+                title: 'Success',
+                hideCancel: true,
+                hideConfirm: true,
+                duration: 1500
+            });
+        };
+    }
 
     /* ADD USER */
 
@@ -874,6 +1073,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         currentUserData = data;
 
+        if (elements.editUserRole) elements.editUserRole.value = (data.role || 'player').toLowerCase();
+        if (elements.editUserStatus) elements.editUserStatus.value = (data.status || 'active').toLowerCase();
+
         const role = (data.role || 'player').toLowerCase();
         const status = (data.status || 'active').toLowerCase();
 
@@ -897,14 +1099,12 @@ document.addEventListener('DOMContentLoaded', () => {
               data.gender.slice(1)
             : 'N/A';
 
-        elements.profRole.innerText =
+        // ✅ Replace the old profRole/profStatus lines with this safe check:
+        if (elements.profRole) elements.profRole.innerText = formatRole(role);
+        if (elements.profStatus) elements.profStatus.innerText = formatStatus(status);
+
+        elements.profHeaderRole.innerText =
             formatRole(role);
-
-        elements.profStatus.innerText =
-            formatStatus(status);
-
-        elements.profStatus.className =
-            `status-pill ${status}`;
 
         elements.profHeaderRole.innerText =
             formatRole(role);
@@ -1010,6 +1210,55 @@ document.addEventListener('DOMContentLoaded', () => {
         get('closeProfileBtn').onclick = () => {
             elements.profileModal.classList.remove('active');
         };
+
+        /* SAVE ROLE & STATUS VIA SECURE RPC */
+    if (elements.saveUserBtn) {
+        elements.saveUserBtn.addEventListener('click', async () => {
+            if (!currentUserData) return;
+
+            const newRole = elements.editUserRole.value;
+            const newStatus = elements.editUserStatus.value;
+
+            // Confirm prompt
+            const confirmed = await showCustomModal(
+                `Update ${currentUserData.full_name || 'this user'} to Role: "${formatRole(newRole)}" and Status: "${formatStatus(newStatus)}"?`,
+                {
+                    title: 'Confirm Role & Status Change',
+                    confirmText: 'Save Changes'
+                }
+            );
+
+            if (!confirmed) return;
+
+            // Call the secure RPC function
+            const { data, error } = await supabase.rpc('admin_update_user_role_and_status', {
+                target_user_id: currentUserData.id,
+                new_role: newRole,
+                new_status: newStatus
+            });
+
+            if (error) {
+                await showCustomModal(error.message, {
+                    title: 'Update Failed',
+                    isDanger: true,
+                    hideCancel: true
+                });
+                return;
+            }
+
+            elements.profileModal.classList.remove('active');
+
+            await showCustomModal('User role and status updated successfully!', {
+                title: 'Success',
+                hideCancel: true,
+                hideConfirm: true,
+                duration: 1500
+            });
+
+            // Refresh table to reflect the changes
+            fetchUsers();
+        });
+    }
 
     fetchUsers();
 });

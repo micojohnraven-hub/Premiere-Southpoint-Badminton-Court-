@@ -118,25 +118,70 @@ if (elements.logoutBtn) {
 
     // --- 2. FILTERING LOGIC ---
     const applyAllFilters = () => {
-        const searchValue = elements.logSearch?.value.toLowerCase() || "";
+        const searchValue = elements.logSearch?.value.trim().toLowerCase() || "";
         const selectedCategory = elements.categoryFilter?.value || "all"; 
         const activeStatusBtn = document.querySelector('.btn-filter.active');
         const selectedStatus = activeStatusBtn ? activeStatusBtn.getAttribute('data-filter') : 'all';
 
         const rows = document.querySelectorAll('.log-row');
+        let visibleCount = 0;
+
         rows.forEach(row => {
-            const rowText = row.innerText.toLowerCase();
-            const rowStatus = row.getAttribute('data-status'); 
+            const rowStatus = row.getAttribute('data-status') || ''; 
             const catSpan = row.querySelector('.cat-label');
-            const rowCategory = catSpan ? catSpan.innerText.trim() : "";
-            
-            const matchesSearch = rowText.includes(searchValue);
+            const rowCategory = (catSpan ? catSpan.innerText.trim() : "").toLowerCase();
+            const eventDesc = (row.querySelector('.p-name')?.innerText.trim() || "").toLowerCase();
+            const userInvolved = (row.cells[3]?.innerText.trim() || "").toLowerCase();
+
+            // Status filter
             let matchesStatus = (selectedStatus === 'all' || rowStatus === selectedStatus);
-            if (selectedStatus === 'error' && (rowStatus === 'critical' || rowStatus === 'error')) matchesStatus = true;
-            const matchesCategory = (selectedCategory === 'all' || rowCategory === selectedCategory);
-            
-            row.style.display = (matchesSearch && matchesStatus && matchesCategory) ? "" : "none";
+            if (selectedStatus === 'error' && (rowStatus === 'critical' || rowStatus === 'error')) {
+                matchesStatus = true;
+            }
+
+            // Category filter
+            const matchesCategory = (selectedCategory === 'all' || rowCategory.toUpperCase() === selectedCategory.toUpperCase());
+
+            // Search filter (1st letter prefix matching)
+            let matchesSearch = true;
+            if (searchValue) {
+                if (searchValue.length === 1) {
+                    const catWords = rowCategory.split(/\s+/);
+                    const eventWords = eventDesc.split(/\s+/);
+                    const userWords = userInvolved.split(/\s+/);
+
+                    matchesSearch =
+                        catWords.some(w => w.startsWith(searchValue)) ||
+                        eventWords.some(w => w.startsWith(searchValue)) ||
+                        userWords.some(w => w.startsWith(searchValue));
+                } else {
+                    const searchable = `${rowCategory} ${eventDesc} ${userInvolved}`;
+                    matchesSearch = searchable.includes(searchValue);
+                }
+            }
+
+            const isVisible = matchesSearch && matchesStatus && matchesCategory;
+            row.style.display = isVisible ? "" : "none";
+
+            if (isVisible) visibleCount++;
         });
+
+        // "No logs found" feedback
+        let noMatchRow = elements.logTableBody.querySelector('.no-filter-row');
+        if (visibleCount === 0 && rows.length > 0) {
+            if (!noMatchRow) {
+                noMatchRow = document.createElement('tr');
+                noMatchRow.className = 'no-filter-row';
+                noMatchRow.innerHTML = `
+                    <td colspan="5" style="text-align: center; padding: 3rem 1rem; color: #94a3b8;">
+                        No logs found matching "${escapeHTML(searchValue || selectedCategory)}".
+                    </td>
+                `;
+                elements.logTableBody.appendChild(noMatchRow);
+            }
+        } else if (noMatchRow) {
+            noMatchRow.remove();
+        }
     };
 
     // --- 3. RENDER & STATS ---
@@ -246,7 +291,7 @@ if (elements.logoutBtn) {
 
     elements.exportBtn?.addEventListener('click', exportToCSV);
 
-    elements.logSearch?.addEventListener('keyup', applyAllFilters);
+    elements.logSearch?.addEventListener('input', applyAllFilters);
     elements.categoryFilter?.addEventListener('change', applyAllFilters);
     
     elements.filterBtns.forEach(btn => {
